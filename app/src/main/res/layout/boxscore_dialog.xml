@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:grid="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    grid:alignmentMode="alignBounds"
+    grid:rowCount="3" grid:columnCount="2">
+
+    <TextView
+        grid:layout_column="0"
+        grid:layout_row="0"
+        android:id="@+id/label1_view"
+        grid:layout_columnWeight="1"
+        grid:layout_rowWeight="1"
+        grid:layout_gravity="fill"/>
+
+    <TextView
+        grid:layout_column="0"
+        grid:layout_row="1"
+        android:id="@+id/label2_view"
+        grid:layout_columnWeight="1"
+        grid:layout_rowWeight="1"
+        grid:layout_gravity="fill"/>
+
+    <TextView
+        grid:layout_column="0"
+        grid:layout_row="2"
+        android:id="@+id/label3_view"
+        grid:layout_columnWeight="1"
+        grid:layout_rowWeight="1"
+        grid:layout_gravity="fill"/>
+
+    <TextView
+        grid:layout_column="1"
+        grid:layout_row="0"
+        android:id="@+id/stats_2pt"
+        grid:layout_columnWeight="1"
+        grid:layout_rowWeight="1"
+        grid:layout_gravity="fill"/>
+
+    <TextView
+        grid:layout_column="1"
+        grid:layout_row="1"
+        android:id="@+id/stats_3pt"
+        grid:layout_columnWeight="1"
+        grid:layout_rowWeight="1"
+        grid:layout_gravity="fill"/>
+
+    <TextView
+        grid:layout_column="1"
+        grid:layout_row="2"
+        android:id="@+id/stats_reb"
+        grid:layout_columnWeight="1"
+        grid:layout_rowWeight="1"
+        grid:layout_gravity="fill"/>
+
+</android.support.v7.widget.GridLayout>

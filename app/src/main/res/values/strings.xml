@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">Basketball Sim</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Home Activity Strings -->
+    <string name="new_game_button">New Game</string>
+    <string name="load_game_button">Load Game</string>
+
+    <!-- Team Activity Strings -->
+    <string name="title_activity_team">TeamActivity</string>
+    <string name="team_activity_title">Choose your team, Coach!</string>
+    <string name="spinner_title">Choose your conference:</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- Main Activity Strings -->
+    <string name="roster_tab_title">Manage Roster</string>
+    <string name="roster_tab_text">Adjust Your Lineup and View Stats</string>
+    <string name="schedule_tab_title">Schedule</string>
+    <string name="sim_button_text">Sim Current Week</string>
+    <string name="rest_of_league_title">Around the League</string>
+    <string name="rest_of_league_text">Info on teams around the league here</string>
+
+    <!-- String Array of Conference and Team Names (for use on Team Activity) -->
+    <string-array name="conference_array">
+        <item>BIG 10</item>
+        <item>BIG 12</item>
+        <item>SEC</item>
+        <item>ACC</item>
+    </string-array>
+
+    <string-array name="big10_array">
+        <item>MICHIGAN ST - Prestige: 85</item>
+        <item>OHIO ST - Prestige: 80</item>
+        <item>MICHIGAN - Prestige: 80</item>
+        <item>WISCONSIN - Prestige: 75</item>
+        <item>IOWA - Prestige: 70</item>
+        <item>PURDUE - Prestige: 70</item>
+        <item>MINNESOTA - Prestige: 65</item>
+        <item>ILLINOIS - Prestige: 60</item>
+        <item>NEBRASKA - Prestige: 55</item>
+        <item>RUTGERS - Prestige: 50</item>
+    </string-array>
+
+    <string-array name="big12_array">
+        <item>KANSAS - Prestige: 90</item>
+        <item>OKLAHOMA - Prestige: 80</item>
+        <item>IOWA ST - Prestige: 80</item>
+        <item>TEXAS - Prestige: 75</item>
+        <item>OKLAHOMA ST - Prestige: 70</item>
+        <item>BAYLOR - Prestige: 70</item>
+        <item>WEST VIRGINIA - Prestige: 65</item>
+        <item>KANSAS ST - Prestige: 65</item>
+        <item>TEXAS TECH - Prestige: 60</item>
+        <item>TEXAS CHRISTIAN - Prestige: 50</item>
+    </string-array>
+
+    <string-array name="sec_array">
+        <item>KENTUCKY - Prestige: 95</item>
+        <item>FLORIDA - Prestige: 80</item>
+        <item>LOUISIANA ST - Prestige: 70</item>
+        <item>SOUTH CAROLINA - Prestige: 70</item>
+        <item>TENNESSEE - Prestige: 70</item>
+        <item>VANDERBILT - Prestige: 70</item>
+        <item>GEORGIA - Prestige: 65</item>
+        <item>ARKANSAS - Prestige: 65</item>
+        <item>ALABAMA - Prestige: 55</item>
+        <item>AUBURN - Prestige: 50</item>
+    </string-array>
+
+    <string-array name="acc_array">
+        <item>DUKE - Prestige: 90</item>
+        <item>NORTH CAROLINA - Prestige: 90</item>
+        <item>LOUISVILLE - Prestige: 80</item>
+        <item>SYRACUSE - Prestige: 75</item>
+        <item>MIAMI - Prestige: 75</item>
+        <item>VIRGINIA - Prestige: 70</item>
+        <item>GEORGIA TECH - Prestige: 65</item>
+        <item>FLORIDA ST - Prestige: 65</item>
+        <item>NORTH CAROLINA ST - Prestige: 60</item>
+        <item>BOSTON COLLEGE - Prestige: 50</item>
+    </string-array>
+
+</resources>
