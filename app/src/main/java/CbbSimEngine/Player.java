@@ -179,58 +179,6 @@ public class Player {
     }
 
 
-    // GET METHODS FOR PLAYER ATTRIBUTES
-    public String getName(){
-
-        return name;
-    }
-
-    public String getTeamAbbr(){
-
-        return team.getAbbr();
-    }
-
-    public Role getPlayerRole(){
-
-        return playerRole;
-    }
-
-    public int getInsideShotRating(){
-        return insideShotRating;
-    }
-
-    public int getOutsideShotRating(){
-        return outsideShotRating;
-    }
-
-    public int getDefenseRating(){
-        return defenseRating;
-    }
-
-    public int getReboundRating(){
-        return reboundRating;
-    }
-
-    public int getPassRating(){
-        return passRating;
-    }
-
-    public int getHeightRating(){
-        return heightRating;
-    }
-
-    public int getHandleRating(){
-        return handleRating;
-    }
-
-    public int getPosition(){
-        return position;
-    }
-
-    public int getOverall(){
-        return overall;
-    }
-
     /* Method to set the height rating of the player based on position */
     public void setHeightRating(int pos){
 
@@ -520,6 +468,63 @@ public class Player {
         }
 
         overall = (offOvr + defOvr)/2;
+    }
+
+
+    // GET METHODS FOR PLAYER ATTRIBUTES
+    public String getName(){
+
+        return name;
+    }
+
+    public String getTeamAbbr(){
+
+        return team.getAbbr();
+    }
+
+    public Role getPlayerRole(){
+
+        return playerRole;
+    }
+
+    public int getInsideShotRating(){
+        return insideShotRating;
+    }
+
+    public int getOutsideShotRating(){
+        return outsideShotRating;
+    }
+
+    public int getDefenseRating(){
+        return defenseRating;
+    }
+
+    public int getReboundRating(){
+        return reboundRating;
+    }
+
+    public int getPassRating(){
+        return passRating;
+    }
+
+    public int getHeightRating(){
+        return heightRating;
+    }
+
+    public int getHandleRating(){
+        return handleRating;
+    }
+
+    public int getPosition(){
+        return position;
+    }
+
+    public int getOverall(){
+        return overall;
+    }
+
+    public int getOffOvr(){
+        return offOvr;
     }
 
 

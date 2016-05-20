@@ -298,7 +298,7 @@ public class Game {
     }
 
     /* Method for determining where the next pass should go
-    *  Currently based off of chance and how good of a shooter the next player is */
+    *  Currently based off of chance and each player's offensive overall */
     public int determineNextPass(Player p, ArrayList<Player> offense){
 
         int posToPass = 0; //defaults to PG
@@ -310,7 +310,7 @@ public class Game {
 
             if(!(offense.get(i).equals(p))){ //If current ball handler does not equal this player, calc passProb
 
-                passProb = (offense.get(i).getInsideShotRating() + offense.get(i).getOutsideShotRating())*Math.random();
+                passProb = (offense.get(i).getOffOvr()*Math.random()*2);
 
                 if(passProb > largestPassProb){
                     largestPassProb = passProb;
