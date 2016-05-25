@@ -235,7 +235,7 @@ public class Game {
 
         final int bringUpBallTime = 5; //5 seconds to bring the ball up the court on each possession
         boolean curPossession = true; //Keeps track of offensive possession
-        double passChance = 0.90; // 85% chance the first ball handler will make a pass
+        double passChance = 0.90; // 90% chance the first ball handler will make a pass
         int passCounter = 0; //counts the number of passes to determine how much time each possession takes
         boolean shotMade = false;
 
@@ -310,7 +310,7 @@ public class Game {
 
             if(!(offense.get(i).equals(p))){ //If current ball handler does not equal this player, calc passProb
 
-                passProb = (offense.get(i).getOffOvr()*Math.random()*2);
+                passProb = (offense.get(i).getOffOvr() * 2 * Math.random());
 
                 if(passProb > largestPassProb){
                     largestPassProb = passProb;
@@ -321,102 +321,6 @@ public class Game {
         }
 
         return posToPass;
-
-
-    }
-
-    /* Method for determining the outcome of a player's shot
-    *  1. Determine the player's defender
-    *  2. Determine whether the player will take an inside or outside shot
-    *  3. Calculate whether the shot was made */
-    public boolean attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int pos){
-
-        double probIns = shooter.getInsideShotRating();
-        double probOut = shooter.getOutsideShotRating();
-        Player defender = defense.get(pos);
-        double insShotPercent = 15 + (shooter.getInsideShotRating()/2) - (defender.getDefenseRating()/5);
-        double outShotPercent = 10 + (shooter.getOutsideShotRating()/2) - (defender.getDefenseRating()/5);
-        double passerBonus = 0;
-
-        if(!passer.equals(shooter)) {
-            //No passer bonus for passers with rating under 70
-            if (passer.getPassRating() >= 70) {
-
-                passerBonus = 4 + ((passer.getPassRating() - 70) / 2);
-            }
-        }
-
-
-        if(probIns * Math.random() >= probOut* Math.random()){
-            //take inside shot
-            if(100*Math.random() < insShotPercent + passerBonus){
-                //shot made
-                if(possession == 0){
-                    homeScore += 2;
-                    //Add 2FGM and 2FGA
-                    homeStats[pos][0]++;
-                    homeStats[pos][1]++;
-                }
-                else{
-                    awayScore += 2;
-                    //Add 2FGM and 2FGA
-                    awayStats[pos][0]++;
-                    awayStats[pos][1]++;
-                }
-
-                gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 2 pt basket " + clock + "\n";
-                return true;
-            }
-            else{
-                //shot missed
-                if(possession == 0){
-                    //Add 2FGA
-                    homeStats[pos][1]++;
-                }
-                else{
-                    //Add 2FGA
-                    awayStats[pos][1]++;
-                }
-
-                gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 2 pt basket " + clock + "\n";
-                return false;
-            }
-        }
-        else{
-            //take outside shot
-            if(100*Math.random() < outShotPercent + passerBonus){
-                //shot made
-                if(possession == 0){
-                    homeScore += 3;
-                    //Add 3FGM and 3FGA
-                    homeStats[pos][2]++;
-                    homeStats[pos][3]++;
-                }
-                else{
-                    awayScore += 3;
-                    //Add 3FGM and 3FGA
-                    awayStats[pos][2]++;
-                    awayStats[pos][3]++;
-                }
-
-                gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt basket " + clock + "\n";
-                return true;
-            }
-            else{
-                //shot missed
-                if(possession == 0){
-                    //Add 3FGA
-                    homeStats[pos][3]++;
-                }
-                else{
-                    //Add 3FGA
-                    awayStats[pos][3]++;
-                }
-
-                gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt basket " + clock + "\n";
-                return false;
-            }
-        }
 
 
     }
@@ -488,6 +392,255 @@ public class Game {
             return posOfOffReb;
         }
 
+    }
+
+    /* Method for determining if the player makes or misses his shot
+    *  1. Determines if the shot will be assisted and what the passerBonus will be (based on passer's pass rating)
+    *  1. Determines the type of shot attempted (post, layup, mid, or three) using player tendencies
+    *  2. Calls the appropriate shot type's method and grabs the result
+    *  Returns whether the shot was made/missed (true/false) */
+    public boolean attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int pos){
+
+        boolean shotResult;
+        int passerBonus = 0;
+        Player defender = defense.get(pos); //The player that will be defending the shooter
+
+        if(!passer.equals(shooter)) {
+            //No passer bonus for passers with rating under 70
+            if (passer.getPassRating() >= 70) {
+
+                passerBonus = (int) (4 + ((passer.getPassRating() - 70) / 2));
+            }
+        }
+
+
+        // Determine what kind of shot the player will attempt based on tendencies
+        if(100*Math.random() < shooter.getJumperOrDrive()){
+            //Player will drive
+            if(100*Math.random() < shooter.getLayupOrPost()){
+                //Player will Post up
+                shotResult = attemptPostShot(passerBonus, shooter, defender);
+
+                if(shotResult){
+
+                    // Shot made
+                    if(possession == 0){
+                        homeScore += 2;
+                        //Add 2FGM and 2FGA
+                        homeStats[pos][0]++;
+                        homeStats[pos][1]++;
+                    }
+                    else{
+                        awayScore += 2;
+                        //Add 2FGM and 2FGA
+                        awayStats[pos][0]++;
+                        awayStats[pos][1]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a post shot " + clock + "\n";
+                    return true;
+                }
+                else{
+
+                    // Shot missed
+                    if(possession == 0){
+                        //Add 2FGA
+                        homeStats[pos][1]++;
+                    }
+                    else{
+                        //Add 2FGA
+                        awayStats[pos][1]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a post shot " + clock + "\n";
+                    return false;
+                }
+            } else{
+                //Player will attempt a layup
+                shotResult = attemptLayup(passerBonus, shooter, defender);
+
+                if(shotResult){
+
+                    // Shot made
+                    if(possession == 0){
+                        homeScore += 2;
+                        //Add 2FGM and 2FGA
+                        homeStats[pos][0]++;
+                        homeStats[pos][1]++;
+                    }
+                    else{
+                        awayScore += 2;
+                        //Add 2FGM and 2FGA
+                        awayStats[pos][0]++;
+                        awayStats[pos][1]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a layup " + clock + "\n";
+                    return true;
+                }
+                else{
+
+                    // Shot missed
+                    if(possession == 0){
+                        //Add 2FGA
+                        homeStats[pos][1]++;
+                    }
+                    else{
+                        //Add 2FGA
+                        awayStats[pos][1]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a layup " + clock + "\n";
+                    return false;
+                }
+            }
+        }
+        else{
+            //Player will shoot jumper
+            if(100*Math.random() < shooter.getMidOrThree()){
+                //Player will shoot a three
+                shotResult = attemptThree(passerBonus, shooter, defender);
+
+                if(shotResult){
+
+                    // Shot made
+                    if(possession == 0){
+                        homeScore += 3;
+                        //Add 3FGM and 3FGA
+                        homeStats[pos][2]++;
+                        homeStats[pos][3]++;
+                    }
+                    else{
+                        awayScore += 3;
+                        //Add 3FGM and 3FGA
+                        awayStats[pos][2]++;
+                        awayStats[pos][3]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt basket " + clock + "\n";
+                    return true;
+                }
+                else{
+
+                    // Shot missed
+                    if(possession == 0){
+                        //Add 3FGA
+                        homeStats[pos][3]++;
+                    }
+                    else{
+                        //Add 3FGA
+                        awayStats[pos][3]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt basket " + clock + "\n";
+                    return false;
+                }
+            }
+            else{
+                //Player will shoot a midrange jumpshot
+                shotResult = attemptMid(passerBonus, shooter, defender);
+
+                if(shotResult){
+
+                    // Shot made
+                    if(possession == 0){
+                        homeScore += 2;
+                        //Add 2FGM and 2FGA
+                        homeStats[pos][0]++;
+                        homeStats[pos][1]++;
+                    }
+                    else{
+                        awayScore += 2;
+                        //Add 2FGM and 2FGA
+                        awayStats[pos][0]++;
+                        awayStats[pos][1]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a midrange jumper " + clock + "\n";
+                    return true;
+                }
+                else{
+
+                    // Shot missed
+                    if(possession == 0){
+                        //Add 2FGA
+                        homeStats[pos][1]++;
+                    }
+                    else{
+                        //Add 2FGA
+                        awayStats[pos][1]++;
+                    }
+
+                    // Record result to game log
+                    gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a midrange jumper " + clock + "\n";
+                    return false;
+                }
+            }
+        }
+
+    }
+
+    public boolean attemptPostShot(int passerBonus, Player shooter, Player defender){
+
+        double chance = 18 + (shooter.getPostRating()/2) - (defender.getDefenseRating()/5);
+
+        if(100*Math.random() < chance + passerBonus){
+            // Shot made
+            return true;
+        }
+        else{
+            // Shot missed
+            return false;
+        }
+    }
+
+    public boolean attemptLayup(int passerBonus, Player shooter, Player defender){
+
+        double chance = 17 + (shooter.getLayupRating()/2) - (defender.getDefenseRating()/5);
+
+        if(100*Math.random() < chance + passerBonus){
+            // Shot made
+            return true;
+        }
+        else{
+            // Shot missed
+            return false;
+        }
+    }
+
+    public boolean attemptThree(int passerBonus, Player shooter, Player defender){
+
+        double chance = 10 + (shooter.getThreeRating()/2) - (defender.getDefenseRating()/5);
+
+        if(100*Math.random() < chance + passerBonus){
+            // Shot made
+            return true;
+        }
+        else{
+            // Shot missed
+            return false;
+        }
+    }
+
+    public boolean attemptMid(int passerBonus, Player shooter, Player defender){
+
+        double chance = 15 + (shooter.getMidRating()/2) - (defender.getDefenseRating()/5);
+
+        if(100*Math.random() < chance + passerBonus){
+            // Shot made
+            return true;
+        }
+        else{
+            // Shot missed
+            return false;
+        }
     }
 
 

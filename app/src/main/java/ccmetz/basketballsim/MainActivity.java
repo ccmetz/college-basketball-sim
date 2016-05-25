@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                /** FOR DEBUGGING PURPOSES **/
+
                /* //Display a dialog that shows the log of the game
                 String log = userTeam.getGameArrayList().get(position).getGameLog();
                 new AlertDialog.Builder(MainActivity.this)

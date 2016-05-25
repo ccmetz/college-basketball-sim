@@ -23,8 +23,8 @@ public class Player {
     /* Shooting */
     private int layupRating;
     private int postRating;
-    private int insideShotRating;
-    private int outsideShotRating;
+    private int midRating;
+    private int threeRating;
     /* Defense */
     private int defenseRating;
     private int reboundRating;
@@ -139,8 +139,8 @@ public class Player {
         ArrayList<String> list = new ArrayList<String>();
         list.add("Lay: " + layupRating + "/Def: " + defenseRating);
         list.add("Post: " + postRating + "/Reb: " + reboundRating);
-        list.add("In: " + insideShotRating + "/Stl: " + stealRating);
-        list.add("Out: " + outsideShotRating + "/Blk: " + blockRating);
+        list.add("Mid: " + midRating + "/Stl: " + stealRating);
+        list.add("Out: " + threeRating + "/Blk: " + blockRating);
         list.add("Pass: " + passRating + "/Type: " + typeString);
         list.add("Hand: " + handleRating + "/Stars: " + stars);
         list.add("Off Ovr: " + offOvr + "/Def Ovr: " + defOvr);
@@ -351,8 +351,8 @@ public class Player {
 
         layupRating = (int) (base[0] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
         postRating = (int) (base[1] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
-        insideShotRating = (int) (base[2] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
-        outsideShotRating = (int) (base[3] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
+        midRating = (int) (base[2] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
+        threeRating = (int) (base[3] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
 
         defenseRating = (int) (base[4] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
         reboundRating = (int) (base[5] + (year*3) + (stars*4) + (20 * Math.random()) + oneAndDoneBonus);
@@ -402,11 +402,11 @@ public class Player {
         }
 
         // Tendency adjustments based on attributes
-        if(outsideShotRating >= insideShotRating + 10){
+        if(threeRating >= midRating + 10){
 
             midOrThree += 10;
         }
-        else if(insideShotRating >= outsideShotRating + 10){
+        else if(midRating >= threeRating + 10){
 
             midOrThree -= 10;
         }
@@ -455,14 +455,14 @@ public class Player {
         // Backcourt overall
         if(position == 1 || position == 2 || position == 3){
 
-            offOvr = (int) ((layupRating + postRating*0.15 + insideShotRating + outsideShotRating
+            offOvr = (int) ((layupRating + postRating*0.15 + midRating + threeRating
                     + passRating*0.75 + handleRating*0.75)/4.65);
             defOvr = (int) ((defenseRating + reboundRating*0.75 + stealRating + blockRating*0.75)/3.5);
         }
         // Frontcourt overall
         else if(position == 4 || position == 5){
 
-            offOvr = (int) ((layupRating + postRating + insideShotRating + outsideShotRating*0.75
+            offOvr = (int) ((layupRating + postRating + midRating + threeRating *0.75
                     + passRating*0.25 + handleRating*0.25)/4.25);
             defOvr = (int) ((defenseRating + reboundRating + stealRating*0.75 + blockRating)/3.75);
         }
@@ -473,26 +473,31 @@ public class Player {
 
     // GET METHODS FOR PLAYER ATTRIBUTES
     public String getName(){
-
         return name;
     }
 
     public String getTeamAbbr(){
-
         return team.getAbbr();
     }
 
     public Role getPlayerRole(){
-
         return playerRole;
     }
 
-    public int getInsideShotRating(){
-        return insideShotRating;
+    public int getPostRating(){
+        return postRating;
     }
 
-    public int getOutsideShotRating(){
-        return outsideShotRating;
+    public int getLayupRating(){
+        return layupRating;
+    }
+
+    public int getMidRating(){
+        return midRating;
+    }
+
+    public int getThreeRating(){
+        return threeRating;
     }
 
     public int getDefenseRating(){
@@ -525,6 +530,18 @@ public class Player {
 
     public int getOffOvr(){
         return offOvr;
+    }
+
+    public int getJumperOrDrive(){
+        return jumperOrDrive;
+    }
+
+    public int getLayupOrPost(){
+        return layupOrPost;
+    }
+
+    public int getMidOrThree(){
+        return midOrThree;
     }
 
 
