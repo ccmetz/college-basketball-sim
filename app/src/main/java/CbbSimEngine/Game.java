@@ -55,6 +55,17 @@ public class Game {
 
     }
 
+    /**
+     * Used for determining the result of each team's possession
+     * MAKE -> Possession changes to other team
+     * MISS -> Rebound opportunity
+     * STEAL -> Possession changes to other team
+     * BLOCK -> Rebound opportunity
+     */
+    public enum Result{
+        MAKE, MISS, STEAL, BLOCK
+    }
+
     public String getGameResult(boolean home){
 
         String r = " ----";
@@ -237,7 +248,7 @@ public class Game {
         boolean curPossession = true; //Keeps track of offensive possession
         double passChance = 0.90; // 90% chance the first ball handler will make a pass
         int passCounter = 0; //counts the number of passes to determine how much time each possession takes
-        boolean shotMade = false;
+        Result result;
 
         Player hasBall = offense.get(0); // Step 1: PG starts with the ball
         Player passer = hasBall; //PG will default as the passer
@@ -259,9 +270,9 @@ public class Game {
             else{
 
                 //Player with the ball shoots
-                shotMade = attemptShot(passer, hasBall, defense, posOfBall);
+                result = attemptShot(passer, hasBall, defense, posOfBall);
 
-                if(!shotMade){
+                if(result == Result.MISS || result == Result.BLOCK){
 
                     //rebound the ball
                     posOfBall = rebound(offense, defense);
@@ -278,7 +289,7 @@ public class Game {
 
                 }
                 else {
-                    curPossession = false; //current possession ends after shot is made
+                    curPossession = false; //current possession ends after shot is made or ball is stolen
                 }
 
                 // Adjust the game clock
@@ -399,9 +410,9 @@ public class Game {
     *  1. Determines the type of shot attempted (post, layup, mid, or three) using player tendencies
     *  2. Calls the appropriate shot type's method and grabs the result
     *  Returns whether the shot was made/missed (true/false) */
-    public boolean attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int pos){
+    public Result attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int pos){
 
-        boolean shotResult;
+        Result shotResult;
         int passerBonus = 0;
         Player defender = defense.get(pos); //The player that will be defending the shooter
 
@@ -421,7 +432,7 @@ public class Game {
                 //Player will Post up
                 shotResult = attemptPostShot(passerBonus, shooter, defender);
 
-                if(shotResult){
+                if(shotResult == Result.MAKE){
 
                     // Shot made
                     if(possession == 0){
@@ -439,9 +450,8 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a post shot " + clock + "\n";
-                    return true;
                 }
-                else{
+                else if(shotResult == Result.MISS){
 
                     // Shot missed
                     if(possession == 0){
@@ -455,13 +465,12 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a post shot " + clock + "\n";
-                    return false;
                 }
             } else{
                 //Player will attempt a layup
                 shotResult = attemptLayup(passerBonus, shooter, defender);
 
-                if(shotResult){
+                if(shotResult == Result.MAKE){
 
                     // Shot made
                     if(possession == 0){
@@ -479,9 +488,8 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a layup " + clock + "\n";
-                    return true;
                 }
-                else{
+                else if(shotResult == Result.MISS){
 
                     // Shot missed
                     if(possession == 0){
@@ -495,7 +503,6 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a layup " + clock + "\n";
-                    return false;
                 }
             }
         }
@@ -505,7 +512,7 @@ public class Game {
                 //Player will shoot a three
                 shotResult = attemptThree(passerBonus, shooter, defender);
 
-                if(shotResult){
+                if(shotResult == Result.MAKE){
 
                     // Shot made
                     if(possession == 0){
@@ -523,9 +530,8 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt basket " + clock + "\n";
-                    return true;
                 }
-                else{
+                else if(shotResult == Result.MISS){
 
                     // Shot missed
                     if(possession == 0){
@@ -539,14 +545,13 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt basket " + clock + "\n";
-                    return false;
                 }
             }
             else{
                 //Player will shoot a midrange jumpshot
                 shotResult = attemptMid(passerBonus, shooter, defender);
 
-                if(shotResult){
+                if(shotResult == Result.MAKE){
 
                     // Shot made
                     if(possession == 0){
@@ -564,9 +569,8 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a midrange jumper " + clock + "\n";
-                    return true;
                 }
-                else{
+                else if(shotResult == Result.MISS){
 
                     // Shot missed
                     if(possession == 0){
@@ -580,66 +584,190 @@ public class Game {
 
                     // Record result to game log
                     gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a midrange jumper " + clock + "\n";
-                    return false;
                 }
             }
         }
 
+        return shotResult;
     }
 
-    public boolean attemptPostShot(int passerBonus, Player shooter, Player defender){
+    public Result attemptPostShot(int passerBonus, Player shooter, Player defender){
 
-        double chance = 18 + (shooter.getPostRating()/2) - (defender.getDefenseRating()/5);
+        double shotChance = 18 + (shooter.getPostRating()/2) - (defender.getDefenseRating()/5);
+        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
+        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
 
-        if(100*Math.random() < chance + passerBonus){
+        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
+
+        //Determine if a block or steal opportunity exists
+        if(Math.random() < 0.10){
+            //Steal opportunity exists - determine if defender will go for steal
+            if(Math.random() < defender.getTryForSteal()){
+                //Defender goes for steal
+                if(100*Math.random() < stealChance){
+
+                    //STEAL - TURNOVER
+                    blkOrStl = true;
+                    return Result.STEAL;
+                }
+
+            }
+        }
+        else if(Math.random() < 0.20){
+            //Block opportunity exists - determine if defender will go for block
+            if(Math.random() < defender.getTryForBlock()){
+                //Defender goes for block
+                if(100*Math.random() < blockChance){
+
+                    //BLOCKED
+                    blkOrStl = true;
+                    return Result.BLOCK;
+                }
+            }
+        }
+
+        if(100*Math.random() < shotChance + passerBonus && blkOrStl == false){
             // Shot made
-            return true;
+            return Result.MAKE;
         }
         else{
             // Shot missed
-            return false;
+            return Result.MISS;
         }
     }
 
-    public boolean attemptLayup(int passerBonus, Player shooter, Player defender){
+    public Result attemptLayup(int passerBonus, Player shooter, Player defender){
 
         double chance = 17 + (shooter.getLayupRating()/2) - (defender.getDefenseRating()/5);
+        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
+        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
 
-        if(100*Math.random() < chance + passerBonus){
+        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
+
+        //Determine if a block or steal opportunity exists
+        if(Math.random() < 0.15){
+            //Steal opportunity exists - determine if defender will go for steal
+            if(Math.random() < defender.getTryForSteal()){
+                //Defender goes for steal
+                if(100*Math.random() < stealChance){
+
+                    //STEAL - TURNOVER
+                    blkOrStl = true;
+                    return Result.STEAL;
+                }
+
+            }
+        }
+        else if(Math.random() < 0.20){
+            //Block opportunity exists - determine if defender will go for block
+            if(Math.random() < defender.getTryForBlock()){
+                //Defender goes for block
+                if(100*Math.random() < blockChance){
+
+                    //BLOCKED
+                    blkOrStl = true;
+                    return Result.BLOCK;
+                }
+            }
+        }
+
+        if(100*Math.random() < chance + passerBonus && blkOrStl == false){
             // Shot made
-            return true;
+            return Result.MAKE;
         }
         else{
             // Shot missed
-            return false;
+            return Result.MISS;
         }
     }
 
-    public boolean attemptThree(int passerBonus, Player shooter, Player defender){
+    public Result attemptThree(int passerBonus, Player shooter, Player defender){
 
         double chance = 10 + (shooter.getThreeRating()/2) - (defender.getDefenseRating()/5);
+        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
+        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
 
-        if(100*Math.random() < chance + passerBonus){
+        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
+
+        //Determine if a block or steal opportunity exists
+        if(Math.random() < 0.05){
+            //Steal opportunity exists - determine if defender will go for steal
+            if(Math.random() < defender.getTryForSteal()){
+                //Defender goes for steal
+                if(100*Math.random() < stealChance){
+
+                    //STEAL - TURNOVER
+                    blkOrStl = true;
+                    return Result.STEAL;
+                }
+
+            }
+        }
+        else if(Math.random() < 0.02){
+            //Block opportunity exists - determine if defender will go for block
+            if(Math.random() < defender.getTryForBlock()){
+                //Defender goes for block
+                if(100*Math.random() < blockChance){
+
+                    //BLOCKED
+                    blkOrStl = true;
+                    return Result.BLOCK;
+                }
+            }
+        }
+
+        if(100*Math.random() < chance + passerBonus && blkOrStl == false){
             // Shot made
-            return true;
+            return Result.MAKE;
         }
         else{
             // Shot missed
-            return false;
+            return Result.MISS;
         }
     }
 
-    public boolean attemptMid(int passerBonus, Player shooter, Player defender){
+    public Result attemptMid(int passerBonus, Player shooter, Player defender){
 
         double chance = 15 + (shooter.getMidRating()/2) - (defender.getDefenseRating()/5);
+        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
+        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
 
-        if(100*Math.random() < chance + passerBonus){
+        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
+
+        //Determine if a block or steal opportunity exists
+        if(Math.random() < 0.05){
+            //Steal opportunity exists - determine if defender will go for steal
+            if(Math.random() < defender.getTryForSteal()){
+                //Defender goes for steal
+                if(100*Math.random() < stealChance){
+
+                    //STEAL - TURNOVER
+                    blkOrStl = true;
+                    return Result.STEAL;
+                }
+
+            }
+        }
+        else if(Math.random() < 0.05){
+            //Block opportunity exists - determine if defender will go for block
+            if(Math.random() < defender.getTryForBlock()){
+                //Defender goes for block
+                if(100*Math.random() < blockChance){
+
+                    //BLOCKED
+                    blkOrStl = true;
+                    return Result.BLOCK;
+                }
+            }
+        }
+
+        if(100*Math.random() < chance + passerBonus && blkOrStl == false){
             // Shot made
-            return true;
+            return Result.MAKE;
         }
         else{
             // Shot missed
-            return false;
+            return Result.MISS;
         }
     }
 

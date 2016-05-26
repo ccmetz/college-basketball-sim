@@ -520,6 +520,14 @@ public class Player {
         return handleRating;
     }
 
+    public int getStealRating(){
+        return stealRating;
+    }
+
+    public int getBlockRating(){
+        return blockRating;
+    }
+
     public int getPosition(){
         return position;
     }
@@ -542,6 +550,14 @@ public class Player {
 
     public int getMidOrThree(){
         return midOrThree;
+    }
+
+    public int getTryForSteal(){
+        return tryForSteal;
+    }
+
+    public int getTryForBlock(){
+        return tryForBlock;
     }
 
 
