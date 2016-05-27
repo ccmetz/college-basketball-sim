@@ -477,6 +477,9 @@ public class Game {
 
                     //STEAL - TURNOVER
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
+                            shooter.getName() + " " + clock + "\n";
                     return Result.STEAL;
                 }
 
@@ -490,6 +493,9 @@ public class Game {
 
                     //BLOCKED
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
+                            " " + clock + "\n";
                     return Result.BLOCK;
                 }
             }
@@ -509,8 +515,7 @@ public class Game {
                 awayStats[pos][0]++;
                 awayStats[pos][1]++;
             }
-
-            // Record result to game log
+            
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a post shot " + clock + "\n";
             return Result.MAKE;
         }
@@ -525,7 +530,6 @@ public class Game {
                 awayStats[pos][1]++;
             }
 
-            // Record result to game log
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a post shot " + clock + "\n";
             return Result.MISS;
         }
@@ -549,6 +553,9 @@ public class Game {
 
                     //STEAL - TURNOVER
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
+                            shooter.getName() + " " + clock + "\n";
                     return Result.STEAL;
                 }
 
@@ -562,6 +569,9 @@ public class Game {
 
                     //BLOCKED
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
+                            " " + clock + "\n";
                     return Result.BLOCK;
                 }
             }
@@ -582,7 +592,6 @@ public class Game {
                 awayStats[pos][1]++;
             }
 
-            // Record result to game log
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a layup " + clock + "\n";
             return Result.MAKE;
         }
@@ -597,7 +606,6 @@ public class Game {
                 awayStats[pos][1]++;
             }
 
-            // Record result to game log
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a layup " + clock + "\n";
             return Result.MISS;
         }
@@ -621,6 +629,9 @@ public class Game {
 
                     //STEAL - TURNOVER
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
+                            shooter.getName() + " " + clock + "\n";
                     return Result.STEAL;
                 }
 
@@ -634,6 +645,9 @@ public class Game {
 
                     //BLOCKED
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
+                            " " + clock + "\n";
                     return Result.BLOCK;
                 }
             }
@@ -654,7 +668,6 @@ public class Game {
                 awayStats[pos][3]++;
             }
 
-            // Record result to game log
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt basket " + clock + "\n";
             return Result.MAKE;
         }
@@ -669,7 +682,6 @@ public class Game {
                 awayStats[pos][3]++;
             }
 
-            // Record result to game log
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt basket " + clock + "\n";
             return Result.MISS;
         }
@@ -693,6 +705,9 @@ public class Game {
 
                     //STEAL - TURNOVER
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
+                            shooter.getName() + " " + clock + "\n";
                     return Result.STEAL;
                 }
 
@@ -706,6 +721,9 @@ public class Game {
 
                     //BLOCKED
                     blkOrStl = true;
+
+                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
+                            " " + clock + "\n";
                     return Result.BLOCK;
                 }
             }
@@ -726,7 +744,6 @@ public class Game {
                 awayStats[pos][1]++;
             }
 
-            // Record result to game log
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a midrange jumper " + clock + "\n";
             return Result.MAKE;
         }
@@ -741,7 +758,6 @@ public class Game {
                 awayStats[pos][1]++;
             }
 
-            // Record result to game log
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a midrange jumper " + clock + "\n";
             return Result.MISS;
         }
