@@ -126,21 +126,21 @@ public class Game {
                 "\n" + awayOnFloor.get(1).getName() + "\n" + awayOnFloor.get(2).getName() + "\n" + awayOnFloor.get(3).getName()
                 + "\n" + awayOnFloor.get(4).getName() + "\n\n";
 
-        right2pt = "2FGM  2FGA" + "\n" + homeStats[0][0] + "  " + homeStats[0][1] + "\n" + homeStats[1][0] +
+        right2pt = "2FGM/A" + "\n" + homeStats[0][0] + "  " + homeStats[0][1] + "\n" + homeStats[1][0] +
                     "  " + homeStats[1][1] + "\n" + homeStats[2][0] + "  " + homeStats[2][1] + "\n" +
                     homeStats[3][0] + "  " + homeStats[3][1] + "\n" + homeStats[4][0] + "  " + homeStats[4][1] +
                     "\n--\n" + awayStats[0][0] + "  " + awayStats[0][1] + "\n" + awayStats[1][0] + "  " +
                     awayStats[1][1] + "\n" + awayStats[2][0] + "  " + awayStats[2][1] + "\n" + awayStats[3][0] +
                     "  " + awayStats[3][1] + "\n" + awayStats[4][0] + "  " + awayStats[4][1] + "\n\n";
 
-        right3pt = "3FGM  3FGA" + "\n" + homeStats[0][2] + "  " + homeStats[0][3] + "\n" + homeStats[1][2] +
+        right3pt = "3FGM/A" + "\n" + homeStats[0][2] + "  " + homeStats[0][3] + "\n" + homeStats[1][2] +
                     "  " + homeStats[1][3] + "\n" + homeStats[2][2] + "  " + homeStats[2][3] + "\n" +
                     homeStats[3][2] + "  " + homeStats[3][3] + "\n" + homeStats[4][2] + "  " + homeStats[4][3] + "\n--\n" +
                     awayStats[0][2] + "  " + awayStats[0][3] + "\n" + awayStats[1][2] + "  " + awayStats[1][3] +
                     "\n" + awayStats[2][2] + "  " + awayStats[2][3] + "\n" + awayStats[3][2] + "  " + awayStats[3][3] +
                     "\n" + awayStats[4][2] + "  " + awayStats[4][3] + "\n\n";
 
-        rightReb = "OREB  DREB" + "\n" + homeStats[0][4] + "  " + homeStats[0][5] + "\n" + homeStats[1][4] +
+        rightReb = "O/DREB" + "\n" + homeStats[0][4] + "  " + homeStats[0][5] + "\n" + homeStats[1][4] +
                     "  " + homeStats[1][5] + "\n" + homeStats[2][4] + "  " + homeStats[2][5] + "\n" +
                     homeStats[3][4] + "  " + homeStats[3][5] + "\n" + homeStats[4][4] + "  " + homeStats[4][5] + "\n--\n" +
                     awayStats[0][4] + "  " + awayStats[0][5] + "\n" + awayStats[1][4] + "  " + awayStats[1][5] +
@@ -515,7 +515,7 @@ public class Game {
                 awayStats[pos][0]++;
                 awayStats[pos][1]++;
             }
-            
+
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a post shot " + clock + "\n";
             return Result.MAKE;
         }

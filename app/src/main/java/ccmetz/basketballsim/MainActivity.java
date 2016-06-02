@@ -1,16 +1,19 @@
 package ccmetz.basketballsim;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -93,15 +96,20 @@ public class MainActivity extends AppCompatActivity {
                         .setMessage(log)
                         .show(); */
 
-                //CREATE A BOXSCORE DIALOG USING A GRIDVIEW AND PROBABLY A CUSTOM ADAPTER THAT
-                //TAKES IN gameBoxScore AS AN ARGUMENT
+                //Get the gameBoxScore array from the specific game
                 String[] gameBoxScore = userTeam.getGameArrayList().get(position).getBoxScore();
 
-                // Logging for debugging purposes!
-                Log.i("gameBoxScore[0]: ", gameBoxScore[0]);
-                Log.i("gameBoxScore[1]: ", gameBoxScore[1]);
-                Log.i("gameBoxScore[2]: ", gameBoxScore[2]);
-                Log.i("gameBoxScore[3]: ", gameBoxScore[3]);
+                LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View rootView = inflater.inflate(R.layout.boxscore_dialog,null);
+
+                //Initialize the GridView and set the custom BoxScoreAdapter
+                GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
+                boxScoreGrid.setAdapter(new BoxScoreAdapter(gameBoxScore, MainActivity.this));
+
+                //Show the box score dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setView(rootView);
+                builder.show();
 
             }
         });
