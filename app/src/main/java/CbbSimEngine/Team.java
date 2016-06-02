@@ -125,8 +125,8 @@ public class Team {
 
         for (int i = 0; i < numPGs; i++) {
 
-            pgList.add(i, new Player(league.getRandomName(), 1, (int) (4 * Math.random()), determineRecruitStars(),
-                    (int) (4 * Math.random()), this));
+            pgList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 1, (int) (4 * Math.random()),
+                    determineRecruitStars(), (int) (4 * Math.random()), this));
 
         }
 
@@ -134,8 +134,8 @@ public class Team {
 
         for (int i = 0; i < numSGs; i++) {
 
-            sgList.add(i, new Player(league.getRandomName(), 2, (int) (4 * Math.random()), determineRecruitStars(),
-                    (int) (4 * Math.random()), this));
+            sgList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 2, (int) (4 * Math.random()),
+                    determineRecruitStars(), (int) (4 * Math.random()), this));
 
         }
 
@@ -143,8 +143,8 @@ public class Team {
 
         for (int i = 0; i < numSFs; i++) {
 
-            sfList.add(i, new Player(league.getRandomName(), 3, (int) (4 * Math.random()), determineRecruitStars(),
-                    (int) (4 * Math.random()), this));
+            sfList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 3, (int) (4 * Math.random()),
+                    determineRecruitStars(), (int) (4 * Math.random()), this));
 
         }
 
@@ -152,8 +152,8 @@ public class Team {
 
         for (int i = 0; i < numPFs; i++) {
 
-            pfList.add(i, new Player(league.getRandomName(), 4, (int) (4 * Math.random()), determineRecruitStars(),
-                    (int) (4 * Math.random()), this));
+            pfList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 4, (int) (4 * Math.random()),
+                    determineRecruitStars(), (int) (4 * Math.random()), this));
 
         }
 
@@ -161,8 +161,8 @@ public class Team {
 
         for (int i = 0; i < numCs; i++) {
 
-            cList.add(i, new Player(league.getRandomName(), 5, (int) (4 * Math.random()), determineRecruitStars(),
-                    (int) (4 * Math.random()), this));
+            cList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 5, (int) (4 * Math.random()),
+                    determineRecruitStars(), (int) (4 * Math.random()), this));
 
         }
 

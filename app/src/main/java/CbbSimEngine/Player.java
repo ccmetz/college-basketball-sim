@@ -11,6 +11,8 @@ public class Player {
 
     // Defined in the constructor
     private String name;
+    private String fName;
+    private String lName;
     private int position; //Position marked by ints (ex: 1 = pg, 2 = sg, etc)
     private String posString;
     private int year;
@@ -59,9 +61,11 @@ public class Player {
 
     //Constructor for randomly generated Player Name and attributes
     //STARS will influence the player's attributes
-    public Player(String nm, int pos, int yr, int stars, int t, Team tm){
+    public Player(String first, String last, int pos, int yr, int stars, int t, Team tm){
 
-        name = nm;
+        fName = first;
+        lName = last;
+        name = first + " " + last;
         position = pos;
         year = yr;
         team = tm;
@@ -474,6 +478,10 @@ public class Player {
     // GET METHODS FOR PLAYER ATTRIBUTES
     public String getName(){
         return name;
+    }
+
+    public String getLastName(){
+        return lName;
     }
 
     public String getTeamAbbr(){

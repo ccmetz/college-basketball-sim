@@ -166,12 +166,19 @@ public class League {
         }
     }
 
-    // Method for generating a random full name
-    public String getRandomName(){
+    // Methods for generating a first and last name
+    public String getRandomFirstName(){
 
         Random r = new Random();
 
-        return firstNames[r.nextInt(firstNames.length)] + " " + lastNames[r.nextInt(lastNames.length)];
+        return firstNames[r.nextInt(firstNames.length)];
+    }
+
+    public String getRandomLastName(){
+
+        Random r = new Random();
+
+        return lastNames[r.nextInt(lastNames.length)];
     }
 
 

@@ -120,11 +120,11 @@ public class Game {
         String right3pt;
         String rightReb;
 
-        left = homeTeam.getAbbr() + "\n" + homeOnFloor.get(0).getName() + "\n" + homeOnFloor.get(1).getName() +
-                "\n" + homeOnFloor.get(2).getName() + "\n" + homeOnFloor.get(3).getName() + "\n" +
-                homeOnFloor.get(4).getName() + "\n" + awayTeam.getAbbr() + "\n" + awayOnFloor.get(0).getName() +
-                "\n" + awayOnFloor.get(1).getName() + "\n" + awayOnFloor.get(2).getName() + "\n" + awayOnFloor.get(3).getName()
-                + "\n" + awayOnFloor.get(4).getName() + "\n\n";
+        left = homeTeam.getAbbr() + "\n" + homeOnFloor.get(0).getLastName() + "\n" + homeOnFloor.get(1).getLastName() +
+                "\n" + homeOnFloor.get(2).getLastName() + "\n" + homeOnFloor.get(3).getLastName() + "\n" +
+                homeOnFloor.get(4).getLastName() + "\n" + awayTeam.getAbbr() + "\n" + awayOnFloor.get(0).getLastName() +
+                "\n" + awayOnFloor.get(1).getLastName() + "\n" + awayOnFloor.get(2).getLastName() + "\n" +
+                awayOnFloor.get(3).getLastName() + "\n" + awayOnFloor.get(4).getLastName() + "\n\n";
 
         right2pt = "2FGM/A" + "\n" + homeStats[0][0] + "  " + homeStats[0][1] + "\n" + homeStats[1][0] +
                     "  " + homeStats[1][1] + "\n" + homeStats[2][0] + "  " + homeStats[2][1] + "\n" +
