@@ -50,8 +50,8 @@ public class Game {
 
         gameLog = ""; //Game log is initially blank
 
-        homeStats = new int[5][6]; //5 players -> tracks 2FGM, 2FGA, 3FGM, 3FGA, OREB, DREB
-        awayStats = new int[5][6];
+        homeStats = new int[5][9]; //5 players -> tracks 2FGM, 2FGA, 3FGM, 3FGA, OREB, DREB, STL, BLK, TO
+        awayStats = new int[5][9];
 
     }
 
@@ -114,43 +114,69 @@ public class Game {
     // ONLY OPTIMIZED FOR GAMES PLAYED WITHOUT SUBS - WILL NEED TO MODIFY WHEN SUB FUNCTIONALITY ADDED
     public String[] getBoxScore(){
 
-        String[] boxScore = new String[4];
-        String left;
-        String right2pt;
-        String right3pt;
-        String rightReb;
+        String[] boxScore = new String[6];
+        String playerNames;
+        String stats2pt;
+        String stats3pt;
+        String statsReb;
+        String statsSBT; //Stls, Blks, TOs
 
-        left = homeTeam.getAbbr() + "\n" + homeOnFloor.get(0).getLastName() + "\n" + homeOnFloor.get(1).getLastName() +
+        playerNames = homeTeam.getAbbr() + "\n" + homeOnFloor.get(0).getLastName() + "\n" + homeOnFloor.get(1).getLastName() +
                 "\n" + homeOnFloor.get(2).getLastName() + "\n" + homeOnFloor.get(3).getLastName() + "\n" +
                 homeOnFloor.get(4).getLastName() + "\n" + awayTeam.getAbbr() + "\n" + awayOnFloor.get(0).getLastName() +
                 "\n" + awayOnFloor.get(1).getLastName() + "\n" + awayOnFloor.get(2).getLastName() + "\n" +
                 awayOnFloor.get(3).getLastName() + "\n" + awayOnFloor.get(4).getLastName() + "\n\n";
 
-        right2pt = "2FGM/A" + "\n" + homeStats[0][0] + "  " + homeStats[0][1] + "\n" + homeStats[1][0] +
-                    "  " + homeStats[1][1] + "\n" + homeStats[2][0] + "  " + homeStats[2][1] + "\n" +
-                    homeStats[3][0] + "  " + homeStats[3][1] + "\n" + homeStats[4][0] + "  " + homeStats[4][1] +
-                    "\n--\n" + awayStats[0][0] + "  " + awayStats[0][1] + "\n" + awayStats[1][0] + "  " +
-                    awayStats[1][1] + "\n" + awayStats[2][0] + "  " + awayStats[2][1] + "\n" + awayStats[3][0] +
-                    "  " + awayStats[3][1] + "\n" + awayStats[4][0] + "  " + awayStats[4][1] + "\n\n";
+        stats2pt = "2FGM/A" + "\n" + homeStats[0][0] + "  " + homeStats[0][1] + "\n" +
+                    homeStats[1][0] + "  " + homeStats[1][1] + "\n" +
+                    homeStats[2][0] + "  " + homeStats[2][1] + "\n" +
+                    homeStats[3][0] + "  " + homeStats[3][1] + "\n" +
+                    homeStats[4][0] + "  " + homeStats[4][1] + "\n--\n" +
+                    awayStats[0][0] + "  " + awayStats[0][1] + "\n" +
+                    awayStats[1][0] + "  " + awayStats[1][1] + "\n" +
+                    awayStats[2][0] + "  " + awayStats[2][1] + "\n" +
+                    awayStats[3][0] + "  " + awayStats[3][1] + "\n" +
+                    awayStats[4][0] + "  " + awayStats[4][1] + "\n\n";
 
-        right3pt = "3FGM/A" + "\n" + homeStats[0][2] + "  " + homeStats[0][3] + "\n" + homeStats[1][2] +
-                    "  " + homeStats[1][3] + "\n" + homeStats[2][2] + "  " + homeStats[2][3] + "\n" +
-                    homeStats[3][2] + "  " + homeStats[3][3] + "\n" + homeStats[4][2] + "  " + homeStats[4][3] + "\n--\n" +
-                    awayStats[0][2] + "  " + awayStats[0][3] + "\n" + awayStats[1][2] + "  " + awayStats[1][3] +
-                    "\n" + awayStats[2][2] + "  " + awayStats[2][3] + "\n" + awayStats[3][2] + "  " + awayStats[3][3] +
-                    "\n" + awayStats[4][2] + "  " + awayStats[4][3] + "\n\n";
+        stats3pt = "3FGM/A" + "\n" + homeStats[0][2] + "  " + homeStats[0][3] + "\n" +
+                    homeStats[1][2] + "  " + homeStats[1][3] + "\n" +
+                    homeStats[2][2] + "  " + homeStats[2][3] + "\n" +
+                    homeStats[3][2] + "  " + homeStats[3][3] + "\n" +
+                    homeStats[4][2] + "  " + homeStats[4][3] + "\n--\n" +
+                    awayStats[0][2] + "  " + awayStats[0][3] + "\n" +
+                    awayStats[1][2] + "  " + awayStats[1][3] + "\n" +
+                    awayStats[2][2] + "  " + awayStats[2][3] + "\n" +
+                    awayStats[3][2] + "  " + awayStats[3][3] + "\n" +
+                    awayStats[4][2] + "  " + awayStats[4][3] + "\n\n";
 
-        rightReb = "O/DREB" + "\n" + homeStats[0][4] + "  " + homeStats[0][5] + "\n" + homeStats[1][4] +
-                    "  " + homeStats[1][5] + "\n" + homeStats[2][4] + "  " + homeStats[2][5] + "\n" +
-                    homeStats[3][4] + "  " + homeStats[3][5] + "\n" + homeStats[4][4] + "  " + homeStats[4][5] + "\n--\n" +
-                    awayStats[0][4] + "  " + awayStats[0][5] + "\n" + awayStats[1][4] + "  " + awayStats[1][5] +
-                    "\n" + awayStats[2][4] + "  " + awayStats[2][5] + "\n" + awayStats[3][4] + "  " + awayStats[3][5] +
-                    "\n" + awayStats[4][4] + "  " + awayStats[4][5] + "\n";
+        statsReb = "O/DREB" + "\n" + homeStats[0][4] + "  " + homeStats[0][5] + "\n" +
+                    homeStats[1][4] + "  " + homeStats[1][5] + "\n" +
+                    homeStats[2][4] + "  " + homeStats[2][5] + "\n" +
+                    homeStats[3][4] + "  " + homeStats[3][5] + "\n" +
+                    homeStats[4][4] + "  " + homeStats[4][5] + "\n--\n" +
+                    awayStats[0][4] + "  " + awayStats[0][5] + "\n" +
+                    awayStats[1][4] + "  " + awayStats[1][5] + "\n" +
+                    awayStats[2][4] + "  " + awayStats[2][5] + "\n" +
+                    awayStats[3][4] + "  " + awayStats[3][5] + "\n" +
+                    awayStats[4][4] + "  " + awayStats[4][5] + "\n";
 
-        boxScore[0] = left;
-        boxScore[1] = right2pt;
-        boxScore[2] = right3pt;
-        boxScore[3] = rightReb;
+        statsSBT = "Stl/Blk/TO" + "\n" + homeStats[0][6] + "   " + homeStats[0][7] + "   " + homeStats[0][8] + "\n" +
+                    homeStats[1][6] + "   " + homeStats[1][7] + "   " + homeStats[1][8] + "\n" +
+                    homeStats[2][6] + "   " + homeStats[2][7] + "   " + homeStats[2][8] + "\n" +
+                    homeStats[3][6] + "   " + homeStats[3][7] + "   " + homeStats[3][8] + "\n" +
+                    homeStats[4][6] + "   " + homeStats[4][7] + "   " + homeStats[4][8] + "\n--\n" +
+                    awayStats[0][6] + "   " + awayStats[0][7] + "   " + awayStats[0][8] + "\n" +
+                    awayStats[1][6] + "   " + awayStats[1][7] + "   " + awayStats[1][8] + "\n" +
+                    awayStats[2][6] + "   " + awayStats[2][7] + "   " + awayStats[2][8] + "\n" +
+                    awayStats[3][6] + "   " + awayStats[3][7] + "   " + awayStats[3][8] + "\n" +
+                    awayStats[4][6] + "   " + awayStats[4][7] + "   " + awayStats[4][8] + "\n";
+
+        boxScore[0] = playerNames;
+        boxScore[1] = stats2pt;
+        boxScore[2] = stats3pt;
+        boxScore[3] = statsReb;
+        boxScore[4] = playerNames; //Only 4 columns in box score dialog - start new row
+        boxScore[5] = statsSBT;
 
         return boxScore;
 
@@ -453,6 +479,30 @@ public class Game {
                 //Player will shoot a midrange jumpshot
                 shotResult = attemptMid(passerBonus, shooter, defender, pos);
 
+            }
+        }
+
+        // Handle Stl, Blk, and TO stats based on shotResult returned after play
+        if(shotResult == Result.STEAL){
+
+            if(possession == 0){
+                homeStats[pos][8]++; //Add Turnover
+                awayStats[pos][6]++; //Add Steal
+            }
+            else{
+                awayStats[pos][8]++;
+                homeStats[pos][6]++;
+            }
+        }
+        else if(shotResult == Result.BLOCK){
+
+            if(possession == 0){
+                homeStats[pos][8]++; //Add Turnover
+                awayStats[pos][7]++; //Add Block
+            }
+            else{
+                awayStats[pos][8]++;
+                homeStats[pos][7]++;
             }
         }
 
