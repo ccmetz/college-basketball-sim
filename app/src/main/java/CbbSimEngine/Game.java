@@ -497,11 +497,9 @@ public class Game {
         else if(shotResult == Result.BLOCK){
 
             if(possession == 0){
-                homeStats[pos][8]++; //Add Turnover
                 awayStats[pos][7]++; //Add Block
             }
             else{
-                awayStats[pos][8]++;
                 homeStats[pos][7]++;
             }
         }
@@ -543,6 +541,13 @@ public class Game {
 
                     //BLOCKED
                     blkOrStl = true;
+
+                    if(possession == 0){
+                        homeStats[pos][1]++; //Add 2-pt shot attempt
+                    }
+                    else{
+                        awayStats[pos][1]++;
+                    }
 
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
@@ -620,6 +625,13 @@ public class Game {
                     //BLOCKED
                     blkOrStl = true;
 
+                    if(possession == 0){
+                        homeStats[pos][1]++; //Add 2-pt shot attempt
+                    }
+                    else{
+                        awayStats[pos][1]++;
+                    }
+
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
                     return Result.BLOCK;
@@ -696,6 +708,13 @@ public class Game {
                     //BLOCKED
                     blkOrStl = true;
 
+                    if(possession == 0){
+                        homeStats[pos][3]++; //Add 3-pt shot attempt
+                    }
+                    else{
+                        awayStats[pos][3]++;
+                    }
+
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
                     return Result.BLOCK;
@@ -771,6 +790,13 @@ public class Game {
 
                     //BLOCKED
                     blkOrStl = true;
+
+                    if(possession == 0){
+                        homeStats[pos][1]++; //Add 2-pt shot attempt
+                    }
+                    else{
+                        awayStats[pos][1]++;
+                    }
 
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
