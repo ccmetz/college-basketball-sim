@@ -50,8 +50,8 @@ public class Game {
 
         gameLog = ""; //Game log is initially blank
 
-        homeStats = new int[5][9]; //5 players -> tracks 2FGM, 2FGA, 3FGM, 3FGA, OREB, DREB, STL, BLK, TO
-        awayStats = new int[5][9];
+        homeStats = new int[5][10]; //5 players -> tracks 2FGM, 2FGA, 3FGM, 3FGA, OREB, DREB, STL, BLK, TO, AST
+        awayStats = new int[5][10];
 
     }
 
@@ -114,12 +114,13 @@ public class Game {
     // ONLY OPTIMIZED FOR GAMES PLAYED WITHOUT SUBS - WILL NEED TO MODIFY WHEN SUB FUNCTIONALITY ADDED
     public String[] getBoxScore(){
 
-        String[] boxScore = new String[6];
+        String[] boxScore = new String[7];
         String playerNames;
         String stats2pt;
         String stats3pt;
         String statsReb;
         String statsSBT; //Stls, Blks, TOs
+        String statsAst;
 
         playerNames = homeTeam.getAbbr() + "\n" + homeOnFloor.get(0).getLastName() + "\n" + homeOnFloor.get(1).getLastName() +
                 "\n" + homeOnFloor.get(2).getLastName() + "\n" + homeOnFloor.get(3).getLastName() + "\n" +
@@ -171,12 +172,17 @@ public class Game {
                     awayStats[3][6] + "   " + awayStats[3][7] + "   " + awayStats[3][8] + "\n" +
                     awayStats[4][6] + "   " + awayStats[4][7] + "   " + awayStats[4][8] + "\n";
 
+        statsAst = "AST" + "\n" + homeStats[0][9] + "\n" + homeStats[1][9] + "\n" + homeStats[2][9] + "\n" +
+                    homeStats[3][9] + "\n" + homeStats[4][9] + "\n--\n" + awayStats[0][9] + "\n" + awayStats[1][9] +
+                    "\n" + awayStats[2][9] + "\n" + awayStats[3][9] + "\n" + awayStats[4][9] + "\n";
+
         boxScore[0] = playerNames;
         boxScore[1] = stats2pt;
         boxScore[2] = stats3pt;
         boxScore[3] = statsReb;
         boxScore[4] = playerNames; //Only 4 columns in box score dialog - start new row
         boxScore[5] = statsSBT;
+        boxScore[6] = statsAst;
 
         return boxScore;
 
@@ -278,7 +284,8 @@ public class Game {
 
         Player hasBall = offense.get(0); // Step 1: PG starts with the ball
         Player passer = hasBall; //PG will default as the passer
-        int posOfBall = 0; //Keeps track of the position of the player within the offense ArrayList
+        int posOfBall = 0; //Keeps track of the position of the player within the offense ArrayList (Different from player pos)
+        int posOfPasser = 0; //Keeps track of the position of the passer within the offense ArrayList (Different from player pos)
 
 
         while(curPossession){
@@ -287,6 +294,7 @@ public class Game {
 
                 //Decide who to pass to
                 passer = hasBall;
+                posOfPasser = posOfBall;
                 posOfBall = determineNextPass(hasBall, offense);
                 hasBall = offense.get(posOfBall);
                 passCounter++;
@@ -296,7 +304,7 @@ public class Game {
             else{
 
                 //Player with the ball shoots
-                result = attemptShot(passer, hasBall, defense, posOfBall);
+                result = attemptShot(passer, hasBall, defense, posOfBall, posOfPasser);
 
                 if(result == Result.MISS || result == Result.BLOCK){
 
@@ -435,14 +443,18 @@ public class Game {
     *  1. Determines if the shot will be assisted and what the passerBonus will be (based on passer's pass rating)
     *  1. Determines the type of shot attempted (post, layup, mid, or three) using player tendencies
     *  2. Calls the appropriate shot type's method and grabs the result
-    *  Returns whether the shot was made/missed (true/false) */
-    public Result attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int pos){
+    *  Returns the result of the shot attempt (Steal, Block, Make, Miss) */
+    public Result attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int posBall, int posPass){
 
         Result shotResult;
         int passerBonus = 0;
-        Player defender = defense.get(pos); //The player that will be defending the shooter
+        Player defender = defense.get(posBall); //The player that will be defending the shooter
+        boolean isAssisted = false;
 
-        if(!passer.equals(shooter)) {
+        // 50% chance of assist - THIS WILL BE BASED ON PLAYER'S BBALL IQ IN THE FUTURE
+        if(!passer.equals(shooter) && (Math.random() < 0.5)) {
+
+            isAssisted = true;
             //No passer bonus for passers with rating under 70
             if (passer.getPassRating() >= 70) {
 
@@ -457,12 +469,12 @@ public class Game {
             if(100*Math.random() < shooter.getLayupOrPost()){
 
                 //Player will Post up
-                shotResult = attemptPostShot(passerBonus, shooter, defender, pos);
+                shotResult = attemptPostShot(passerBonus, shooter, defender, posBall);
 
             } else{
 
                 //Player will drive and attempt a layup
-                shotResult = attemptLayup(passerBonus, shooter, defender, pos);
+                shotResult = attemptLayup(passerBonus, shooter, defender, posBall);
 
             }
         }
@@ -471,13 +483,13 @@ public class Game {
             if(100*Math.random() < shooter.getMidOrThree()){
 
                 //Player will shoot a three
-                shotResult = attemptThree(passerBonus, shooter, defender, pos);
+                shotResult = attemptThree(passerBonus, shooter, defender, posBall);
 
             }
             else{
 
                 //Player will shoot a midrange jumpshot
-                shotResult = attemptMid(passerBonus, shooter, defender, pos);
+                shotResult = attemptMid(passerBonus, shooter, defender, posBall);
 
             }
         }
@@ -486,22 +498,33 @@ public class Game {
         if(shotResult == Result.STEAL){
 
             if(possession == 0){
-                homeStats[pos][8]++; //Add Turnover
-                awayStats[pos][6]++; //Add Steal
+                homeStats[posBall][8]++; //Add Turnover
+                awayStats[posBall][6]++; //Add Steal
             }
             else{
-                awayStats[pos][8]++;
-                homeStats[pos][6]++;
+                awayStats[posBall][8]++;
+                homeStats[posBall][6]++;
             }
         }
         else if(shotResult == Result.BLOCK){
 
             if(possession == 0){
-                awayStats[pos][7]++; //Add Block
+                awayStats[posBall][7]++; //Add Block
             }
             else{
-                homeStats[pos][7]++;
+                homeStats[posBall][7]++;
             }
+        }
+        else if(shotResult == Result.MAKE && isAssisted){
+
+            if(possession == 0){
+                homeStats[posPass][9]++; //Add assist to player stats
+            }
+            else{
+                awayStats[posPass][9]++;
+            }
+
+            gameLog = gameLog + "(assisted by " + passer.getName() + ")\n";
         }
 
         return shotResult;
