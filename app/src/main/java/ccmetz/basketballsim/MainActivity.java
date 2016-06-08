@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,7 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private int confCounter; //the position of the conference in the League class
     private int teamCounter; //position of the team in the Conference class
     private TabLayout tabLayout;
-    private TextView rosterText; //Header for Manage Roster tab
+
+    private LinearLayout buttonPanel; //Horizontal layout for lineup and stats buttons
+    private Button lineupButton; //Button for adjusting the lineup
+    private Button statsButton; //Button for viewing player stats
     private TextView scheduleText; //Header for Schedule tab
     private TextView restOfLeagueText; //Header for Around the League tab
     private Button simButton;
@@ -68,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.schedule_tab_title));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.rest_of_league_title));
 
-        rosterText = (TextView) findViewById(R.id.roster_text);
+        buttonPanel = (LinearLayout) findViewById(R.id.button_panel);
+        lineupButton = (Button) findViewById(R.id.lineup_button);
+        statsButton = (Button) findViewById(R.id.stats_button);
         scheduleText = (TextView) findViewById(R.id.schedule_text);
         scheduleText.setText(userTeam.getTeamName() + " (" + userTeam.getRecord() + ")");
         simButton = (Button) findViewById(R.id.sim_week_button);
@@ -128,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        /* The following views will default as not visible because the lineup tab is selected by default */
+        /* The following views will default as not visible because the Manage Roster tab is selected by default
+         * Set visibility of views that are not on the Manage Roster tab to View.GONE */
         if (scheduleText != null) {
             scheduleText.setVisibility(View.GONE);
         }
@@ -148,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if(pos == 0){
 
-                    rosterText.setVisibility(View.VISIBLE);
+                    buttonPanel.setVisibility(View.VISIBLE);
+                    lineupButton.setVisibility(View.VISIBLE);
+                    statsButton.setVisibility(View.VISIBLE);
                     rosterView.setVisibility(View.VISIBLE);
                 }
                 else if(pos == 1){
@@ -169,7 +178,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if(pos == 0){
 
-                    rosterText.setVisibility(View.GONE);
+                    buttonPanel.setVisibility(View.GONE);
+                    lineupButton.setVisibility(View.GONE);
+                    statsButton.setVisibility(View.GONE);
                     rosterView.setVisibility(View.GONE);
                 }
                 else if(pos == 1){

@@ -14,18 +14,33 @@
     tools:showIn="@layout/activity_main">
 
     <!-- Visible when Manage Roster tab is selected -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/roster_tab_text"
-        android:gravity="center_horizontal"
-        android:id="@+id/roster_text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:orientation="horizontal"
+        android:id="@+id/button_panel"
+        android:layout_weight="0.5">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lineup_button_text"
+            android:id="@+id/lineup_button"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stats_button_text"
+            android:id="@+id/stats_button"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/roster_view" />
+        android:id="@+id/roster_view"
+        android:layout_weight="5.5"/>
 
     <!-- Visible when Schedule tab is selected -->
     <TextView
