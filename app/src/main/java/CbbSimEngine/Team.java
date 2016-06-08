@@ -269,8 +269,10 @@ public class Team {
 
             rosterList.get(i).setPlayerRole(Player.Role.STARTER);
         }
-        // Set the next 5 best players to ROLEPLAYER
-        for(int i = 5; i < 10; i++){
+        // Set the SIXTHMAN
+        rosterList.get(5).setPlayerRole(Player.Role.SIXTHMAN);
+        // Set the next 3 best players to ROLEPLAYER
+        for(int i = 6; i < 9; i++){
 
             rosterList.get(i).setPlayerRole(Player.Role.ROLEPLAYER);
         }

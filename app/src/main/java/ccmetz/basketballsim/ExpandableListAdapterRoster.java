@@ -80,10 +80,10 @@ public class ExpandableListAdapterRoster extends BaseExpandableListAdapter {
         if(playerRole == Role.STARTER){
             detailText.setTextColor(Color.parseColor("#84c103"));
         }
-        else if(playerRole == Role.ROLEPLAYER){
+        else if(playerRole == Role.SIXTHMAN){
             detailText.setTextColor(Color.parseColor("#ffa22f"));
         }
-        else if(playerRole == Role.BENCH){
+        else if(playerRole == Role.ROLEPLAYER){
             detailText.setTextColor(Color.parseColor("#d4444a"));
 
         }
