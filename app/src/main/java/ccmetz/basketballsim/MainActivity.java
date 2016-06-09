@@ -16,7 +16,10 @@ import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import CbbSimEngine.League;
 import CbbSimEngine.Team;
@@ -31,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private Button lineupButton; //Button for adjusting the lineup
     private Button statsButton; //Button for viewing player stats
     private TextView scheduleText; //Header for Schedule tab
-    private TextView restOfLeagueText; //Header for Around the League tab
+    private TextView confSpinnerText; //Header for conference spinner
+    private TextView teamSpinnerText; //Header for team spinner
     private Button simButton;
 
     private ExpandableListView rosterView;
@@ -39,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView scheduleView;
     private ArrayAdapter<String> scheduleAdapter;
+
+    private Spinner confSpinner; //Spinner to choose conference on Around the League tab
+    private ArrayList<String> confList;
+    private ArrayAdapter<String> confAdapter;
+    private String[] confArray;
+    private Spinner teamSpinner; //Spinner to choose team on Around the League tab
+    private ArrayList<String> teamList;
+    private ArrayAdapter<String> teamAdapter;
+    private String[] teamArray;
 
     private League league; //This will be the league that the user will officially play in
     private Team userTeam; //The team that the user will be controlling
@@ -78,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
         scheduleText = (TextView) findViewById(R.id.schedule_text);
         scheduleText.setText(userTeam.getTeamName() + " (" + userTeam.getRecord() + ")");
         simButton = (Button) findViewById(R.id.sim_week_button);
-        restOfLeagueText = (TextView) findViewById(R.id.rest_of_league_text);
+        confSpinnerText = (TextView) findViewById(R.id.conf_spinner_text);
+        teamSpinnerText = (TextView) findViewById(R.id.team_spinner_text);
 
         /* Setup the ExpandableListView with a custom adapter */
         rosterView = (ExpandableListView) findViewById(R.id.roster_view);
@@ -106,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 String[] gameBoxScore = userTeam.getGameArrayList().get(position).getBoxScore();
 
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View rootView = inflater.inflate(R.layout.boxscore_dialog,null);
+                View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
 
                 //Initialize the GridView and set the custom BoxScoreAdapter
                 GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
@@ -133,6 +147,66 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /* Setup the conference and team spinners */
+        confList = new ArrayList<String>();
+        confSpinner = (Spinner) findViewById(R.id.main_conf_spinner);
+
+        for (int i = 0; i < league.getConferences().size(); i++) {
+
+            confList.add(i, league.getConferences().get(i).getConfName());
+        }
+
+        confAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, confList);
+        confAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        confSpinner.setAdapter(confAdapter);
+
+        teamList = new ArrayList<String>();
+        teamSpinner = (Spinner) findViewById(R.id.main_team_spinner);
+
+        for (int i = 0; i < league.getConferences().get(0).getTeams().size(); i++) {
+
+            // Defaults to teams belonging to the first conference initialized in the league
+            teamList.add(i, league.getConferences().get(0).getTeams().get(i).getTeamName());
+        }
+
+        teamAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, teamList);
+        teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        teamSpinner.setAdapter(teamAdapter);
+
+        confSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                teamList.clear();
+
+                for (int i = 0; i < league.getConferences().get(position).getTeams().size(); i++) {
+
+                    teamList.add(i, league.getConferences().get(position).getTeams().get(i).getTeamName());
+                }
+
+                teamAdapter.notifyDataSetChanged(); //Updates the team spinner with appropriate team names
+                teamSpinner.setSelection(0); //Reset the spinner to the top of the list
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         /* The following views will default as not visible because the Manage Roster tab is selected by default
          * Set visibility of views that are not on the Manage Roster tab to View.GONE */
@@ -143,9 +217,16 @@ public class MainActivity extends AppCompatActivity {
         scheduleView.setVisibility(View.GONE);
         simButton.setVisibility(View.GONE);
 
-        if(restOfLeagueText != null){
-            restOfLeagueText.setVisibility(View.GONE);
+        if (confSpinnerText != null) {
+            confSpinnerText.setVisibility(View.GONE);
         }
+
+        confSpinner.setVisibility(View.GONE);
+
+        if(teamSpinnerText != null){
+            teamSpinnerText.setVisibility(View.GONE);
+        }
+        teamSpinner.setVisibility(View.GONE);
 
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -153,22 +234,23 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 int pos = tabLayout.getSelectedTabPosition();
 
-                if(pos == 0){
+                if (pos == 0) {
 
                     buttonPanel.setVisibility(View.VISIBLE);
                     lineupButton.setVisibility(View.VISIBLE);
                     statsButton.setVisibility(View.VISIBLE);
                     rosterView.setVisibility(View.VISIBLE);
-                }
-                else if(pos == 1){
+                } else if (pos == 1) {
 
                     scheduleText.setVisibility(View.VISIBLE);
                     scheduleView.setVisibility(View.VISIBLE);
                     simButton.setVisibility(View.VISIBLE);
-                }
-                else if(pos == 2){
+                } else if (pos == 2) {
 
-                    restOfLeagueText.setVisibility(View.VISIBLE);
+                    confSpinnerText.setVisibility(View.VISIBLE);
+                    confSpinner.setVisibility(View.VISIBLE);
+                    teamSpinnerText.setVisibility(View.VISIBLE);
+                    teamSpinner.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -176,22 +258,23 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 int pos = tabLayout.getSelectedTabPosition();
 
-                if(pos == 0){
+                if (pos == 0) {
 
                     buttonPanel.setVisibility(View.GONE);
                     lineupButton.setVisibility(View.GONE);
                     statsButton.setVisibility(View.GONE);
                     rosterView.setVisibility(View.GONE);
-                }
-                else if(pos == 1){
+                } else if (pos == 1) {
 
                     scheduleText.setVisibility(View.GONE);
                     scheduleView.setVisibility(View.GONE);
                     simButton.setVisibility(View.GONE);
-                }
-                else if(pos == 2){
+                } else if (pos == 2) {
 
-                    restOfLeagueText.setVisibility(View.GONE);
+                    confSpinnerText.setVisibility(View.GONE);
+                    confSpinner.setVisibility(View.GONE);
+                    teamSpinnerText.setVisibility(View.GONE);
+                    teamSpinner.setVisibility(View.GONE);
                 }
             }
 
@@ -205,9 +288,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         startActivity(intent);
     }
+
 }
+

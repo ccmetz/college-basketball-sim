@@ -19,7 +19,8 @@
     <string name="schedule_tab_title">Schedule</string>
     <string name="sim_button_text">Sim Current Week</string>
     <string name="rest_of_league_title">Around the League</string>
-    <string name="rest_of_league_text">Info on teams around the league here</string>
+    <string name="conf_text">Conference:</string>
+    <string name="team_text">Teams:</string>
 
     <!-- String Array of Conference and Team Names (for use on Team Activity) -->
     <string-array name="conference_array">
