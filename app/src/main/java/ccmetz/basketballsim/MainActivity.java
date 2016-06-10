@@ -47,11 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private Spinner confSpinner; //Spinner to choose conference on Around the League tab
     private ArrayList<String> confList;
     private ArrayAdapter<String> confAdapter;
-    private String[] confArray;
     private Spinner teamSpinner; //Spinner to choose team on Around the League tab
     private ArrayList<String> teamList;
     private ArrayAdapter<String> teamAdapter;
-    private String[] teamArray;
 
     private League league; //This will be the league that the user will officially play in
     private Team userTeam; //The team that the user will be controlling
@@ -147,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         /* Setup the conference and team spinners */
         confList = new ArrayList<String>();
         confSpinner = (Spinner) findViewById(R.id.main_conf_spinner);
@@ -187,6 +186,10 @@ public class MainActivity extends AppCompatActivity {
 
                 teamAdapter.notifyDataSetChanged(); //Updates the team spinner with appropriate team names
                 teamSpinner.setSelection(0); //Reset the spinner to the top of the list
+
+                confCounter = position;
+                teamCounter = 0;
+
             }
 
             @Override
@@ -199,6 +202,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                teamCounter = position;
+
+                // Set the roster to the selected team and update the Adapter
+                rosterAdapter.updateRosterList(league.getConferences().get(confCounter)
+                        .getTeams().get(teamCounter).getRoster());
+
+                rosterView.setSelection(0); //Scroll rosterView to the top after update
             }
 
             @Override
@@ -240,6 +250,10 @@ public class MainActivity extends AppCompatActivity {
                     lineupButton.setVisibility(View.VISIBLE);
                     statsButton.setVisibility(View.VISIBLE);
                     rosterView.setVisibility(View.VISIBLE);
+
+                    //Set the roster to the user's team and update the adapter
+                    rosterAdapter.updateRosterList(userTeam.getRoster());
+
                 } else if (pos == 1) {
 
                     scheduleText.setVisibility(View.VISIBLE);
@@ -251,6 +265,11 @@ public class MainActivity extends AppCompatActivity {
                     confSpinner.setVisibility(View.VISIBLE);
                     teamSpinnerText.setVisibility(View.VISIBLE);
                     teamSpinner.setVisibility(View.VISIBLE);
+                    rosterView.setVisibility(View.VISIBLE);
+
+                    //Set the roster to the current team selected in the team spinner and update the Adapter
+                    rosterAdapter.updateRosterList(league.getConferences().get(confCounter)
+                            .getTeams().get(teamCounter).getRoster());
                 }
             }
 
@@ -264,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
                     lineupButton.setVisibility(View.GONE);
                     statsButton.setVisibility(View.GONE);
                     rosterView.setVisibility(View.GONE);
+
                 } else if (pos == 1) {
 
                     scheduleText.setVisibility(View.GONE);
@@ -275,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
                     confSpinner.setVisibility(View.GONE);
                     teamSpinnerText.setVisibility(View.GONE);
                     teamSpinner.setVisibility(View.GONE);
+                    rosterView.setVisibility(View.GONE);
                 }
             }
 

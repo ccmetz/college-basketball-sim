@@ -23,12 +23,12 @@ import CbbSimEngine.Player.Role;
 public class ExpandableListAdapterRoster extends BaseExpandableListAdapter {
 
     private Activity context;
-    private ArrayList<Player> rosterList;
+    private ArrayList<Player> rosterList = new ArrayList<Player>();
 
     public ExpandableListAdapterRoster(Activity context, ArrayList<Player> rosterList){
 
         this.context = context;
-        this.rosterList = rosterList;
+        this.rosterList.addAll(rosterList);
 
     }
     @Override
@@ -115,4 +115,13 @@ public class ExpandableListAdapterRoster extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+    public void updateRosterList(ArrayList<Player> newRoster){
+
+        rosterList.clear();
+        rosterList.addAll(newRoster);
+        this.notifyDataSetChanged();
+    }
 }
+
+

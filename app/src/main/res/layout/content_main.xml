@@ -36,12 +36,6 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-    <ExpandableListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/roster_view"
-        android:layout_weight="5.5"/>
-
     <!-- Visible when Schedule tab is selected -->
     <TextView
         android:layout_width="match_parent"
@@ -50,19 +44,6 @@
         android:id="@+id/schedule_text"
         android:layout_weight="0.5"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:id="@+id/schedule_view"
-        android:layout_weight="6.5"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:id="@+id/sim_week_button"
-        android:text="@string/sim_button_text"
-        android:layout_weight="1"/>
 
     <!-- Visible when Around the League tab is selected -->
     <TextView
@@ -88,5 +69,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/main_team_spinner"/>
+    <!-- ////////////////////////////////////////// -->
+
+    <!-- Visible on both the Manage Roster/Around the League tabs -->
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/roster_view"
+        android:layout_weight="5.5"/>
+
+    <!-- Visible on the Schedule tab -->
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:id="@+id/schedule_view"
+        android:layout_weight="6.5"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:id="@+id/sim_week_button"
+        android:text="@string/sim_button_text"
+        android:layout_weight="1"/>
+    <!-- ////////////////////////////////////////// -->
 
 </LinearLayout>
