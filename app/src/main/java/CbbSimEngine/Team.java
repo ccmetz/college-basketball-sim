@@ -347,4 +347,58 @@ public class Team {
     public void addLoss(){
         losses++;
     }
+
+    // Returns an ArrayList of the players that play a specific position on the team
+    public ArrayList<Player> getPositionList(int pos){
+
+        ArrayList<Player> playerList = new ArrayList<Player>();
+
+        switch (pos){
+
+            case 0:
+                for(int i = 0; i < rosterList.size(); i++){
+                    if(rosterList.get(i).getPosition() == 1){
+                        playerList.add(rosterList.get(i));
+                    }
+                }
+                break;
+
+            case 1:
+                for(int i = 0; i < rosterList.size(); i++){
+                    if(rosterList.get(i).getPosition() == 2){
+                        playerList.add(rosterList.get(i));
+                    }
+                }
+                break;
+
+            case 2:
+                for(int i = 0; i < rosterList.size(); i++){
+                    if(rosterList.get(i).getPosition() == 3){
+                        playerList.add(rosterList.get(i));
+                    }
+                }
+                break;
+
+            case 3:
+                for(int i = 0; i < rosterList.size(); i++){
+                    if(rosterList.get(i).getPosition() == 4){
+                        playerList.add(rosterList.get(i));
+                    }
+                }
+                break;
+
+            case 4:
+                for(int i = 0; i < rosterList.size(); i++){
+                    if(rosterList.get(i).getPosition() == 5){
+                        playerList.add(rosterList.get(i));
+                    }
+                }
+                break;
+
+        }
+
+        return playerList;
+
+    }
+
 }

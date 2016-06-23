@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import CbbSimEngine.League;
+import CbbSimEngine.Player;
 import CbbSimEngine.Team;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private League league; //This will be the league that the user will officially play in
     private Team userTeam; //The team that the user will be controlling
     private int season; //Current season
+    private ArrayList<String> posList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
 
         season = league.getCurrentSeason();
 
+        // Initialize and define the list of player positions
+        posList = new ArrayList<String>();
+        posList.add("PG");
+        posList.add("SG");
+        posList.add("SF");
+        posList.add("PF");
+        posList.add("C");
+
         getSupportActionBar().setTitle(userTeam.getTeamName() + " " + season + " Season");
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -91,6 +101,67 @@ public class MainActivity extends AppCompatActivity {
         simButton = (Button) findViewById(R.id.sim_week_button);
         confSpinnerText = (TextView) findViewById(R.id.conf_spinner_text);
         teamSpinnerText = (TextView) findViewById(R.id.team_spinner_text);
+
+        /* Define the functionality of the lineupButton */
+        lineupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View rootView = inflater.inflate(R.layout.lineup_dialog, null);
+
+                //Initialize the Spinner
+                Spinner posSpinner = (Spinner) rootView.findViewById(R.id.position_spinner);
+                ArrayAdapter<String> posAdapter = new ArrayAdapter<String>(MainActivity.this,
+                        android.R.layout.simple_spinner_item, posList);
+                posAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                posSpinner.setAdapter(posAdapter);
+
+                final ArrayList<Player> playerList = new ArrayList<Player>();
+                playerList.addAll(userTeam.getPositionList(0));
+
+                //Initialize the ListView and set the custom adapter
+                ListView lineupView = (ListView) rootView.findViewById(R.id.lineup_view);
+                final LineupListArrayAdapter lineupAdapter =
+                        new LineupListArrayAdapter(MainActivity.this, playerList);
+                lineupView.setAdapter(lineupAdapter);
+
+                // Handle ListView changes when the spinner position is changed
+                posSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        playerList.clear();
+                        playerList.addAll(userTeam.getPositionList(position));
+
+                        lineupAdapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+                //Initialize the Save Lineup button
+                Button saveLineupButton = (Button) rootView.findViewById(R.id.save_lineup_button);
+                saveLineupButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        // Check for valid # of Starters, Role Players, etc
+                        // Reorganize the userTeam roster and update the rosterView on the Manage Roster tab
+
+                    }
+                });
+
+                //Show the Adjust Lineup Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setView(rootView);
+                builder.show();
+            }
+        });
 
         /* Setup the ExpandableListView with a custom adapter */
         rosterView = (ExpandableListView) findViewById(R.id.roster_view);

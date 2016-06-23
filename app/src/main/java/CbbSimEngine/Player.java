@@ -153,6 +153,13 @@ public class Player {
         return list;
     }
 
+    /* Returns a shorter String to be used for the Adjust Lineup dialog */
+    public String displayShortPlayerInfo(){
+
+        return "[" + getYearString() + "] " + posString + " " + fName.substring(0,1) + "." + lName +
+                " " + playerHt + "\nOvr: " + overall;
+    }
+
 
     public String getYearString(){
 
