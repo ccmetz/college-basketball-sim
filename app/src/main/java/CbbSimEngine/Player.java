@@ -55,7 +55,7 @@ public class Player {
     private int offOvr;
     private int defOvr;
     private int oneAndDoneBonus;
-    /* Starter, Sixth Man, Role Player, or Bench? */
+    /* Starter, Role Player, or Bench? */
     private Role playerRole;
 
 
@@ -118,11 +118,10 @@ public class Player {
 
     // Player roles will be designated as either STARTER, ROLEPLAYER, BENCHRIDER
     // STARTERs will start and get the majority of the minutes
-    // SIXTHMAN will play the most minutes off the bench
     // ROLEPLAYERs will come off the bench and take the rest of the minutes
     // BENCH players will not play
     public enum Role{
-        STARTER, SIXTHMAN, ROLEPLAYER, BENCH
+        STARTER, ROLEPLAYER, BENCH
     }
 
     // Sets the Player's playerRole to either STARTER, ROLEPLAYER, or BENCHRIDER

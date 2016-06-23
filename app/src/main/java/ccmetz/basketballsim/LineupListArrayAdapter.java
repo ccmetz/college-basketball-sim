@@ -58,11 +58,6 @@ public class LineupListArrayAdapter extends ArrayAdapter<Player> {
             detailText.setTextColor(Color.parseColor("#84c103"));
             firstString.setChecked(true);
         }
-        else if(playerRole == Player.Role.SIXTHMAN){
-           // Log.i("Role", "SIXTH");
-            detailText.setTextColor(Color.parseColor("#ffa22f"));
-            secondString.setChecked(true);
-        }
         else if(playerRole == Player.Role.ROLEPLAYER){
           //  Log.i("Role", "ROLE");
             detailText.setTextColor(Color.parseColor("#d4444a"));
