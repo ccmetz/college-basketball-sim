@@ -12,14 +12,16 @@ import java.util.Random;
 public class League {
 
     // String arrays that contain the first and last names that will be used for players throughout the league
-    final private String[] firstNames = {"Cody", "Ross", "Devyn", "Roy", "Aaron", "Bryan", "Demarcus", "Stephen", "Lebron",
-                                        "Michael", "Eric", "Andrew", "Anthony", "Jared", "Brett", "John", "Ahmad", "Christian",
+    final private String[] firstNames = {"Daniel", "Isaiah", "Devyn", "Roy", "Aaron", "Bryan", "Demarcus", "Stephen", "Lebron",
+                                        "Michael", "Eric", "Andrew", "Anthony", "Jared", "Eli", "John", "Ahmad", "Christian",
                                         "Josh", "Connor", "Jack", "Adam", "Mike", "Micah", "Jordy", "Kendrick", "Derrick",
-                                        "Dwayne", "Melo", "Greg"};
-    final private String[] lastNames = {"Cook", "White", "Marble", "Metz", "Nelson", "Rose", "James", "Williams", "Jordan",
+                                        "Dwayne", "Melo", "Greg", "Peter", "Trevor", "Patrick", "Kyrie", "Kevin", "Tristan",
+                                        "Brandon", "Bobby", "Ricky", "Dion", "Demarre", "Dirk"};
+    final private String[] lastNames = {"Cook", "White", "Marble", "Towns", "Nelson", "Rose", "James", "Williams", "Jordan",
                                         "Miller", "Randle", "Green", "Thompson", "Wagner", "Brown", "Smith", "Murray", "Ulis",
                                         "Booker", "Thomas", "Bryant", "McDonald", "Irving", "Parker", "Hart", "Lowry", "Hill",
-                                        "Young", "Carter", "Manning"};
+                                        "Young", "Carter", "Manning", "Jok", "Valentine", "Baldwin", "Simmons", "Durant", "King",
+                                        "Allen", "Parsons", "Forbes", "Taylor", "Harden", "Nowitzki"};
 
     private ArrayList<String> posList; //List of basketball positions
     private ArrayList<Conference> confList; //List that contains the conferences that belong to this league

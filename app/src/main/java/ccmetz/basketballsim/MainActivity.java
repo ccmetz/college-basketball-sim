@@ -443,9 +443,6 @@ public class MainActivity extends AppCompatActivity {
                     //Set the schedule to the user's team and update the adapter
                     scheduleAdapter.updateScheduleList(userTeam.getScheduleList());
 
-                    //Set boxScoreTracker to userTeam's Game List
-
-
                 } else if (pos == 2) {
 
                     onATLTab = true;
@@ -457,9 +454,11 @@ public class MainActivity extends AppCompatActivity {
                     radioGroup.setVisibility(View.VISIBLE);
 
                     if(rosterButton.isChecked()) {
+
                         rosterView.setVisibility(View.VISIBLE);
                     }
                     else if(scheduleButton.isChecked()){
+
                         scheduleView.setVisibility(View.VISIBLE);
                     }
 
