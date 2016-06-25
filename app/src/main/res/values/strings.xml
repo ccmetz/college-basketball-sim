@@ -21,8 +21,8 @@
     <string name="rest_of_league_title">Around the League</string>
     <string name="conf_text">Conference:</string>
     <string name="team_text">Teams:</string>
-    <string name="adjust_lineup_text">Each position must have one 1st string at most one 2nd string selected.\n
-        Any changes to each position\'s depth chart must be saved before moving on to other positions.</string>
+    <string name="adjust_lineup_title">Adjust Lineup</string>
+    <string name="adjust_lineup_text">Each position can only have 1 Starter (1st string) selected.\n\nAny changes to a position\'s depth chart must be saved before moving on to other positions.</string>
     <string name="save_lineup_button">Save Lineup</string>
     <string name="close_lineup_button">Close</string>
 

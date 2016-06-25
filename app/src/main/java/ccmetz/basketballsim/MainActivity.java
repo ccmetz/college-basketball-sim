@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 //Create and show the Adjust Lineup Dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setView(rootView);
+                builder.setTitle(getResources().getString(R.string.adjust_lineup_title));
                 final AlertDialog dialog = builder.create();
                 dialog.show();
 
