@@ -24,6 +24,7 @@
     <string name="adjust_lineup_text">Each position must have one 1st string at most one 2nd string selected.\n
         Any changes to each position\'s depth chart must be saved before moving on to other positions.</string>
     <string name="save_lineup_button">Save Lineup</string>
+    <string name="close_lineup_button">Close</string>
 
     <!-- String Array of Conference and Team Names (for use on Team Activity) -->
     <string-array name="conference_array">

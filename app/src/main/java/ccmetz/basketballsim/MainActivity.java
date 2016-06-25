@@ -192,16 +192,27 @@ public class MainActivity extends AppCompatActivity {
                             Toast toast = Toast.makeText(MainActivity.this, "You can only pick 1 Starter per position!", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
                             toast.show();
-                            
+
                         }
 
                     }
                 });
 
-                //Show the Adjust Lineup Dialog
+
+                //Create and show the Adjust Lineup Dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setView(rootView);
-                builder.show();
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+                //Initialize the Close button
+                Button closeLineupButton = (Button) rootView.findViewById(R.id.close_lineup_button);
+                closeLineupButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
