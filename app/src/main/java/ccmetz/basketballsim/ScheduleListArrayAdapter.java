@@ -15,14 +15,14 @@ import java.util.ArrayList;
 public class ScheduleListArrayAdapter extends ArrayAdapter<String> {
 
     private Context context;
-    private ArrayList<String> scheduleList;
+    private ArrayList<String> scheduleList = new ArrayList<String>();
 
 
     public ScheduleListArrayAdapter(Context context, ArrayList<String> scheduleList) {
         super(context, R.layout.schedule_list_item, scheduleList);
 
         this.context = context;
-        this.scheduleList = scheduleList;
+        this.scheduleList.addAll(scheduleList);
 
     }
 
@@ -44,4 +44,12 @@ public class ScheduleListArrayAdapter extends ArrayAdapter<String> {
         return convertView;
 
     }
+
+    public void updateScheduleList(ArrayList<String> newSchedule){
+
+        scheduleList.clear();
+        scheduleList.addAll(newSchedule);
+        this.notifyDataSetChanged();
+    }
+
 }

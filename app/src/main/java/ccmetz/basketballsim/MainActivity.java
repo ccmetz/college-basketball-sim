@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import CbbSimEngine.Game;
 import CbbSimEngine.League;
 import CbbSimEngine.Player;
 import CbbSimEngine.Team;
@@ -51,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
     private ExpandableListAdapterRoster rosterAdapter; //Adapter for roster listview
 
     private ListView scheduleView;
-    private ArrayAdapter<String> scheduleAdapter;
+    private ScheduleListArrayAdapter scheduleAdapter;
+    private boolean onATLTab; //Keeps track of what box scores need to be accessed based on which tab is selected
+    private ArrayList<Game> boxScoreTracker; //Keeps track of which team's Game List to use for box scores
 
     private Spinner confSpinner; //Spinner to choose conference on Around the League tab
     private ArrayList<String> confList;
@@ -83,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         /* Assign the correct Team to the user */
         userTeam = league.getConferences().get(confCounter).getTeams().get(teamCounter);
         userTeam.setUserControl(true);
+        onATLTab = false; //Default to appropriate box score for schedule tab (user's team)
+        boxScoreTracker = userTeam.getGameArrayList(); //Set to user's team by default
 
         season = league.getCurrentSeason();
 
@@ -247,6 +252,11 @@ public class MainActivity extends AppCompatActivity {
                 //Get the gameBoxScore array from the specific game
                 String[] gameBoxScore = userTeam.getGameArrayList().get(position).getBoxScore();
 
+                if(onATLTab) {
+
+                    gameBoxScore = boxScoreTracker.get(position).getBoxScore();
+                }
+
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
 
@@ -271,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                 league.simCurrentWeek();
                 //Refresh the team record and game schedule on the schedule tab
                 scheduleText.setText(userTeam.getTeamName() + " (" + userTeam.getRecord() + ")");
-                scheduleAdapter.notifyDataSetChanged();
+                scheduleAdapter.updateScheduleList(userTeam.getScheduleList());
             }
         });
 
@@ -339,6 +349,16 @@ public class MainActivity extends AppCompatActivity {
                         .getTeams().get(teamCounter).getRoster());
 
                 rosterView.setSelection(0); //Scroll rosterView to the top after update
+
+                // Set the schedule to the selected team and update the Adapter
+                scheduleAdapter.updateScheduleList(league.getConferences().get(confCounter)
+                        .getTeams().get(teamCounter).getScheduleList());
+
+                // Set the boxScoreTracker to the selected team and update the Adapter
+                boxScoreTracker = league.getConferences().get(confCounter).getTeams().get(teamCounter)
+                        .getGameArrayList();
+
+                scheduleView.setSelection(0); //Scroll scheduleView to the top after update
             }
 
             @Override
@@ -357,6 +377,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                if (rosterButton.isChecked()) {
+
+                    scheduleView.setVisibility(View.GONE);
+                    rosterView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -364,6 +389,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                if (scheduleButton.isChecked()) {
+
+                    rosterView.setVisibility(View.GONE);
+                    scheduleView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -408,21 +438,46 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (pos == 1) {
 
+                    onATLTab = false;
+
                     scheduleText.setVisibility(View.VISIBLE);
                     scheduleView.setVisibility(View.VISIBLE);
                     simButton.setVisibility(View.VISIBLE);
+
+                    //Set the schedule to the user's team and update the adapter
+                    scheduleAdapter.updateScheduleList(userTeam.getScheduleList());
+
+                    //Set boxScoreTracker to userTeam's Game List
+
+
                 } else if (pos == 2) {
+
+                    onATLTab = true;
 
                     confSpinnerText.setVisibility(View.VISIBLE);
                     confSpinner.setVisibility(View.VISIBLE);
                     teamSpinnerText.setVisibility(View.VISIBLE);
                     teamSpinner.setVisibility(View.VISIBLE);
                     radioGroup.setVisibility(View.VISIBLE);
-                    rosterView.setVisibility(View.VISIBLE);
+
+                    if(rosterButton.isChecked()) {
+                        rosterView.setVisibility(View.VISIBLE);
+                    }
+                    else if(scheduleButton.isChecked()){
+                        scheduleView.setVisibility(View.VISIBLE);
+                    }
 
                     //Set the roster to the current team selected in the team spinner and update the Adapter
                     rosterAdapter.updateRosterList(league.getConferences().get(confCounter)
                             .getTeams().get(teamCounter).getRoster());
+
+                    //Set boxScoreTracker to selected team's Game List
+                    boxScoreTracker = league.getConferences().get(confCounter).getTeams().get(teamCounter)
+                            .getGameArrayList();
+
+                    //Set the schedule to the current team selected in the team spinner and update the adapter
+                    scheduleAdapter.updateScheduleList(league.getConferences().get(confCounter)
+                            .getTeams().get(teamCounter).getScheduleList());
                 }
             }
 
@@ -442,6 +497,7 @@ public class MainActivity extends AppCompatActivity {
                     scheduleText.setVisibility(View.GONE);
                     scheduleView.setVisibility(View.GONE);
                     simButton.setVisibility(View.GONE);
+
                 } else if (pos == 2) {
 
                     confSpinnerText.setVisibility(View.GONE);
@@ -450,6 +506,7 @@ public class MainActivity extends AppCompatActivity {
                     teamSpinner.setVisibility(View.GONE);
                     radioGroup.setVisibility(View.GONE);
                     rosterView.setVisibility(View.GONE);
+                    scheduleView.setVisibility(View.GONE);
                 }
             }
 
