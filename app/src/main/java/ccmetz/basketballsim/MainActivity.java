@@ -13,10 +13,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView scheduleText; //Header for Schedule tab
     private TextView confSpinnerText; //Header for conference spinner
     private TextView teamSpinnerText; //Header for team spinner
-    private Button simButton;
+    private Button simButton; //Button for simming games
+    private RadioGroup radioGroup; //Group that contains the 2 radio buttons for seeing the roster and schedule
+    private RadioButton rosterButton; //RadioButton for viewing the roster
+    private RadioButton scheduleButton; //RadioButton for viewing the schedule
 
     private ExpandableListView rosterView;
     private ExpandableListAdapterRoster rosterAdapter; //Adapter for roster listview
@@ -156,19 +162,19 @@ public class MainActivity extends AppCompatActivity {
                         int[] roleTracker = lineupAdapter.getRoleChanges();
                         int starterCount = 0;
 
-                        for(int i = 0; i < roleTracker.length; i++){
+                        for (int i = 0; i < roleTracker.length; i++) {
 
-                            if(roleTracker[i] == 1){
+                            if (roleTracker[i] == 1) {
                                 starterCount++;
                             }
                         }
 
                         // Reorganize the userTeam roster and update the rosterView on the Manage Roster tab
-                        if(starterCount == 1){
+                        if (starterCount == 1) {
 
-                            for(int i = 0; i < playerList.size(); i++){
+                            for (int i = 0; i < playerList.size(); i++) {
 
-                                switch (roleTracker[i]){
+                                switch (roleTracker[i]) {
 
                                     case 1:
                                         playerList.get(i).setPlayerRole(Player.Role.STARTER);
@@ -186,11 +192,10 @@ public class MainActivity extends AppCompatActivity {
                             userTeam.updateTeamLineup(); //Reorganize the team roster
                             rosterAdapter.updateRosterList(userTeam.getRoster()); //update the rosterView ListView
                             lineupAdapter.updateLineupAdapter(); //Update the the dialog once the roster is reorganized
-                        }
-                        else{
+                        } else {
                             //Error - Don't save
                             Toast toast = Toast.makeText(MainActivity.this, "You can only pick 1 Starter per position!", Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
+                            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                             toast.show();
 
                         }
@@ -342,6 +347,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /* Set up the RadioGroup and RadioButton listeners */
+        radioGroup = (RadioGroup) findViewById(R.id.radio_group);
+        rosterButton = (RadioButton) findViewById(R.id.roster_button);
+        scheduleButton = (RadioButton) findViewById(R.id.schedule_button);
+        rosterButton.setChecked(true); //Roster is visible by default
+
+        rosterButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+
+        scheduleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+
 
         /* The following views will default as not visible because the Manage Roster tab is selected by default
          * Set visibility of views that are not on the Manage Roster tab to View.GONE */
@@ -362,6 +387,8 @@ public class MainActivity extends AppCompatActivity {
             teamSpinnerText.setVisibility(View.GONE);
         }
         teamSpinner.setVisibility(View.GONE);
+
+        radioGroup.setVisibility(View.GONE);
 
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -390,6 +417,7 @@ public class MainActivity extends AppCompatActivity {
                     confSpinner.setVisibility(View.VISIBLE);
                     teamSpinnerText.setVisibility(View.VISIBLE);
                     teamSpinner.setVisibility(View.VISIBLE);
+                    radioGroup.setVisibility(View.VISIBLE);
                     rosterView.setVisibility(View.VISIBLE);
 
                     //Set the roster to the current team selected in the team spinner and update the Adapter
@@ -420,6 +448,7 @@ public class MainActivity extends AppCompatActivity {
                     confSpinner.setVisibility(View.GONE);
                     teamSpinnerText.setVisibility(View.GONE);
                     teamSpinner.setVisibility(View.GONE);
+                    radioGroup.setVisibility(View.GONE);
                     rosterView.setVisibility(View.GONE);
                 }
             }
