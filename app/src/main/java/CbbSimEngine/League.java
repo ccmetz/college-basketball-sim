@@ -21,7 +21,7 @@ public class League {
                                         "Booker", "Thomas", "Bryant", "McDonald", "Irving", "Parker", "Hart", "Lowry", "Hill",
                                         "Young", "Carter", "Manning"};
 
-
+    private ArrayList<String> posList; //List of basketball positions
     private ArrayList<Conference> confList; //List that contains the conferences that belong to this league
     private ArrayList<Team> leagueTeamList; //List that contains all of the teams in league
     private int currentWeek; //Starts at 0
@@ -32,6 +32,13 @@ public class League {
 
         currentSeason = 2016;
         currentWeek = 0;
+
+        posList = new ArrayList<String>();
+        posList.add("PG");
+        posList.add("SG");
+        posList.add("SF");
+        posList.add("PF");
+        posList.add("C");
 
         confList = new ArrayList<Conference>();
         confList.add(new Conference("BIG 10", this));
@@ -179,6 +186,11 @@ public class League {
         Random r = new Random();
 
         return lastNames[r.nextInt(lastNames.length)];
+    }
+
+    public ArrayList<String> getPosList(){
+
+        return posList;
     }
 
 

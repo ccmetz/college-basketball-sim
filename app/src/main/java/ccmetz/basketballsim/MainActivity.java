@@ -91,13 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
         season = league.getCurrentSeason();
 
-        // Initialize and define the list of player positions
+        // Grab the list of basketball positions from the League object
         posList = new ArrayList<String>();
-        posList.add("PG");
-        posList.add("SG");
-        posList.add("SF");
-        posList.add("PF");
-        posList.add("C");
+        posList.addAll(league.getPosList());
 
         getSupportActionBar().setTitle(userTeam.getTeamName() + " " + season + " Season");
 
