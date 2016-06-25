@@ -350,53 +350,162 @@ public class Team {
     // Returns an ArrayList of the players that play a specific position on the team
     public ArrayList<Player> getPositionList(int pos){
 
-        ArrayList<Player> playerList = new ArrayList<Player>();
+        //ArrayList<Player> playerList = new ArrayList<Player>();
+        //int counter = 0;
 
         switch (pos){
 
             case 0:
-                for(int i = 0; i < rosterList.size(); i++){
-                    if(rosterList.get(i).getPosition() == 1){
-                        playerList.add(rosterList.get(i));
-                    }
-                }
-                break;
+                return pgList;
 
             case 1:
-                for(int i = 0; i < rosterList.size(); i++){
-                    if(rosterList.get(i).getPosition() == 2){
-                        playerList.add(rosterList.get(i));
-                    }
-                }
-                break;
+                return sgList;
 
             case 2:
-                for(int i = 0; i < rosterList.size(); i++){
-                    if(rosterList.get(i).getPosition() == 3){
-                        playerList.add(rosterList.get(i));
-                    }
-                }
-                break;
+                return sfList;
 
             case 3:
-                for(int i = 0; i < rosterList.size(); i++){
-                    if(rosterList.get(i).getPosition() == 4){
-                        playerList.add(rosterList.get(i));
-                    }
-                }
-                break;
+                return pfList;
 
             case 4:
-                for(int i = 0; i < rosterList.size(); i++){
+              /*  for(int i = 0; i < rosterList.size(); i++){
                     if(rosterList.get(i).getPosition() == 5){
                         playerList.add(rosterList.get(i));
                     }
                 }
-                break;
+                break; */
+                return cList;
+        }
+
+        //return playerList;
+        return pgList;
+
+    }
+
+    // This method is called when the user makes changes to their team's lineup
+    // The rosterList is re-sorted according to any new starters or role players
+    public void updateTeamLineup(){
+
+        ArrayList<Player> roleList = new ArrayList<Player>();
+        ArrayList<Player> benchList = new ArrayList<Player>();
+
+        updateStarters(pgList);
+        updateStarters(sgList);
+        updateStarters(sfList);
+        updateStarters(pfList);
+        updateStarters(cList);
+
+        rosterList.clear();
+
+        // Re-add the starters
+        rosterList.add(pgList.get(0));
+        rosterList.add(sgList.get(0));
+        rosterList.add(sfList.get(0));
+        rosterList.add(pfList.get(0));
+        rosterList.add(cList.get(0));
+
+        // Populate the role player and bench lists
+        for(int i = 1; i < pgList.size(); i++){
+
+            if(pgList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER) {
+                roleList.add(pgList.get(i));
+            }
+            else if(pgList.get(i).getPlayerRole() == Player.Role.BENCH){
+                benchList.add(pgList.get(i));
+            }
+        }
+
+        for(int i = 1; i < sgList.size(); i++){
+
+            if(sgList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER) {
+                roleList.add(sgList.get(i));
+            }
+            else if(sgList.get(i).getPlayerRole() == Player.Role.BENCH){
+                benchList.add(sgList.get(i));
+            }
+        }
+
+        for(int i = 1; i < sfList.size(); i++){
+
+            if(sfList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER) {
+                roleList.add(sfList.get(i));
+            }
+            else if(sfList.get(i).getPlayerRole() == Player.Role.BENCH){
+                benchList.add(sfList.get(i));
+            }
+        }
+
+        for(int i = 1; i < pfList.size(); i++){
+
+            if(pfList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER) {
+                roleList.add(pfList.get(i));
+            }
+            else if(pfList.get(i).getPlayerRole() == Player.Role.BENCH){
+                benchList.add(pfList.get(i));
+            }
+        }
+
+        for(int i = 1; i < cList.size(); i++){
+
+            if(cList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER) {
+                roleList.add(cList.get(i));
+            }
+            else if(cList.get(i).getPlayerRole() == Player.Role.BENCH){
+                benchList.add(cList.get(i));
+            }
+        }
+
+        sortList(roleList);
+        sortList(benchList);
+
+        for(int i = 0; i < roleList.size(); i++){
+
+            rosterList.add(roleList.get(i));
+        }
+
+        for(int i = 0; i < benchList.size(); i++){
+
+            rosterList.add(benchList.get(i));
+        }
+
+    }
+
+    // This method is called inside of updateTeamLineup
+    // The starters for all 5 position groups will be repositioned to the front
+    // of their respective ArrayLists
+    public void updateStarters(ArrayList<Player> list){
+
+
+        for(int i = 0; i < list.size(); i++){
+
+            if(list.get(i).getPlayerRole() == Player.Role.STARTER && i != 0){
+
+                //Swap the new starter with the old starter
+                Player temp = list.get(0);
+                list.set(0, list.get(i));
+                list.set(i, temp);
+            }
 
         }
 
-        return playerList;
+        //Resort the list with role players ahead of bench players
+        for(int i = 1; i < list.size() - 1; i++){
+
+            if(list.get(i).getPlayerRole() == Player.Role.BENCH){
+
+                //Check for any role players below it in the list
+                for(int j = i + 1; j < list.size(); j++){
+
+                    if(list.get(j).getPlayerRole() == Player.Role.ROLEPLAYER){
+                        //Swap
+                        Player temp = list.get(i);
+                        list.set(i, list.get(j));
+                        list.set(j, temp);
+
+                    }
+                }
+            }
+        }
 
     }
 

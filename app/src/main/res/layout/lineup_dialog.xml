@@ -18,13 +18,13 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:id="@+id/lineup_view" />
 
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:id="@+id/save_lineup_button"
         android:layout_gravity="center"
         android:text="@string/save_lineup_button" />

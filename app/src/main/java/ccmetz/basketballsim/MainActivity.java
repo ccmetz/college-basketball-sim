@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         playerList.clear();
                         playerList.addAll(userTeam.getPositionList(position));
 
-                        lineupAdapter.notifyDataSetChanged();
+                        lineupAdapter.updateLineupAdapter();
 
                     }
 
@@ -151,7 +153,47 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         // Check for valid # of Starters, Role Players, etc
+                        int[] roleTracker = lineupAdapter.getRoleChanges();
+                        int starterCount = 0;
+
+                        for(int i = 0; i < roleTracker.length; i++){
+
+                            if(roleTracker[i] == 1){
+                                starterCount++;
+                            }
+                        }
+
                         // Reorganize the userTeam roster and update the rosterView on the Manage Roster tab
+                        if(starterCount == 1){
+
+                            for(int i = 0; i < playerList.size(); i++){
+
+                                switch (roleTracker[i]){
+
+                                    case 1:
+                                        playerList.get(i).setPlayerRole(Player.Role.STARTER);
+                                        break;
+                                    case 2:
+                                        playerList.get(i).setPlayerRole(Player.Role.ROLEPLAYER);
+                                        break;
+                                    case 3:
+                                        playerList.get(i).setPlayerRole(Player.Role.BENCH);
+                                        break;
+                                }
+
+                            }
+
+                            userTeam.updateTeamLineup(); //Reorganize the team roster
+                            rosterAdapter.updateRosterList(userTeam.getRoster()); //update the rosterView ListView
+                            lineupAdapter.updateLineupAdapter(); //Update the the dialog once the roster is reorganized
+                        }
+                        else{
+                            //Error - Don't save
+                            Toast toast = Toast.makeText(MainActivity.this, "You can only pick 1 Starter per position!", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
+                            toast.show();
+                            
+                        }
 
                     }
                 });
