@@ -13,21 +13,21 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TeamActivity extends AppCompatActivity {
 
     private Spinner confSpinner; //Spinner that the user can use to select conferences
-    private ArrayList<String> confNames; //ArrayList that holds all of the conference names
+    private List<String> confNames; //ArrayList that holds all of the conference names
     private ArrayAdapter<String> confAdapter; //Adapter that attaches conference names to the confSpinner
 
     private ListView teamView; //ListView used to display teams in the activity
-    private ArrayList<String> teamNames; //ArrayList that holds all of the team names
+    private List<String> teamNames; //ArrayList that holds all of the team names
     private ArrayAdapter<String> teamAdapter; //Adapter that attaches the teams names to the teamView
 
     private int currentConf; //Keeps track of currently selected conference (when conference changes -> teamView updates)
     private int currentTeam; //Keeps track of currently selected team
-    private String[] confArray; //stores the names of all of the conferences
-    private String[] confTeams; //this array will reference the teams of whatever conference is chosen
 
 
     @Override
@@ -39,20 +39,19 @@ public class TeamActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        confArray = getResources().getStringArray(R.array.conference_array);
-        confTeams = getResources().getStringArray(R.array.big10_array); //defaults to BIG 10 conf teams
-
         teamNames = new ArrayList<String>();
+        // Defaults to BIG 10 team names
+        teamNames.addAll(Arrays.asList(getResources().getStringArray(R.array.big10_array)));
+
         currentConf = 0; //First conference is selected by default
         currentTeam = 0; //First team is selected by default
 
         /* Spinner for Conferences */
         confSpinner = (Spinner) findViewById(R.id.conf_spinner);
 
+        // Create the confNames ArrayList to be used in the confAdapter
         confNames = new ArrayList<String>();
-        for(int i = 0; i < confArray.length; i++){
-            confNames.add(i, confArray[i]);
-        }
+        confNames.addAll(Arrays.asList(getResources().getStringArray(R.array.conference_array)));
 
         confAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, confNames);
         confAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -67,20 +66,16 @@ public class TeamActivity extends AppCompatActivity {
                 teamNames.clear();
 
                 if(currentConf == 0){
-                    confTeams = getResources().getStringArray(R.array.big10_array);
+                    teamNames.addAll(Arrays.asList(getResources().getStringArray(R.array.big10_array)));
                 }
                 else if(currentConf == 1){
-                    confTeams = getResources().getStringArray(R.array.big12_array);
+                    teamNames.addAll(Arrays.asList(getResources().getStringArray(R.array.big12_array)));
                 }
                 else if(currentConf == 2){
-                    confTeams = getResources().getStringArray(R.array.sec_array);
+                    teamNames.addAll(Arrays.asList(getResources().getStringArray(R.array.sec_array)));
                 }
                 else if(currentConf == 3){
-                    confTeams = getResources().getStringArray(R.array.acc_array);
-                }
-
-                for(int i = 0; i < confTeams.length; i++) {
-                        teamNames.add(confTeams[i]);
+                    teamNames.addAll(Arrays.asList(getResources().getStringArray(R.array.acc_array)));
                 }
 
                 teamAdapter.notifyDataSetChanged(); //updates the listview with new teams
@@ -106,8 +101,8 @@ public class TeamActivity extends AppCompatActivity {
                 currentTeam = position;
                 // Get just the team name for the confirmation dialog (Need to subtract " - Prestige: ##")
                 String confirmName = null;
-                if(confTeams[currentTeam].contains(" -")){
-                    confirmName = confTeams[currentTeam].substring(0, confTeams[currentTeam].indexOf(" -"));
+                if(teamNames.get(currentTeam).contains(" -")){
+                    confirmName = teamNames.get(currentTeam).substring(0, teamNames.get(currentTeam).indexOf(" -"));
                 }
 
                 /* Create and show the dialog for the team selected */
