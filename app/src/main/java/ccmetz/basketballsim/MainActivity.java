@@ -321,10 +321,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 teamAdapter.notifyDataSetChanged(); //Updates the team spinner with appropriate team names
-                teamSpinner.setSelection(0); //Reset the spinner to the top of the list
+                confCounter = position; // Update the position of the confSpinner
+                teamSpinner.setSelection(0); // Set the teamSpinner to show the first team in the conference
+                teamCounter = 0; // Record the current position of the teamSpinner
 
-                confCounter = position;
-                teamCounter = 0;
+                updateLists(); // Reset the team rosters and schedules
 
             }
 
@@ -338,23 +339,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                teamCounter = position;
+                teamCounter = position; // Update the position of the teamSpinner
 
-                // Set the roster to the selected team and update the Adapter
-                rosterAdapter.updateRosterList(league.getConferences().get(confCounter)
-                        .getTeams().get(teamCounter).getRoster());
-
-                rosterView.setSelection(0); //Scroll rosterView to the top after update
-
-                // Set the schedule to the selected team and update the Adapter
-                scheduleAdapter.updateScheduleList(league.getConferences().get(confCounter)
-                        .getTeams().get(teamCounter).getScheduleList());
-
-                // Set the boxScoreTracker to the selected team and update the Adapter
-                boxScoreTracker = league.getConferences().get(confCounter).getTeams().get(teamCounter)
-                        .getGameArrayList();
-
-                scheduleView.setSelection(0); //Scroll scheduleView to the top after update
+                updateLists(); // Reset the team rosters and schedules
             }
 
             @Override
@@ -462,17 +449,7 @@ public class MainActivity extends AppCompatActivity {
                         scheduleView.setVisibility(View.VISIBLE);
                     }
 
-                    //Set the roster to the current team selected in the team spinner and update the Adapter
-                    rosterAdapter.updateRosterList(league.getConferences().get(confCounter)
-                            .getTeams().get(teamCounter).getRoster());
-
-                    //Set boxScoreTracker to selected team's Game List
-                    boxScoreTracker = league.getConferences().get(confCounter).getTeams().get(teamCounter)
-                            .getGameArrayList();
-
-                    //Set the schedule to the current team selected in the team spinner and update the adapter
-                    scheduleAdapter.updateScheduleList(league.getConferences().get(confCounter)
-                            .getTeams().get(teamCounter).getScheduleList());
+                    updateLists(); // Reset the team rosters and schedules
                 }
             }
 
@@ -519,6 +496,24 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         startActivity(intent);
+    }
+
+    // Method for resetting the rosterView and scheduleView when a new team is selected
+    public void updateLists() {
+
+        // Set the roster to the selected team and update the Adapter
+        rosterAdapter.updateRosterList(league.getConferences().get(confCounter)
+                .getTeams().get(teamCounter).getRoster());
+        rosterView.setSelection(0);
+
+        // Set the schedule to the selected team and update the Adapter
+        scheduleAdapter.updateScheduleList(league.getConferences().get(confCounter)
+                .getTeams().get(teamCounter).getScheduleList());
+        scheduleView.setSelection(0);
+
+        // Set the boxScoreTracker to the selected team and update the Adapter
+        boxScoreTracker = league.getConferences().get(confCounter).getTeams().get(teamCounter)
+                .getGameArrayList();
     }
 
 }
