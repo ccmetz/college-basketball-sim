@@ -1,6 +1,7 @@
 package CbbSimEngine;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,9 +24,9 @@ public class League {
                                         "Young", "Carter", "Manning", "Jok", "Valentine", "Baldwin", "Simmons", "Durant", "King",
                                         "Allen", "Parsons", "Forbes", "Taylor", "Harden", "Nowitzki"};
 
-    private ArrayList<String> posList; //List of basketball positions
-    private ArrayList<Conference> confList; //List that contains the conferences that belong to this league
-    private ArrayList<Team> leagueTeamList; //List that contains all of the teams in league
+    private List<String> posList; //List of basketball positions
+    private List<Conference> confList; //List that contains the conferences that belong to this league
+    private List<Team> leagueTeamList; //List that contains all of the teams in league
     private int currentWeek; //Starts at 0
     private int currentSeason; //Starts at 2016
 
@@ -137,7 +138,7 @@ public class League {
         return currentWeek;
     }
 
-    public ArrayList<Conference> getConferences(){
+    public List<Conference> getConferences(){
 
         return confList;
     }
@@ -190,7 +191,7 @@ public class League {
         return lastNames[r.nextInt(lastNames.length)];
     }
 
-    public ArrayList<String> getPosList(){
+    public List<String> getPosList(){
 
         return posList;
     }
