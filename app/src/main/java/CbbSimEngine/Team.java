@@ -71,6 +71,10 @@ public class Team {
         return name;
     }
 
+    public int getProgramLevel(){
+        return programLevel;
+    }
+
     public ArrayList<Player> getRoster(){
 
         return rosterList;
