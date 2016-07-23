@@ -53,8 +53,8 @@ public class League {
         /** Add teams to the conferences - keeping them to 10 teams each for now **/
         // BIG 10
         confList.get(0).getTeams().add(new Team("MICHIGAN ST", "BIG 10", "MSU", 85, this));
-        confList.get(0).getTeams().add(new Team("OHIO ST", "BIG 10", "OSU", 80, this));
         confList.get(0).getTeams().add(new Team("MICHIGAN", "BIG 10", "MIC", 80, this));
+        confList.get(0).getTeams().add(new Team("OHIO ST", "BIG 10", "OSU", 80, this));
         confList.get(0).getTeams().add(new Team("WISCONSIN", "BIG 10", "WIS", 75, this));
         confList.get(0).getTeams().add(new Team("IOWA", "BIG 10", "IA", 70, this));
         confList.get(0).getTeams().add(new Team("PURDUE", "BIG 10", "PU", 70, this));
@@ -65,13 +65,13 @@ public class League {
 
         // BIG 12
         confList.get(1).getTeams().add(new Team("KANSAS", "BIG 12", "KS", 90, this));
-        confList.get(1).getTeams().add(new Team("OKLAHOMA", "BIG 12", "OK", 80, this));
         confList.get(1).getTeams().add(new Team("IOWA ST", "BIG 12", "ISU", 80, this));
+        confList.get(1).getTeams().add(new Team("OKLAHOMA", "BIG 12", "OK", 80, this));
         confList.get(1).getTeams().add(new Team("TEXAS", "BIG 12", "TX", 75, this));
-        confList.get(1).getTeams().add(new Team("OKLAHOMA ST", "BIG 12", "OKS", 70, this));
         confList.get(1).getTeams().add(new Team("Baylor", "BIG 12", "BU", 70, this));
-        confList.get(1).getTeams().add(new Team("WEST VIRGINIA", "BIG 12", "WV", 65, this));
+        confList.get(1).getTeams().add(new Team("OKLAHOMA ST", "BIG 12", "OKS", 70, this));
         confList.get(1).getTeams().add(new Team("KANSAS ST", "BIG 12", "KSU", 65, this));
+        confList.get(1).getTeams().add(new Team("WEST VIRGINIA", "BIG 12", "WV", 65, this));
         confList.get(1).getTeams().add(new Team("TEXAS TECH", "BIG 12", "TT", 60, this));
         confList.get(1).getTeams().add(new Team("TEXAS CHRISTIAN", "BIG 12", "TCU", 50, this));
 
@@ -82,8 +82,8 @@ public class League {
         confList.get(2).getTeams().add(new Team("SOUTH CAROLINA", "SEC", "SC", 70, this));
         confList.get(2).getTeams().add(new Team("TENNESSEE", "SEC", "TENN", 70, this));
         confList.get(2).getTeams().add(new Team("VANDERBILT", "SEC", "VU", 70, this));
-        confList.get(2).getTeams().add(new Team("GEORGIA", "SEC", "GU", 65, this));
         confList.get(2).getTeams().add(new Team("ARKANSAS", "SEC", "AK", 65, this));
+        confList.get(2).getTeams().add(new Team("GEORGIA", "SEC", "GU", 65, this));
         confList.get(2).getTeams().add(new Team("ALABAMA", "SEC", "AL", 55, this));
         confList.get(2).getTeams().add(new Team("AUBURN", "SEC", "AU", 50, this));
 
@@ -91,11 +91,11 @@ public class League {
         confList.get(3).getTeams().add(new Team("DUKE", "ACC", "DUKE", 90, this));
         confList.get(3).getTeams().add(new Team("NORTH CAROLINA", "ACC", "UNC", 90, this));
         confList.get(3).getTeams().add(new Team("LOUISVILLE", "ACC", "LOU", 80, this));
-        confList.get(3).getTeams().add(new Team("SYRACUSE", "ACC", "SYR", 75, this));
         confList.get(3).getTeams().add(new Team("MIAMI", "ACC", "MIA", 75, this));
+        confList.get(3).getTeams().add(new Team("SYRACUSE", "ACC", "SYR", 75, this));
         confList.get(3).getTeams().add(new Team("VIRGINIA", "ACC", "UVA", 70, this));
-        confList.get(3).getTeams().add(new Team("GEORGIA TECH", "ACC", "GT", 65, this));
         confList.get(3).getTeams().add(new Team("FLORIDA ST", "ACC", "FSU", 65, this));
+        confList.get(3).getTeams().add(new Team("GEORGIA TECH", "ACC", "GT", 65, this));
         confList.get(3).getTeams().add(new Team("NORTH CAROLINA ST", "ACC", "NCST", 60, this));
         confList.get(3).getTeams().add(new Team("BOSTON COLLEGE", "ACC", "BC", 50, this));
 
