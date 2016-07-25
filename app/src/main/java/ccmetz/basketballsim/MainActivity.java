@@ -249,7 +249,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                /** FOR DEBUGGING PURPOSES **/
+                if(userTeam.getGameArrayList().get(position).hasBeenPlayed) {
+                    /** FOR DEBUGGING PURPOSES **/
 
                /* //Display a dialog that shows the log of the game
                 String log = userTeam.getGameArrayList().get(position).getGameLog();
@@ -257,63 +258,63 @@ public class MainActivity extends AppCompatActivity {
                         .setMessage(log)
                         .show(); */
 
-                //Get the gameBoxScore array and team names from the specific game
-                ArrayList<String[]> gameBoxScore = new ArrayList<String[]>();
-                gameBoxScore.clear();
-                gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getHomeBoxScore());
-                gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getAwayBoxScore());
-
-                ArrayList<String> boxScoreTeams = new ArrayList<String>();
-                boxScoreTeams.clear();
-                boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
-                boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
-
-                if(onATLTab) {
+                    //Get the gameBoxScore array and team names from the specific game
+                    ArrayList<String[]> gameBoxScore = new ArrayList<String[]>();
                     gameBoxScore.clear();
-                    gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getHomeBoxScore());
-                    gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getAwayBoxScore());
+                    gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getHomeBoxScore());
+                    gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getAwayBoxScore());
 
+                    ArrayList<String> boxScoreTeams = new ArrayList<String>();
                     boxScoreTeams.clear();
-                    boxScoreTeams.add(boxScoreTracker.get(position).getHomeTeam().getAbbr());
-                    boxScoreTeams.add(boxScoreTracker.get(position).getAwayTeam().getAbbr());
+                    boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
+                    boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
+
+                    if (onATLTab) {
+                        gameBoxScore.clear();
+                        gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getHomeBoxScore());
+                        gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getAwayBoxScore());
+
+                        boxScoreTeams.clear();
+                        boxScoreTeams.add(boxScoreTracker.get(position).getHomeTeam().getAbbr());
+                        boxScoreTeams.add(boxScoreTracker.get(position).getAwayTeam().getAbbr());
+                    }
+
+                    LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
+
+                    //teamSpinnerCounter = 0; //Keep track of spinner's position (defaults to 0)
+
+                    //Initialize the boxScoreSpinner with the relevant team names
+                    Spinner boxScoreSpinner = (Spinner) rootView.findViewById(R.id.team_spinner);
+                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(MainActivity.this,
+                            android.R.layout.simple_spinner_item, boxScoreTeams);
+                    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    boxScoreSpinner.setAdapter(spinnerAdapter);
+
+                    //Initialize the GridView and set the custom BoxScoreAdapter
+                    GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
+                    final BoxScoreAdapter boxScoreAdapter = new BoxScoreAdapter(gameBoxScore, teamSpinnerCounter, MainActivity.this);
+                    boxScoreGrid.setAdapter(boxScoreAdapter);
+
+                    // Notify the boxScoreAdapter when the spinner selection changes
+                    boxScoreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                            boxScoreAdapter.updateBoxScore(position);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    //Show the box score dialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setView(rootView);
+                    builder.show();
                 }
-
-                LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
-
-                //teamSpinnerCounter = 0; //Keep track of spinner's position (defaults to 0)
-
-                //Initialize the boxScoreSpinner with the relevant team names
-                Spinner boxScoreSpinner = (Spinner) rootView.findViewById(R.id.team_spinner);
-                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,
-                        boxScoreTeams);
-                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                boxScoreSpinner.setAdapter(spinnerAdapter);
-
-                //Initialize the GridView and set the custom BoxScoreAdapter
-                GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
-                final BoxScoreAdapter boxScoreAdapter = new BoxScoreAdapter(gameBoxScore, teamSpinnerCounter, MainActivity.this);
-                boxScoreGrid.setAdapter(boxScoreAdapter);
-
-                // Notify the boxScoreAdapter when the spinner selection changes
-                boxScoreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                        boxScoreAdapter.updateBoxScore(position);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-
-                //Show the box score dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setView(rootView);
-                builder.show();
-
             }
         });
 

@@ -7,9 +7,11 @@ import java.util.ArrayList;
  */
 public class Game {
 
+    public boolean hasBeenPlayed;
+
     private Team homeTeam;
     private Team awayTeam;
-    private boolean hasBeenPlayed;
+
 
     private ArrayList<Player> homeLineup;
     private ArrayList<Player> homeOnFloor;//Home team current players that are on the floor
@@ -26,10 +28,7 @@ public class Game {
 
     private String gameLog; //Keeps track of the play by play of the game
 
-    // These variables will be used for stats for the box score
-    private BoxScore boxScore;
-    private int[][] homeStats;
-    private int[][] awayStats;
+    private BoxScore boxScore; //Handles the creation of the game box score
 
 
     Game(Team hTeam, Team aTeam){
@@ -50,10 +49,6 @@ public class Game {
         awayLineup = awayTeam.getRoster(); //set awayLineup equal to the away team's roster
 
         gameLog = ""; //Game log is initially blank
-
-        homeStats = new int[5][10]; //5 players -> tracks 2FGM, 2FGA, 3FGM, 3FGA, OREB, DREB, STL, BLK, TO, AST
-        awayStats = new int[5][10];
-
     }
 
     /**
