@@ -162,16 +162,16 @@ public class MainActivity extends AppCompatActivity {
                         // Check for valid # of Starters, Role Players, etc
                         int[] roleTracker = lineupAdapter.getRoleChanges();
                         int starterCount = 0;
+                        int roleCount = 0;
 
                         for (int i = 0; i < roleTracker.length; i++) {
 
-                            if (roleTracker[i] == 1) {
-                                starterCount++;
-                            }
+                            if (roleTracker[i] == 1) starterCount++;
+                            else if(roleTracker[i] == 2) roleCount++;
                         }
 
                         // Reorganize the userTeam roster and update the rosterView on the Manage Roster tab
-                        if (starterCount == 1) {
+                        if (starterCount == 1 && roleCount == 1) {
 
                             for (int i = 0; i < playerList.size(); i++) {
 
@@ -195,7 +195,16 @@ public class MainActivity extends AppCompatActivity {
                             lineupAdapter.updateLineupAdapter(); //Update the the dialog once the roster is reorganized
                         } else {
                             //Error - Don't save
-                            Toast toast = Toast.makeText(MainActivity.this, "You can only pick 1 Starter per position!", Toast.LENGTH_SHORT);
+                            Toast toast = new Toast(MainActivity.this);
+                            if(starterCount != 1 && roleCount != 1) {
+                                toast = Toast.makeText(MainActivity.this, "Must have only 1 starter and 1 role player per position!", Toast.LENGTH_SHORT);
+                            }
+                            else if(starterCount != 1){
+                                toast = Toast.makeText(MainActivity.this, "Must have 1 starter per position!", Toast.LENGTH_SHORT);
+                            }
+                            else {
+                                toast = Toast.makeText(MainActivity.this, "Must have 1 role player per position!", Toast.LENGTH_SHORT);
+                            }
                             toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                             toast.show();
 
