@@ -232,7 +232,8 @@ public class Team {
     // This method will create and sort the rosterList by starters and bench players
     public void createRosterList(){
 
-        ArrayList<Player> listToBeSorted = new ArrayList<Player>();
+        ArrayList<Player> roleList = new ArrayList<Player>();
+        ArrayList<Player> benchList = new ArrayList<Player>();
 
         //Add Starters first (highest overall)
         rosterList.add(pgList.get(0));
@@ -241,32 +242,39 @@ public class Team {
         rosterList.add(pfList.get(0));
         rosterList.add(cList.get(0));
 
+        //Add backup role players/bench players for each position and sort them by overall
         for(int i = 1; i < pgList.size(); i++){
-            listToBeSorted.add(pgList.get(i));
+           if(i == 1) roleList.add(pgList.get(i));
+           else benchList.add(pgList.get(i));
         }
 
         for(int i = 1; i < sgList.size(); i++){
-            listToBeSorted.add(sgList.get(i));
+            if(i == 1) roleList.add(sgList.get(i));
+            else benchList.add(sgList.get(i));
         }
 
         for(int i = 1; i < sfList.size(); i++){
-            listToBeSorted.add(sfList.get(i));
+            if(i == 1) roleList.add(sfList.get(i));
+            else benchList.add(sfList.get(i));
         }
 
         for(int i = 1; i < pfList.size(); i++){
-            listToBeSorted.add(pfList.get(i));
+            if(i == 1) roleList.add(pfList.get(i));
+            else benchList.add(pfList.get(i));
         }
 
         for(int i = 1; i < cList.size(); i++){
-            listToBeSorted.add(cList.get(i));
+            if(i == 1) roleList.add(cList.get(i));
+            else benchList.add(cList.get(i));
         }
 
-        // Sort bench players by overall and add them to the rosterList
-        sortList(listToBeSorted);
-        for(int i = 0; i < listToBeSorted.size(); i++){
+        sortList(roleList);
+        sortList(benchList);
 
-            rosterList.add(listToBeSorted.get(i));
-        }
+        //Add the role players to the rosterList
+        rosterList.addAll(roleList);
+        rosterList.addAll(benchList);
+        
 
         // Set best players at their positions as STARTER
         for(int i = 0; i < 5; i++){
@@ -274,7 +282,7 @@ public class Team {
             rosterList.get(i).setPlayerRole(Player.Role.STARTER);
         }
 
-        // Set the next 5 best players to ROLEPLAYER
+        // Set the 5 backup players to ROLEPLAYER
         for(int i = 5; i < 10; i++){
 
             rosterList.get(i).setPlayerRole(Player.Role.ROLEPLAYER);
