@@ -55,7 +55,12 @@ public class Team {
         pfList = new ArrayList<Player>();
         cList = new ArrayList<Player>();
 
-        generateRoster(2, 3, 3, 2, 2); //12 total scholarship players
+        //Generate a roster for the Team (12 total scholarship players)
+        double rosterChance = Math.random();
+        if(rosterChance > 0.75) generateRoster(2, 3, 3, 2, 2);
+        else if(rosterChance > 0.50) generateRoster(3,2,3,2,2);
+        else if(rosterChance > 0.25) generateRoster(2,3,2,3,2);
+        else generateRoster(3,2,2,3,2);
 
         calcTeamOverall();
 
@@ -274,7 +279,7 @@ public class Team {
         //Add the role players to the rosterList
         rosterList.addAll(roleList);
         rosterList.addAll(benchList);
-        
+
 
         // Set best players at their positions as STARTER
         for(int i = 0; i < 5; i++){
