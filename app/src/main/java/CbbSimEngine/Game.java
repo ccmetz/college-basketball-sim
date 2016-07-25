@@ -134,10 +134,10 @@ public class Game {
 
     // Method will create a box score to be displayed in a dialog on the schedule tab
     // ONLY OPTIMIZED FOR GAMES PLAYED WITHOUT SUBS - WILL NEED TO MODIFY WHEN SUB FUNCTIONALITY ADDED
-    public String[] getBoxScore(){
+    public BoxScore getBoxScore(){
 
         boxScore.createBoxScore();
-        return boxScore.getHomeBoxScore();
+        return boxScore;
 
     }
 

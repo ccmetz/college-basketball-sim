@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     private int season; //Current season
     private ArrayList<String> posList;
 
+    int teamSpinnerCounter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,15 +258,21 @@ public class MainActivity extends AppCompatActivity {
                         .show(); */
 
                 //Get the gameBoxScore array and team names from the specific game
-                String[] gameBoxScore = userTeam.getGameArrayList().get(position).getBoxScore();
+                ArrayList<String[]> gameBoxScore = new ArrayList<String[]>();
+                gameBoxScore.clear();
+                gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getHomeBoxScore());
+                gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getAwayBoxScore());
+
                 ArrayList<String> boxScoreTeams = new ArrayList<String>();
                 boxScoreTeams.clear();
                 boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
                 boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
 
                 if(onATLTab) {
+                    gameBoxScore.clear();
+                    gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getHomeBoxScore());
+                    gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getAwayBoxScore());
 
-                    gameBoxScore = boxScoreTracker.get(position).getBoxScore();
                     boxScoreTeams.clear();
                     boxScoreTeams.add(boxScoreTracker.get(position).getHomeTeam().getAbbr());
                     boxScoreTeams.add(boxScoreTracker.get(position).getAwayTeam().getAbbr());
@@ -272,6 +280,8 @@ public class MainActivity extends AppCompatActivity {
 
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
+
+                //teamSpinnerCounter = 0; //Keep track of spinner's position (defaults to 0)
 
                 //Initialize the boxScoreSpinner with the relevant team names
                 Spinner boxScoreSpinner = (Spinner) rootView.findViewById(R.id.team_spinner);
@@ -282,7 +292,22 @@ public class MainActivity extends AppCompatActivity {
 
                 //Initialize the GridView and set the custom BoxScoreAdapter
                 GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
-                boxScoreGrid.setAdapter(new BoxScoreAdapter(gameBoxScore, MainActivity.this));
+                final BoxScoreAdapter boxScoreAdapter = new BoxScoreAdapter(gameBoxScore, teamSpinnerCounter, MainActivity.this);
+                boxScoreGrid.setAdapter(boxScoreAdapter);
+
+                // Notify the boxScoreAdapter when the spinner selection changes
+                boxScoreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        boxScoreAdapter.updateBoxScore(position);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
 
                 //Show the box score dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);

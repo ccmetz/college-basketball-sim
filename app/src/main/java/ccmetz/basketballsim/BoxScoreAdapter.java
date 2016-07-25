@@ -6,24 +6,30 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by ccmetz on 6/1/16.
  */
 public class BoxScoreAdapter extends BaseAdapter {
 
-    private String[] gameBoxScore;
+    private String[] homeBoxScore;
+    private String[] awayBoxScore;
     private Context context;
+    private int counter;
 
 
-    public BoxScoreAdapter(String[] boxScore, Context c){
+    public BoxScoreAdapter(ArrayList<String[]> boxScore, int teamCounter, Context c){
 
-        gameBoxScore = boxScore;
+        homeBoxScore = boxScore.get(0);
+        awayBoxScore = boxScore.get(1);
         context = c;
+        counter = teamCounter;
     }
 
     public int getCount(){
 
-        return gameBoxScore.length;
+        return homeBoxScore.length;
     }
 
     public Object getItem(int position){
@@ -49,7 +55,16 @@ public class BoxScoreAdapter extends BaseAdapter {
             textView = (TextView) convertView;
         }
 
-        textView.setText(gameBoxScore[position]);
+        if(counter == 0) textView.setText(homeBoxScore[position]);
+        else if(counter == 1) textView.setText(awayBoxScore[position]);
+
         return textView;
+    }
+
+    // Method used to update the box score when a new team is selected in the box score dialog
+    public void updateBoxScore(int position){
+
+        counter = position;
+        this.notifyDataSetChanged();
     }
 }
