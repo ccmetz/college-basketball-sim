@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private int season; //Current season
     private ArrayList<String> posList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -254,16 +255,30 @@ public class MainActivity extends AppCompatActivity {
                         .setMessage(log)
                         .show(); */
 
-                //Get the gameBoxScore array from the specific game
+                //Get the gameBoxScore array and team names from the specific game
                 String[] gameBoxScore = userTeam.getGameArrayList().get(position).getBoxScore();
+                ArrayList<String> boxScoreTeams = new ArrayList<String>();
+                boxScoreTeams.clear();
+                boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
+                boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
 
                 if(onATLTab) {
 
                     gameBoxScore = boxScoreTracker.get(position).getBoxScore();
+                    boxScoreTeams.clear();
+                    boxScoreTeams.add(boxScoreTracker.get(position).getHomeTeam().getAbbr());
+                    boxScoreTeams.add(boxScoreTracker.get(position).getAwayTeam().getAbbr());
                 }
 
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
+
+                //Initialize the boxScoreSpinner with the relevant team names
+                Spinner boxScoreSpinner = (Spinner) rootView.findViewById(R.id.team_spinner);
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,
+                        boxScoreTeams);
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                boxScoreSpinner.setAdapter(spinnerAdapter);
 
                 //Initialize the GridView and set the custom BoxScoreAdapter
                 GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
