@@ -260,14 +260,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //Get the gameBoxScore array and team names from the specific game
                     ArrayList<String[]> gameBoxScore = new ArrayList<String[]>();
-                    gameBoxScore.clear();
-                    gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getHomeBoxScore());
-                    gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getAwayBoxScore());
-
                     ArrayList<String> boxScoreTeams = new ArrayList<String>();
-                    boxScoreTeams.clear();
-                    boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
-                    boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
+
 
                     if (onATLTab) {
                         gameBoxScore.clear();
@@ -277,6 +271,15 @@ public class MainActivity extends AppCompatActivity {
                         boxScoreTeams.clear();
                         boxScoreTeams.add(boxScoreTracker.get(position).getHomeTeam().getAbbr());
                         boxScoreTeams.add(boxScoreTracker.get(position).getAwayTeam().getAbbr());
+                    }
+                    else {
+                        gameBoxScore.clear();
+                        gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getHomeBoxScore());
+                        gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getAwayBoxScore());
+
+                        boxScoreTeams.clear();
+                        boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
+                        boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
                     }
 
                     LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
