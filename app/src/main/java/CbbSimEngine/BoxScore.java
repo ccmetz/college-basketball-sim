@@ -14,12 +14,14 @@ public class BoxScore {
     private int[][] home3pt; // 3FGM, 3FGA
     private int[][] homeReb; // OREB, DREB
     private int[][] homeSBT; // STL, BLK, TO
+    private int[][] homePtReb; //Total PTs, REBs
     private int[] homeAst; // AST
 
     private int[][] away2pt;
     private int[][] away3pt;
     private int[][] awayReb;
     private int[][] awaySBT;
+    private int[][] awayPtReb;
     private int[] awayAst;
 
     private int posMod; //Will change from 0 to 5 depending on if the stats should be added
@@ -30,19 +32,21 @@ public class BoxScore {
         homePlayers = homeNames;
         awayPlayers = awayNames;
 
-        homeBoxScore = new String[7];
-        awayBoxScore = new String[7];
+        homeBoxScore = new String[8];
+        awayBoxScore = new String[8];
 
         home2pt = new int[10][2]; //These sizes will need to be changed to 10 once subs are added
         home3pt = new int[10][2];
         homeReb = new int[10][2];
         homeSBT = new int[10][3];
+        homePtReb = new int[10][2];
         homeAst = new int[10];
 
         away2pt = new int[10][2];
         away3pt = new int[10][2];
         awayReb = new int[10][2];
         awaySBT = new int[10][3];
+        awayPtReb = new int[10][2];
         awayAst = new int[10];
 
         posMod = 0;
@@ -102,7 +106,22 @@ public class BoxScore {
 
         homeBoxScore[4] = "\n" + homePlayers;
 
-        homeBoxScore[5] = "Stl/Blk/TO" + "\n" + homeSBT[0][0] + "   " + homeSBT[0][1] + "   " + homeSBT[0][2] + "\n" +
+        homeBoxScore[5] = "Pts/Rebs" + "\n" + homePtReb[0][0] + "  " + homePtReb[0][1] + "\n" +
+                homePtReb[1][0] + "  " + homePtReb[1][1] + "\n" +
+                homePtReb[2][0] + "  " + homePtReb[2][1] + "\n" +
+                homePtReb[3][0] + "  " + homePtReb[3][1] + "\n" +
+                homePtReb[4][0] + "  " + homePtReb[4][1] + "\n" +
+                homePtReb[5][0] + "  " + homePtReb[5][1] + "\n" +
+                homePtReb[6][0] + "  " + homePtReb[6][1] + "\n" +
+                homePtReb[7][0] + "  " + homePtReb[7][1] + "\n" +
+                homePtReb[8][0] + "  " + homePtReb[8][1] + "\n" +
+                homePtReb[9][0] + "  " + homePtReb[9][1] + "\n\n";
+
+        homeBoxScore[6] = "AST" + "\n" + homeAst[0] + "\n" + homeAst[1] + "\n" + homeAst[2] + "\n" +
+                homeAst[3] + "\n" + homeAst[4] + "\n" + homeAst[5] + "\n" + homeAst[6] + "\n" +
+                homeAst[7] + "\n" + homeAst[8] + "\n" + homeAst[9] + "\n\n";
+
+        homeBoxScore[7] = "Stl/Blk/TO" + "\n" + homeSBT[0][0] + "   " + homeSBT[0][1] + "   " + homeSBT[0][2] + "\n" +
                 homeSBT[1][0] + "   " + homeSBT[1][1] + "   " + homeSBT[1][2] + "\n" +
                 homeSBT[2][0] + "   " + homeSBT[2][1] + "   " + homeSBT[2][2] + "\n" +
                 homeSBT[3][0] + "   " + homeSBT[3][1] + "   " + homeSBT[3][2] + "\n" +
@@ -112,10 +131,6 @@ public class BoxScore {
                 homeSBT[7][0] + "   " + homeSBT[7][1] + "   " + homeSBT[7][2] + "\n" +
                 homeSBT[8][0] + "   " + homeSBT[8][1] + "   " + homeSBT[8][2] + "\n" +
                 homeSBT[9][0] + "   " + homeSBT[9][1] + "   " + homeSBT[9][2] + "\n\n";
-
-        homeBoxScore[6] = "AST" + "\n" + homeAst[0] + "\n" + homeAst[1] + "\n" + homeAst[2] + "\n" +
-                homeAst[3] + "\n" + homeAst[4] + "\n" + homeAst[5] + "\n" + homeAst[6] + "\n" +
-                homeAst[7] + "\n" + homeAst[8] + "\n" + homeAst[9] + "\n\n";
     }
 
     private void createAwayBoxScore(){
@@ -158,7 +173,22 @@ public class BoxScore {
 
         awayBoxScore[4] = "\n" + awayPlayers;
 
-        awayBoxScore[5] = "Stl/Blk/TO" + "\n" + awaySBT[0][0] + "   " + awaySBT[0][1] + "   " + awaySBT[0][2] + "\n" +
+        awayBoxScore[5] = "Pts/Rebs" + "\n" + awayPtReb[0][0] + "  " + awayPtReb[0][1] + "\n" +
+                awayPtReb[1][0] + "  " + awayPtReb[1][1] + "\n" +
+                awayPtReb[2][0] + "  " + awayPtReb[2][1] + "\n" +
+                awayPtReb[3][0] + "  " + awayPtReb[3][1] + "\n" +
+                awayPtReb[4][0] + "  " + awayPtReb[4][1] + "\n" +
+                awayPtReb[5][0] + "  " + awayPtReb[5][1] + "\n" +
+                awayPtReb[6][0] + "  " + awayPtReb[6][1] + "\n" +
+                awayPtReb[7][0] + "  " + awayPtReb[7][1] + "\n" +
+                awayPtReb[8][0] + "  " + awayPtReb[8][1] + "\n" +
+                awayPtReb[9][0] + "  " + awayPtReb[9][1] + "\n\n";
+
+        awayBoxScore[6] = "AST" + "\n" + awayAst[0] + "\n" + awayAst[1] + "\n" + awayAst[2] + "\n" +
+                awayAst[3] + "\n" + awayAst[4] + "\n" + awayAst[5] + "\n" + awayAst[6] + "\n" +
+                awayAst[7] + "\n" + awayAst[8] + "\n" + awayAst[9] + "\n\n";
+
+        awayBoxScore[7] = "Stl/Blk/TO" + "\n" + awaySBT[0][0] + "   " + awaySBT[0][1] + "   " + awaySBT[0][2] + "\n" +
                 awaySBT[1][0] + "   " + awaySBT[1][1] + "   " + awaySBT[1][2] + "\n" +
                 awaySBT[2][0] + "   " + awaySBT[2][1] + "   " + awaySBT[2][2] + "\n" +
                 awaySBT[3][0] + "   " + awaySBT[3][1] + "   " + awaySBT[3][2] + "\n" +
@@ -168,10 +198,6 @@ public class BoxScore {
                 awaySBT[7][0] + "   " + awaySBT[7][1] + "   " + awaySBT[7][2] + "\n" +
                 awaySBT[8][0] + "   " + awaySBT[8][1] + "   " + awaySBT[8][2] + "\n" +
                 awaySBT[9][0] + "   " + awaySBT[9][1] + "   " + awaySBT[9][2] + "\n\n";
-
-        awayBoxScore[6] = "AST" + "\n" + awayAst[0] + "\n" + awayAst[1] + "\n" + awayAst[2] + "\n" +
-                awayAst[3] + "\n" + awayAst[4] + "\n" + awayAst[5] + "\n" + awayAst[6] + "\n" +
-                awayAst[7] + "\n" + awayAst[8] + "\n" + awayAst[9] + "\n\n";
     }
 
     private void modifyPosMod(boolean bench){
@@ -186,10 +212,12 @@ public class BoxScore {
         if(possession == 0) {
             home2pt[player + posMod][0]++;
             home2pt[player + posMod][1]++;
+            homePtReb[player + posMod][0] += 2;
         }
         else if(possession == 1){
             away2pt[player + posMod][0]++;
             away2pt[player + posMod][1]++;
+            awayPtReb[player + posMod][0] += 2;
         }
     }
 
@@ -209,10 +237,12 @@ public class BoxScore {
         if(possession == 0){
             home3pt[player + posMod][0]++;
             home3pt[player + posMod][1]++;
+            homePtReb[player + posMod][0] += 3;
         }
         else if(possession == 1){
             away3pt[player + posMod][0]++;
             away3pt[player + posMod][1]++;
+            awayPtReb[player + posMod][0] += 3;
         }
     }
 
@@ -228,8 +258,14 @@ public class BoxScore {
 
         modifyPosMod(isBenchIn);
 
-        if(possession == 0) homeReb[player + posMod][0]++;
-        else if(possession == 1) awayReb[player + posMod][0]++;
+        if(possession == 0) {
+            homeReb[player + posMod][0]++;
+            homePtReb[player + posMod][1]++;
+        }
+        else if(possession == 1) {
+            awayReb[player + posMod][0]++;
+            awayPtReb[player + posMod][1]++;
+        }
     }
 
     public void addDReb(int possession, int player, boolean isBenchIn){
@@ -237,8 +273,14 @@ public class BoxScore {
         modifyPosMod(isBenchIn);
 
         // The defensive rebound goes to the team that did not currently have possession
-        if(possession == 0) awayReb[player + posMod][1]++;
-        else if(possession == 1) homeReb[player + posMod][1]++;
+        if(possession == 0) {
+            awayReb[player + posMod][1]++;
+            awayPtReb[player + posMod][1]++;
+        }
+        else if(possession == 1) {
+            homeReb[player + posMod][1]++;
+            homePtReb[player + posMod][1]++;
+        }
     }
 
     public void addSteal(int possession, int player, boolean isBenchIn){

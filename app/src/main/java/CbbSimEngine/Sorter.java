@@ -30,7 +30,7 @@ public class Sorter {
         Collections.sort(list, new PlayerOvrComp());
     }
 
-    
+
     // Inner Comparator class for sorting Players by position
     static class PositionComp implements Comparator<Player> {
 
