@@ -2,7 +2,6 @@ package CbbSimEngine;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -39,7 +38,6 @@ public class Conference {
     // setting up each team's individual schedule string list
     public void setConfSchedule(){
 
-        //ArrayList<Team> teams = teamList;
         Collections.shuffle(teamList); //Shuffle teams
 
 
@@ -82,7 +80,7 @@ public class Conference {
             }
         }
 
-        Collections.sort(teamList, new PrestigeComp());
+        Sorter.sortByPrestige(teamList);
 
         //Call each team's setScheduleStringList method now that their schedules have been created
         for(int i = 0; i < teamList.size(); i++) {
@@ -91,16 +89,4 @@ public class Conference {
         }
 
     }
-
-    // Inner Comparator class for sorting Teams by prestige and name
-    class PrestigeComp implements Comparator<Team> {
-
-        @Override
-        public int compare(Team a, Team b){
-            if(a.getProgramLevel() < b.getProgramLevel()) return 1;
-            else if(a.getProgramLevel() == b.getProgramLevel()) return a.getTeamName().compareTo(b.getTeamName());
-            else return -1;
-        }
-    }
-
 }

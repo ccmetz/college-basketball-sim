@@ -139,7 +139,7 @@ public class Team {
 
         }
 
-        sortList(pgList);
+        Sorter.sortPlayersByOverall(pgList);
 
         for (int i = 0; i < numSGs; i++) {
 
@@ -148,7 +148,7 @@ public class Team {
 
         }
 
-        sortList(sgList);
+        Sorter.sortPlayersByOverall(sgList);
 
         for (int i = 0; i < numSFs; i++) {
 
@@ -157,7 +157,7 @@ public class Team {
 
         }
 
-        sortList(sfList);
+        Sorter.sortPlayersByOverall(sfList);
 
         for (int i = 0; i < numPFs; i++) {
 
@@ -166,7 +166,7 @@ public class Team {
 
         }
 
-        sortList(pfList);
+        Sorter.sortPlayersByOverall(pfList);
 
         for (int i = 0; i < numCs; i++) {
 
@@ -175,7 +175,7 @@ public class Team {
 
         }
 
-        sortList(cList);
+        Sorter.sortPlayersByOverall(cList);
 
         // Create the rosterList that will be displayed on the Lineup tab in MainActivity
         createRosterList();
@@ -207,32 +207,6 @@ public class Team {
         return schedule;
     }
 
-    // Method to sort Player lists by overall rating
-    public void sortList(ArrayList<Player> list){
-
-        Player lowerPlayer;
-        Player higherPlayer;
-
-        for(int i = 0; i < list.size(); i++) {
-
-            for (int j = 0; j < list.size(); j++) {
-
-                // Check if at the end of the list
-                if (j + 1 < list.size()) {
-
-                    if (list.get(j).getOverall() < list.get(j + 1).getOverall()) {
-
-                        // Flip Players
-                        lowerPlayer = list.get(j);
-                        higherPlayer = list.get(j + 1);
-                        list.set(j, higherPlayer);
-                        list.set(j + 1, lowerPlayer);
-
-                    }
-                }
-            }
-        }
-    }
 
     // This method will create and sort the rosterList by starters and bench players
     public void createRosterList(){
@@ -273,8 +247,8 @@ public class Team {
             else benchList.add(cList.get(i));
         }
 
-        sortList(roleList);
-        sortList(benchList);
+        Sorter.sortPlayersByOverall(roleList);
+        Sorter.sortPlayersByOverall(benchList);
 
         //Add the role players to the rosterList
         rosterList.addAll(roleList);
@@ -367,9 +341,6 @@ public class Team {
     // Returns an ArrayList of the players that play a specific position on the team
     public ArrayList<Player> getPositionList(int pos){
 
-        //ArrayList<Player> playerList = new ArrayList<Player>();
-        //int counter = 0;
-
         switch (pos){
 
             case 0:
@@ -385,12 +356,6 @@ public class Team {
                 return pfList;
 
             case 4:
-              /*  for(int i = 0; i < rosterList.size(); i++){
-                    if(rosterList.get(i).getPosition() == 5){
-                        playerList.add(rosterList.get(i));
-                    }
-                }
-                break; */
                 return cList;
         }
 
@@ -472,8 +437,8 @@ public class Team {
             }
         }
 
-        sortList(roleList);
-        sortList(benchList);
+        Sorter.sortPlayersByOverall(roleList);
+        Sorter.sortPlayersByOverall(benchList);
 
         for(int i = 0; i < roleList.size(); i++){
 
