@@ -76,14 +76,22 @@ public class Game {
         String homeNames = "";
         String awayNames = "";
 
-        for(int i = 0; i < homeOnFloor.size(); i++){
-            homeNames = homeNames + homeOnFloor.get(i).getLastName() + "\n";
+        for(int i = 0; i < homeStarters.size(); i++){
+            homeNames = homeNames + homeStarters.get(i).getLastName() + "\n";
+        }
+
+        for(int i = 0; i < homeBench.size(); i++){
+            homeNames = homeNames + homeBench.get(i).getLastName() + "\n";
         }
 
         homeNames = homeNames + "\n";
 
-        for(int i = 0; i < awayOnFloor.size(); i++){
-            awayNames = awayNames + awayOnFloor.get(i).getLastName() + "\n";
+        for(int i = 0; i < awayStarters.size(); i++){
+            awayNames = awayNames + awayStarters.get(i).getLastName() + "\n";
+        }
+
+        for(int i = 0; i < awayBench.size(); i++){
+            awayNames = awayNames + awayBench.get(i).getLastName() + "\n";
         }
 
         awayNames = awayNames + "\n";
@@ -413,7 +421,7 @@ public class Game {
             gameLog = gameLog + defense.get(posOfDefReb).getTeamAbbr() + " " + defense.get(posOfDefReb).getName() +
                         " grabbed the defensive rebound " + clock + "\n";
 
-            boxScore.addDReb(possession, posOfDefReb);
+            boxScore.addDReb(possession, posOfDefReb, isBenchIn);
             return -1;
         }
         else{
@@ -421,7 +429,7 @@ public class Game {
             gameLog = gameLog + offense.get(posOfOffReb).getTeamAbbr() + " " + offense.get(posOfOffReb).getName() +
                         " grabbed the offensive rebound " + clock + "\n";
 
-            boxScore.addOReb(possession, posOfOffReb);
+            boxScore.addOReb(possession, posOfOffReb, isBenchIn);
             return posOfOffReb;
         }
 
@@ -485,15 +493,15 @@ public class Game {
         // Handle Stl, Blk, and TO stats based on shotResult returned after play
         if(shotResult == Result.STEAL){
 
-            boxScore.addSteal(possession, posBall);
+            boxScore.addSteal(possession, posBall, isBenchIn);
         }
         else if(shotResult == Result.BLOCK){
 
-            boxScore.addBlock(possession, posBall);
+            boxScore.addBlock(possession, posBall, isBenchIn);
         }
         else if(shotResult == Result.MAKE && isAssisted){
 
-            boxScore.addAst(possession, posPass);
+            boxScore.addAst(possession, posPass, isBenchIn);
 
             gameLog = gameLog + "(assisted by " + passer.getName() + ")\n";
         }
@@ -536,7 +544,7 @@ public class Game {
                     //BLOCKED
                     blkOrStl = true;
 
-                    boxScore.add2ptMiss(possession, pos);
+                    boxScore.add2ptMiss(possession, pos, isBenchIn);
 
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
@@ -550,14 +558,14 @@ public class Game {
             if(possession == 0) homeScore += 2;
             else awayScore += 2;
 
-            boxScore.add2ptMake(possession, pos);
+            boxScore.add2ptMake(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a post shot " + clock + "\n";
             return Result.MAKE;
         }
         else{
             // Shot missed
-            boxScore.add2ptMiss(possession, pos);
+            boxScore.add2ptMiss(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a post shot " + clock + "\n";
             return Result.MISS;
@@ -599,7 +607,7 @@ public class Game {
                     //BLOCKED
                     blkOrStl = true;
 
-                    boxScore.add2ptMiss(possession, pos);
+                    boxScore.add2ptMiss(possession, pos, isBenchIn);
 
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
@@ -613,14 +621,14 @@ public class Game {
             if(possession == 0) homeScore += 2;
             else awayScore += 2;
 
-            boxScore.add2ptMake(possession, pos);
+            boxScore.add2ptMake(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a layup " + clock + "\n";
             return Result.MAKE;
         }
         else{
             // Shot missed
-            boxScore.add2ptMiss(possession, pos);
+            boxScore.add2ptMiss(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a layup " + clock + "\n";
             return Result.MISS;
@@ -662,7 +670,7 @@ public class Game {
                     //BLOCKED
                     blkOrStl = true;
 
-                    boxScore.add3ptMiss(possession, pos);
+                    boxScore.add3ptMiss(possession, pos, isBenchIn);
 
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
@@ -676,14 +684,14 @@ public class Game {
             if(possession == 0) homeScore += 3;
             else awayScore += 3;
 
-            boxScore.add3ptMake(possession, pos);
+            boxScore.add3ptMake(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt basket " + clock + "\n";
             return Result.MAKE;
         }
         else{
             // Shot missed
-            boxScore.add3ptMiss(possession, pos);
+            boxScore.add3ptMiss(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt basket " + clock + "\n";
             return Result.MISS;
@@ -725,7 +733,7 @@ public class Game {
                     //BLOCKED
                     blkOrStl = true;
 
-                    boxScore.add2ptMiss(possession, pos);
+                    boxScore.add2ptMiss(possession, pos, isBenchIn);
 
                     gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                             " " + clock + "\n";
@@ -739,14 +747,14 @@ public class Game {
             if(possession == 0) homeScore += 2;
             else awayScore += 2;
 
-            boxScore.add2ptMake(possession, pos);
+            boxScore.add2ptMake(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a midrange jumper " + clock + "\n";
             return Result.MAKE;
         }
         else{
             // Shot missed
-            boxScore.add2ptMiss(possession, pos);
+            boxScore.add2ptMiss(possession, pos, isBenchIn);
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a midrange jumper " + clock + "\n";
             return Result.MISS;
