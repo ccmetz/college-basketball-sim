@@ -1,6 +1,8 @@
 package CbbSimEngine;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by ccmetz on 5/1/16.
@@ -150,6 +152,8 @@ public class Game {
 
         }
 
+        Collections.sort(homeBench, new PositionComp());
+
         for(int i = 0; i < awayLineup.size(); i++){
 
             if(awayLineup.get(i).getPlayerRole() == Player.Role.STARTER){
@@ -159,6 +163,20 @@ public class Game {
                 awayBench.add(awayLineup.get(i));
             }
 
+        }
+
+        Collections.sort(awayBench, new PositionComp());
+
+    }
+
+    // Inner Comparator class for sorting Players by position
+    class PositionComp implements Comparator<Player> {
+
+        @Override
+        public int compare(Player a, Player b){
+            if(a.getPosition() < b.getPosition()) return -1;
+            else if(a.getPosition() == b.getPosition()) return a.getLastName().compareTo(b.getLastName());
+            else return 1;
         }
     }
 
