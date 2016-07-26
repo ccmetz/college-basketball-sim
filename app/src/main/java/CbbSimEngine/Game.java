@@ -17,9 +17,11 @@ public class Game {
 
     private ArrayList<Player> homeLineup;
     private ArrayList<Player> homeOnFloor;//Home team current players that are on the floor
+    private ArrayList<Player> homeStarters;
     private ArrayList<Player> homeBench; //Home team players that are available to be subbed into the game
     private ArrayList<Player> awayLineup;
     private ArrayList<Player> awayOnFloor; //Away team players that are on the floor
+    private ArrayList<Player> awayStarters;
     private ArrayList<Player> awayBench; //Away team players that are available to be subbed into the game
 
     private int clock; //Game clock
@@ -27,6 +29,7 @@ public class Game {
     private int homeScore;
     private int awayScore;
     private int possession; //0 = home team, 1 = away team
+    private boolean isBenchIn; //false -> Starters, true -> Bench (role players)
 
     private String gameLog; //Keeps track of the play by play of the game
 
@@ -38,15 +41,18 @@ public class Game {
         homeTeam = hTeam;
         awayTeam = aTeam;
         hasBeenPlayed = false;
+        isBenchIn = false;
         possession = 0; //home team starts with the ball
 
         homeLineup = new ArrayList<Player>();
         homeOnFloor = new ArrayList<Player>();
+        homeStarters = new ArrayList<Player>();
         homeBench = new ArrayList<Player>();
         homeLineup = homeTeam.getRoster(); //set homeLineup equal to home team's roster
 
         awayLineup = new ArrayList<Player>();
         awayOnFloor = new ArrayList<Player>();
+        awayStarters = new ArrayList<Player>();
         awayBench = new ArrayList<Player>();
         awayLineup = awayTeam.getRoster(); //set awayLineup equal to the away team's roster
 
@@ -144,7 +150,7 @@ public class Game {
         for(int i = 0; i < homeLineup.size(); i++){
 
             if(homeLineup.get(i).getPlayerRole() == Player.Role.STARTER){
-                homeOnFloor.add(homeLineup.get(i));
+                homeStarters.add(homeLineup.get(i));
             }
             else if(homeLineup.get(i).getPlayerRole() == Player.Role.ROLEPLAYER){
                 homeBench.add(homeLineup.get(i));
@@ -157,7 +163,7 @@ public class Game {
         for(int i = 0; i < awayLineup.size(); i++){
 
             if(awayLineup.get(i).getPlayerRole() == Player.Role.STARTER){
-                awayOnFloor.add(awayLineup.get(i));
+                awayStarters.add(awayLineup.get(i));
             }
             else if(awayLineup.get(i).getPlayerRole() == Player.Role.ROLEPLAYER){
                 awayBench.add(awayLineup.get(i));
@@ -167,6 +173,8 @@ public class Game {
 
         Collections.sort(awayBench, new PositionComp());
 
+        homeOnFloor.addAll(homeStarters);
+        awayOnFloor.addAll(awayStarters);
     }
 
     // Inner Comparator class for sorting Players by position
@@ -177,6 +185,23 @@ public class Game {
             if(a.getPosition() < b.getPosition()) return -1;
             else if(a.getPosition() == b.getPosition()) return a.getLastName().compareTo(b.getLastName());
             else return 1;
+        }
+    }
+
+    private void makeSubstitutions(){
+
+        homeOnFloor.clear();
+        awayOnFloor.clear();
+
+        if(!isBenchIn) {
+            homeOnFloor.addAll(homeBench);
+            awayOnFloor.addAll(awayBench);
+            isBenchIn = true;
+        }
+        else {
+            homeOnFloor.addAll(homeStarters);
+            awayOnFloor.addAll(awayStarters);
+            isBenchIn = false;
         }
     }
 
@@ -195,6 +220,14 @@ public class Game {
             awayScore = 0;
 
             while(clock > 0){
+
+                //Check clock to decide if subs should come in
+                //The role players will play from 1800 - 1500 secs and 600 - 300 secs left in the game
+                if(clock <= 1800 && clock >= 1500 && !isBenchIn) makeSubstitutions();
+                else if(clock <= 1500 && clock >= 1200 && isBenchIn) makeSubstitutions();
+                else if(clock <= 600 && clock >= 300 && !isBenchIn) makeSubstitutions();
+                else if(clock <= 300 && isBenchIn) makeSubstitutions();
+
 
                 // Home team is on offense
                 if(possession == 0){
