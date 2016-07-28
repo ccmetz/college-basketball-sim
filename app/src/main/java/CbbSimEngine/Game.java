@@ -431,18 +431,20 @@ public class Game {
     public Result attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int posBall, int posPass){
 
         Result shotResult;
+        double assistChance = (double) passer.getPassRating()/150;
         int passerBonus = 0;
         Player defender = defense.get(posBall); //The player that will be defending the shooter
         boolean isAssisted = false;
 
-        // 50% chance of assist - THIS WILL BE BASED ON PLAYER'S BBALL IQ IN THE FUTURE
-        if(!passer.equals(shooter) && (Math.random() < 0.5)) {
+        // Chance of Assist based on passer's Pass Rating
+        // A passer with a Pass Rating of 75 will have a 50% chance of assisting on the shot
+        if(!passer.equals(shooter) && (Math.random() < assistChance)) {
 
             isAssisted = true;
             //No passer bonus for passers with rating under 70
             if (passer.getPassRating() >= 70) {
 
-                passerBonus = (int) (4 + ((passer.getPassRating() - 70) / 2));
+                passerBonus = (4 + ((passer.getPassRating() - 70) / 2));
             }
         }
 
