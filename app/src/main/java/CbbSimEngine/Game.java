@@ -425,12 +425,14 @@ public class Game {
 
     /* Method for determining if the player makes or misses his shot
     *  1. Determines if the shot will be assisted and what the passerBonus will be (based on passer's pass rating)
-    *  1. Determines the type of shot attempted (post, layup, mid, or three) using player tendencies
-    *  2. Calls the appropriate shot type's method and grabs the result
-    *  Returns the result of the shot attempt (Steal, Block, Make, Miss) */
+    *  2. Determines the type of shot attempted (post, layup, mid, or three) using player tendencies
+    *  3. Creates a Shot object and passes the appropriate shot type as a parameter
+    *  4. Record the shotResult and update the score, box score, and game log
+    *  Returns the result of the shot attempt (Steal, Block, Make, Miss) from the Shot object */
     public Result attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int posBall, int posPass){
 
-        Result shotResult;
+        Result shotResult; // records the result of the shot attempt
+        int shotType; // 0 = post, 1 = layup, 2 = midrange, 3 = three
         double assistChance = (double) passer.getPassRating()/150;
         int passerBonus = 0;
         Player defender = defense.get(posBall); //The player that will be defending the shooter
@@ -453,43 +455,35 @@ public class Game {
         if(100*Math.random() < shooter.getJumperOrDrive()){
             //Player will drive
             if(100*Math.random() < shooter.getLayupOrPost()){
-
                 //Player will Post up
-                shotResult = attemptPostShot(passerBonus, shooter, defender, posBall);
+                shotType = 0;
 
             } else{
-
                 //Player will drive and attempt a layup
-                shotResult = attemptLayup(passerBonus, shooter, defender, posBall);
-
+                shotType = 1;
             }
         }
         else{
             //Player will shoot jumper
             if(100*Math.random() < shooter.getMidOrThree()){
-
                 //Player will shoot a three
-                shotResult = attemptThree(passerBonus, shooter, defender, posBall);
-
+                shotType = 3;
             }
             else{
-
                 //Player will shoot a midrange jumpshot
-                shotResult = attemptMid(passerBonus, shooter, defender, posBall);
-
+                shotType = 2;
             }
         }
 
-        // Handle Stl, Blk, and TO stats based on shotResult returned after play
-        if(shotResult == Result.STEAL){
+        // Attempt the shot
+        Shot shot = new Shot(passerBonus, shooter, defender, shotType);
+        shotResult = shot.shoot();
 
-            boxScore.addSteal(possession, posBall, isBenchIn);
-        }
-        else if(shotResult == Result.BLOCK){
+        // Handle Stl, Blk, TO, Made/Missed shot stats
+        recordResult(shotResult, shotType, shooter, defender, posBall);
 
-            boxScore.addBlock(possession, posBall, isBenchIn);
-        }
-        else if(shotResult == Result.MAKE && isAssisted){
+        // Check for assist
+        if(shotResult == Result.MAKE && isAssisted){
 
             boxScore.addAst(possession, posPass, isBenchIn);
 
@@ -499,257 +493,71 @@ public class Game {
         return shotResult;
     }
 
+    // Helper method to handle different shot results and write to the box score, game log, and update the score
+    private void recordResult(Result shotResult, int shotType, Player shooter, Player defender, int posBall){
 
-    public Result attemptPostShot(int passerBonus, Player shooter, Player defender, int pos){
-
-        double shotChance = 18 + (shooter.getPostRating()/2) - (defender.getDefenseRating()/5);
-        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
-        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
-
-        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
-
-        //Determine if a block or steal opportunity exists
-        if(Math.random() < 0.10){
-            //Steal opportunity exists - determine if defender will go for steal
-            if(Math.random() < defender.getTryForSteal()){
-                //Defender goes for steal
-                if(100*Math.random() < stealChance){
-
-                    //STEAL - TURNOVER
-                    blkOrStl = true;
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
-                            shooter.getName() + " " + clock + "\n";
-                    return Result.STEAL;
-                }
-
-            }
-        }
-        else if(Math.random() < 0.20){
-            //Block opportunity exists - determine if defender will go for block
-            if(Math.random() < defender.getTryForBlock()){
-                //Defender goes for block
-                if(100*Math.random() < blockChance){
-
-                    //BLOCKED
-                    blkOrStl = true;
-
-                    boxScore.add2ptMiss(possession, pos, isBenchIn);
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
-                            " " + clock + "\n";
-                    return Result.BLOCK;
-                }
-            }
+        String shotStr = "";
+        // If not a three, save the type of 2 pt shot attempt
+        switch(shotType){
+            case 0:
+                shotStr = "post shot ";
+                break;
+            case 1:
+                shotStr = "layup ";
+                break;
+            case 2:
+                shotStr = "midrange jumper ";
+                break;
         }
 
-        if(100*Math.random() < shotChance + passerBonus && blkOrStl == false){
-            // Shot made
+        if(shotResult == Result.STEAL){
+
+            gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
+                    shooter.getName() + " " + clock + "\n";
+
+            boxScore.addSteal(possession, posBall, isBenchIn);
+        }
+        else if(shotResult == Result.BLOCK){
+
+            gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
+                    " " + clock + "\n";
+
+            boxScore.add2ptMiss(possession, posBall, isBenchIn);
+            boxScore.addBlock(possession, posBall, isBenchIn);
+        }
+        else if(shotResult == Result.MAKE && shotType != 3){
+            // 2 pt field goal made
+            String shotLog = " made a " + shotStr;
+
             if(possession == 0) homeScore += 2;
             else awayScore += 2;
 
-            boxScore.add2ptMake(possession, pos, isBenchIn);
+            boxScore.add2ptMake(possession, posBall, isBenchIn);
 
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a post shot " + clock + "\n";
-            return Result.MAKE;
+            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + shotLog + clock + "\n";
         }
-        else{
-            // Shot missed
-            boxScore.add2ptMiss(possession, pos, isBenchIn);
-
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a post shot " + clock + "\n";
-            return Result.MISS;
-        }
-    }
-
-
-    public Result attemptLayup(int passerBonus, Player shooter, Player defender, int pos){
-
-        double chance = 17 + (shooter.getLayupRating()/2) - (defender.getDefenseRating()/5);
-        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
-        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
-
-        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
-
-        //Determine if a block or steal opportunity exists
-        if(Math.random() < 0.15){
-            //Steal opportunity exists - determine if defender will go for steal
-            if(Math.random() < defender.getTryForSteal()){
-                //Defender goes for steal
-                if(100*Math.random() < stealChance){
-
-                    //STEAL - TURNOVER
-                    blkOrStl = true;
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
-                            shooter.getName() + " " + clock + "\n";
-                    return Result.STEAL;
-                }
-
-            }
-        }
-        else if(Math.random() < 0.20){
-            //Block opportunity exists - determine if defender will go for block
-            if(Math.random() < defender.getTryForBlock()){
-                //Defender goes for block
-                if(100*Math.random() < blockChance){
-
-                    //BLOCKED
-                    blkOrStl = true;
-
-                    boxScore.add2ptMiss(possession, pos, isBenchIn);
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
-                            " " + clock + "\n";
-                    return Result.BLOCK;
-                }
-            }
-        }
-
-        if(100*Math.random() < chance + passerBonus && blkOrStl == false){
-            // Shot made
-            if(possession == 0) homeScore += 2;
-            else awayScore += 2;
-
-            boxScore.add2ptMake(possession, pos, isBenchIn);
-
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a layup " + clock + "\n";
-            return Result.MAKE;
-        }
-        else{
-            // Shot missed
-            boxScore.add2ptMiss(possession, pos, isBenchIn);
-
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a layup " + clock + "\n";
-            return Result.MISS;
-        }
-    }
-
-
-    public Result attemptThree(int passerBonus, Player shooter, Player defender, int pos){
-
-        double chance = 10 + (shooter.getThreeRating()/2) - (defender.getDefenseRating()/5);
-        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
-        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
-
-        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
-
-        //Determine if a block or steal opportunity exists
-        if(Math.random() < 0.05){
-            //Steal opportunity exists - determine if defender will go for steal
-            if(Math.random() < defender.getTryForSteal()){
-                //Defender goes for steal
-                if(100*Math.random() < stealChance){
-
-                    //STEAL - TURNOVER
-                    blkOrStl = true;
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
-                            shooter.getName() + " " + clock + "\n";
-                    return Result.STEAL;
-                }
-
-            }
-        }
-        else if(Math.random() < 0.02){
-            //Block opportunity exists - determine if defender will go for block
-            if(Math.random() < defender.getTryForBlock()){
-                //Defender goes for block
-                if(100*Math.random() < blockChance){
-
-                    //BLOCKED
-                    blkOrStl = true;
-
-                    boxScore.add3ptMiss(possession, pos, isBenchIn);
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
-                            " " + clock + "\n";
-                    return Result.BLOCK;
-                }
-            }
-        }
-
-        if(100*Math.random() < chance + passerBonus && blkOrStl == false){
-            // Shot made
+        else if(shotResult == Result.MAKE){
+            // 3 pt field goal made
             if(possession == 0) homeScore += 3;
             else awayScore += 3;
 
-            boxScore.add3ptMake(possession, pos, isBenchIn);
+            boxScore.add3ptMake(possession, posBall, isBenchIn);
 
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt basket " + clock + "\n";
-            return Result.MAKE;
+            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt shot " + clock + "\n";
         }
-        else{
-            // Shot missed
-            boxScore.add3ptMiss(possession, pos, isBenchIn);
+        else if(shotResult == Result.MISS && shotType != 3){
+            // Missed 2 pt field goal
+            String shotLog = " missed a " + shotStr;
 
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt basket " + clock + "\n";
-            return Result.MISS;
+            boxScore.add2ptMiss(possession, posBall, isBenchIn);
+
+            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + shotLog + clock + "\n";
         }
-    }
+        else if(shotResult == Result.MISS){
+            // Missed 3 pt field goal
+            boxScore.add3ptMiss(possession, posBall, isBenchIn);
 
-
-    public Result attemptMid(int passerBonus, Player shooter, Player defender, int pos){
-
-        double chance = 15 + (shooter.getMidRating()/2) - (defender.getDefenseRating()/5);
-        double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
-        double blockChance = (defender.getBlockRating()/2) - (shooter.getPostRating()/3);
-
-        boolean blkOrStl = false; //Will change to true if steal or block occurs before shot is made/missed
-
-        //Determine if a block or steal opportunity exists
-        if(Math.random() < 0.05){
-            //Steal opportunity exists - determine if defender will go for steal
-            if(Math.random() < defender.getTryForSteal()){
-                //Defender goes for steal
-                if(100*Math.random() < stealChance){
-
-                    //STEAL - TURNOVER
-                    blkOrStl = true;
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
-                            shooter.getName() + " " + clock + "\n";
-                    return Result.STEAL;
-                }
-
-            }
-        }
-        else if(Math.random() < 0.05){
-            //Block opportunity exists - determine if defender will go for block
-            if(Math.random() < defender.getTryForBlock()){
-                //Defender goes for block
-                if(100*Math.random() < blockChance){
-
-                    //BLOCKED
-                    blkOrStl = true;
-
-                    boxScore.add2ptMiss(possession, pos, isBenchIn);
-
-                    gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
-                            " " + clock + "\n";
-                    return Result.BLOCK;
-                }
-            }
-        }
-
-        if(100*Math.random() < chance + passerBonus && blkOrStl == false){
-            // Shot made
-            if(possession == 0) homeScore += 2;
-            else awayScore += 2;
-
-            boxScore.add2ptMake(possession, pos, isBenchIn);
-
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a midrange jumper " + clock + "\n";
-            return Result.MAKE;
-        }
-        else{
-            // Shot missed
-            boxScore.add2ptMiss(possession, pos, isBenchIn);
-
-            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a midrange jumper " + clock + "\n";
-            return Result.MISS;
+            gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt shot " + clock + "\n";
         }
     }
-
-
 }
