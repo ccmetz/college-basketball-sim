@@ -123,9 +123,8 @@ public class League {
                 leagueTeamList.get(i).getSchedule().get(currentWeek).simGame();
                 leagueTeamList.get(i).updateScheduleList(); //Recreate the schedule list with updated results
             }
+            currentWeek++;
         }
-
-        currentWeek++;
     }
 
     public int getCurrentSeason(){
@@ -202,5 +201,4 @@ public class League {
         //Calculate preseason rankings based on team overalls (maybe incorporate program level?)
         //Need to decide on what kind of sort to use: Merge? Bubble? Something else?
     }
-
 }

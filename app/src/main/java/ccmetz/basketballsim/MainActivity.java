@@ -1,12 +1,15 @@
 package ccmetz.basketballsim;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -326,11 +329,7 @@ public class MainActivity extends AppCompatActivity {
         simButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                league.simCurrentWeek();
-                //Refresh the team record and game schedule on the schedule tab
-                scheduleText.setText(userTeam.getTeamName() + " (" + userTeam.getRecord() + ")");
-                scheduleAdapter.updateScheduleList(userTeam.getScheduleList());
+                new SimWeekTask().execute();
             }
         });
 
@@ -567,6 +566,40 @@ public class MainActivity extends AppCompatActivity {
         // Set the boxScoreTracker to the selected team and update the Adapter
         boxScoreTracker = league.getConferences().get(confCounter).getTeams().get(teamCounter)
                 .getGameArrayList();
+    }
+
+    // Inner AsyncTask for simming the current week's games
+    private class SimWeekTask extends AsyncTask<Void, Void, Boolean> {
+
+        private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setMessage("Simming week...");
+            this.dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void ...params) {
+
+            try {
+                league.simCurrentWeek();
+                return true;
+            } catch (Exception e) {
+                Log.e("SimWeekTask", "Error in AsyncTask", e);
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            //Refresh the team record and game schedule on the schedule tab
+            scheduleText.setText(userTeam.getTeamName() + " (" + userTeam.getRecord() + ")");
+            scheduleAdapter.updateScheduleList(userTeam.getScheduleList());
+        }
     }
 
 }
