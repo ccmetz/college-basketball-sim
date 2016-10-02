@@ -16,15 +16,14 @@ public class BoxScoreAdapter extends BaseAdapter {
     private String[] homeBoxScore;
     private String[] awayBoxScore;
     private Context context;
-    private int counter;
+    private int counter = 0;
 
 
-    public BoxScoreAdapter(ArrayList<String[]> boxScore, int teamCounter, Context c){
+    public BoxScoreAdapter(ArrayList<String[]> boxScore, Context c){
 
         homeBoxScore = boxScore.get(0);
         awayBoxScore = boxScore.get(1);
         context = c;
-        counter = teamCounter;
     }
 
     public int getCount(){

@@ -157,9 +157,11 @@ public class Game {
 
             if(homeLineup.get(i).getPlayerRole() == Player.Role.STARTER){
                 homeStarters.add(homeLineup.get(i));
+                homeLineup.get(i).addGame();
             }
             else if(homeLineup.get(i).getPlayerRole() == Player.Role.ROLEPLAYER){
                 homeBench.add(homeLineup.get(i));
+                homeLineup.get(i).addGame();
             }
 
         }
@@ -170,9 +172,11 @@ public class Game {
 
             if(awayLineup.get(i).getPlayerRole() == Player.Role.STARTER){
                 awayStarters.add(awayLineup.get(i));
+                awayLineup.get(i).addGame();
             }
             else if(awayLineup.get(i).getPlayerRole() == Player.Role.ROLEPLAYER){
                 awayBench.add(awayLineup.get(i));
+                awayLineup.get(i).addGame();
             }
 
         }
@@ -410,6 +414,7 @@ public class Game {
                         " grabbed the defensive rebound " + clock + "\n";
 
             boxScore.addDReb(possession, posOfDefReb, isBenchIn);
+            defense.get(posOfDefReb).addDefRebound();
             return -1;
         }
         else{
@@ -418,6 +423,7 @@ public class Game {
                         " grabbed the offensive rebound " + clock + "\n";
 
             boxScore.addOReb(possession, posOfOffReb, isBenchIn);
+            offense.get(posOfOffReb).addOffRebound();
             return posOfOffReb;
         }
 
@@ -486,6 +492,7 @@ public class Game {
         if(shotResult == Result.MAKE && isAssisted){
 
             boxScore.addAst(possession, posPass, isBenchIn);
+            passer.addAssist();
 
             gameLog = gameLog + "(assisted by " + passer.getName() + ")\n";
         }
@@ -516,14 +523,24 @@ public class Game {
                     shooter.getName() + " " + clock + "\n";
 
             boxScore.addSteal(possession, posBall, isBenchIn);
+            defender.addSteal();
+            shooter.addTurnover();
         }
         else if(shotResult == Result.BLOCK){
 
             gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
                     " " + clock + "\n";
 
-            boxScore.add2ptMiss(possession, posBall, isBenchIn);
+            if(shotType == 3){
+                boxScore.add3ptMiss(possession, posBall, isBenchIn);
+                shooter.add3ptMiss();
+            }
+            else {
+                boxScore.add2ptMiss(possession, posBall, isBenchIn);
+                shooter.add2ptMiss();
+            }
             boxScore.addBlock(possession, posBall, isBenchIn);
+            defender.addBlock();
         }
         else if(shotResult == Result.MAKE && shotType != 3){
             // 2 pt field goal made
@@ -533,6 +550,7 @@ public class Game {
             else awayScore += 2;
 
             boxScore.add2ptMake(possession, posBall, isBenchIn);
+            shooter.add2ptMake();
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + shotLog + clock + "\n";
         }
@@ -542,6 +560,7 @@ public class Game {
             else awayScore += 3;
 
             boxScore.add3ptMake(possession, posBall, isBenchIn);
+            shooter.add3ptMake();
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " made a 3 pt shot " + clock + "\n";
         }
@@ -550,12 +569,14 @@ public class Game {
             String shotLog = " missed a " + shotStr;
 
             boxScore.add2ptMiss(possession, posBall, isBenchIn);
+            shooter.add2ptMiss();
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + shotLog + clock + "\n";
         }
         else if(shotResult == Result.MISS){
             // Missed 3 pt field goal
             boxScore.add3ptMiss(possession, posBall, isBenchIn);
+            shooter.add3ptMiss();
 
             gameLog = gameLog + shooter.getTeamAbbr() + " " + shooter.getName() + " missed a 3 pt shot " + clock + "\n";
         }

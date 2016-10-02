@@ -238,6 +238,51 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /* Define the functionality of the Player Stats button */
+        statsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View rootView = inflater.inflate(R.layout.player_stats_dialog, null);
+
+                // Get list of player names on roster
+                ArrayList<String> playerList = new ArrayList<String>();
+                for (int i = 0; i < userTeam.getRoster().size(); i++) {
+                    playerList.add(userTeam.getRoster().get(i).displayPlayerInfo());
+                }
+
+                // Initialize the Spinner
+                Spinner playerSpinner = (Spinner) rootView.findViewById(R.id.player_spinner);
+                ArrayAdapter<String> playerAdapter = new ArrayAdapter<String>(MainActivity.this,
+                        android.R.layout.simple_spinner_item, playerList);
+                playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                playerSpinner.setAdapter(playerAdapter);
+
+                GridView playerStatsGrid = (GridView) rootView.findViewById(R.id.player_stats_grid);
+                final PlayerStatsAdapter playerStatsAdapter = new PlayerStatsAdapter(userTeam.getRoster(), MainActivity.this);
+                playerStatsGrid.setAdapter(playerStatsAdapter);
+
+                // Notify the PlayerStatsAdapter when the spinner selection changes
+                playerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        playerStatsAdapter.updatePlayerStats(position);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+                // Show the Player Stats Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setView(rootView);
+                builder.show();
+            }
+        });
+
         /* Setup the ExpandableListView with a custom adapter */
         rosterView = (ExpandableListView) findViewById(R.id.roster_view);
         rosterAdapter = new ExpandableListAdapterRoster(this, userTeam.getRoster());
@@ -288,8 +333,6 @@ public class MainActivity extends AppCompatActivity {
                     LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
 
-                    //teamSpinnerCounter = 0; //Keep track of spinner's position (defaults to 0)
-
                     //Initialize the boxScoreSpinner with the relevant team names
                     Spinner boxScoreSpinner = (Spinner) rootView.findViewById(R.id.team_spinner);
                     ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(MainActivity.this,
@@ -299,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //Initialize the GridView and set the custom BoxScoreAdapter
                     GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
-                    final BoxScoreAdapter boxScoreAdapter = new BoxScoreAdapter(gameBoxScore, teamSpinnerCounter, MainActivity.this);
+                    final BoxScoreAdapter boxScoreAdapter = new BoxScoreAdapter(gameBoxScore, MainActivity.this);
                     boxScoreGrid.setAdapter(boxScoreAdapter);
 
                     // Notify the boxScoreAdapter when the spinner selection changes

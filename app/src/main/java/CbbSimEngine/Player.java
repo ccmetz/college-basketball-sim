@@ -1,5 +1,6 @@
 package CbbSimEngine;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -57,6 +58,21 @@ public class Player {
     private int oneAndDoneBonus;
     /* Starter, Role Player, or Bench? */
     private Role playerRole;
+
+    // Player Career Stats
+    private int points = 0;
+    private int games = 0;
+    private int rebounds = 0;
+    private int defRebounds = 0;
+    private int offRebounds = 0;
+    private int assists = 0;
+    private int steals = 0;
+    private int blocks = 0;
+    private int fgm2 = 0;
+    private int fga2 = 0;
+    private int fgm3 = 0;
+    private int fga3 = 0;
+    private int turnovers = 0;
 
 
     //Constructor for randomly generated Player Name and attributes
@@ -479,6 +495,93 @@ public class Player {
         }
 
         overall = (offOvr + defOvr)/2;
+    }
+
+    // Method for creating the player stats grid
+    public String[] getPlayerStats(){
+
+        String[] stats = new String[12];
+
+        DecimalFormat df = new DecimalFormat("#.#");
+
+        double ppg = (double) points/games;
+        double rpg = (double) rebounds/games;
+        double apg = (double) assists/games;
+        double tpg = (double) turnovers/games;
+        double spg = (double) steals/games;
+        double bpg = (double) blocks/games;
+        double fgPercent = (double) (fgm2 + fgm3)/(fga2 + fga3)*100;
+        double fg3Percent = (double) fgm3/fga3*100;
+        double fgaPG = (double) (fga2 + fga3)/games;
+        double fga3PG = (double) fga3/games;
+        double oRebPG = (double) offRebounds/games;
+        double dRebPG = (double) defRebounds/games;
+
+        stats[0] = "PPG" + "\n" + df.format(ppg);
+        stats[1] = "RPG" + "\n" + df.format(rpg);
+        stats[2] = "APG" + "\n" + df.format(apg);
+        stats[3] = "TOPG" + "\n" + df.format(tpg);
+        stats[4] = "SPG" + "\n" + df.format(spg);
+        stats[5] = "BPG" + "\n" + df.format(bpg);
+        stats[6] = "FG%" + "\n" + df.format(fgPercent);
+        stats[7] = "3FG%" + "\n" + df.format(fg3Percent);
+        stats[8] = "FGAPG" + "\n" + df.format(fgaPG);
+        stats[9] = "3FGAPG" + "\n" + df.format(fga3PG);
+        stats[10] = "OREB/PG" + "\n" + df.format(oRebPG);
+        stats[11] = "DREB/PG" + "\n" + df.format(dRebPG);
+
+        return stats;
+    }
+
+    // Add methods for Player Stats
+    public void add2ptMake() {
+        points += 2;
+        fgm2++;
+        fga2++;
+    }
+
+    public void add2ptMiss() {
+        fga2++;
+    }
+
+    public void add3ptMake() {
+        points += 3;
+        fgm3++;
+        fga3++;
+    }
+
+    public void add3ptMiss() {
+        fga3++;
+    }
+
+    public void addDefRebound() {
+        rebounds++;
+        defRebounds++;
+    }
+
+    public void addOffRebound() {
+        rebounds++;
+        offRebounds++;
+    }
+
+    public void addAssist() {
+        assists++;
+    }
+
+    public void addSteal() {
+        steals++;
+    }
+
+    public void addBlock() {
+        blocks++;
+    }
+
+    public void addTurnover() {
+        turnovers++;
+    }
+
+    public void addGame() {
+        games++;
     }
 
 
