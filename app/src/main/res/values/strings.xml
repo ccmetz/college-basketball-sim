@@ -17,7 +17,7 @@
     <string name="lineup_button_text">Adjust Lineup</string>
     <string name="stats_button_text">View Player Stats</string>
     <string name="schedule_tab_title">Schedule</string>
-    <string name="sim_button_text">Sim Current Week</string>
+    <string name="sim_button_text">Sim Next Game</string>
     <string name="rest_of_league_title">Around the League</string>
     <string name="conf_text">Conference:</string>
     <string name="team_text">Teams:</string>

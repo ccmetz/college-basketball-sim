@@ -32,15 +32,21 @@
         <Button
             android:layout_width="0px"
             android:layout_height="50dp"
+            android:layout_margin="5dp"
             android:id="@+id/save_lineup_button"
             android:layout_gravity="center"
+            android:background="@drawable/button"
+            android:textColor="@android:color/white"
             android:text="@string/save_lineup_button"
             android:layout_weight="1"/>
 
         <Button
             android:layout_width="0px"
             android:layout_height="50dp"
+            android:layout_margin="5dp"
             android:id="@+id/close_lineup_button"
+            android:background="@drawable/button"
+            android:textColor="@android:color/white"
             android:text="@string/close_lineup_button"
             android:layout_weight="1"/>
 
