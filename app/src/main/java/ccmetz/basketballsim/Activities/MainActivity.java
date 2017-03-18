@@ -1,4 +1,4 @@
-package ccmetz.basketballsim;
+package ccmetz.basketballsim.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -29,10 +29,16 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import CbbSimEngine.Game;
-import CbbSimEngine.League;
-import CbbSimEngine.Player;
-import CbbSimEngine.Team;
+import ccmetz.basketballsim.Models.Game;
+import ccmetz.basketballsim.Models.League;
+import ccmetz.basketballsim.Models.Player;
+import ccmetz.basketballsim.Models.Team;
+import ccmetz.basketballsim.Adapters.BoxScoreAdapter;
+import ccmetz.basketballsim.Adapters.ExpandableListAdapterRoster;
+import ccmetz.basketballsim.Adapters.LineupListArrayAdapter;
+import ccmetz.basketballsim.Adapters.PlayerStatsAdapter;
+import ccmetz.basketballsim.R;
+import ccmetz.basketballsim.Adapters.ScheduleListArrayAdapter;
 
 public class MainActivity extends AppCompatActivity {
 

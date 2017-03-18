@@ -1,4 +1,4 @@
-package ccmetz.basketballsim;
+package ccmetz.basketballsim.Adapters;
 
 import android.content.Context;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import CbbSimEngine.Player;
+import ccmetz.basketballsim.Models.Player;
 
 /**
  * Created by ccmetz on 10/2/16.

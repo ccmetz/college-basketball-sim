@@ -1,6 +1,4 @@
-package CbbSimEngine;
-
-import CbbSimEngine.Game.Result;
+package ccmetz.basketballsim.Models;
 
 /**
  * Created by ccmetz on 7/28/16.
@@ -62,7 +60,7 @@ public class Shot {
         }
     }
 
-    public Result shoot(){
+    public Game.Result shoot(){
 
         double shotChance = shotMod + (shooter.getPostRating()/2) - (defender.getDefenseRating()/5);
         double stealChance = (defender.getStealRating()/2) - (shooter.getHandleRating()/3);
@@ -79,7 +77,7 @@ public class Shot {
 
                     //STEAL - TURNOVER
                     blkOrStl = true;
-                    return Result.STEAL;
+                    return Game.Result.STEAL;
                 }
 
             }
@@ -92,18 +90,18 @@ public class Shot {
 
                     //BLOCKED
                     blkOrStl = true;
-                    return Result.BLOCK;
+                    return Game.Result.BLOCK;
                 }
             }
         }
 
         if(100*Math.random() < shotChance + passerBonus && blkOrStl == false){
             // Shot made
-            return Result.MAKE;
+            return Game.Result.MAKE;
         }
         else{
             // Shot missed
-            return Result.MISS;
+            return Game.Result.MISS;
         }
     }
 

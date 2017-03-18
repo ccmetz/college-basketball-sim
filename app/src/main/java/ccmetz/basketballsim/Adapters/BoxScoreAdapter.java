@@ -1,4 +1,4 @@
-package ccmetz.basketballsim;
+package ccmetz.basketballsim.Adapters;
 
 import android.content.Context;
 import android.view.View;

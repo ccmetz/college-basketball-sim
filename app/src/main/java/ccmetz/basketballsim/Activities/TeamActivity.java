@@ -1,4 +1,4 @@
-package ccmetz.basketballsim;
+package ccmetz.basketballsim.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ccmetz.basketballsim.R;
 
 public class TeamActivity extends AppCompatActivity {
 

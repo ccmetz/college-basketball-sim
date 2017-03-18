@@ -1,4 +1,4 @@
-package CbbSimEngine;
+package ccmetz.basketballsim.Models;
 
 import java.util.Collections;
 import java.util.Comparator;

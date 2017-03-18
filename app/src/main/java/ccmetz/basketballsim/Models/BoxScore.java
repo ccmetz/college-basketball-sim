@@ -1,4 +1,4 @@
-package CbbSimEngine;
+package ccmetz.basketballsim.Models;
 
 /**
  * Created by ccmetz on 7/25/16.
