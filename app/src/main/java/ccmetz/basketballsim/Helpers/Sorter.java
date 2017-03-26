@@ -1,8 +1,11 @@
-package ccmetz.basketballsim.Models;
+package ccmetz.basketballsim.Helpers;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import ccmetz.basketballsim.Models.Player;
+import ccmetz.basketballsim.Models.Team;
 
 /**
  * Created by ccmetz on 7/26/16.

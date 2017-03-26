@@ -1,13 +1,16 @@
 package ccmetz.basketballsim.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import ccmetz.basketballsim.Helpers.Sorter;
 
 /**
  * Created by ccmetz on 4/3/16.
  *
  * Team class that will contain Players and team stats
  */
-public class Team {
+public class Team implements Serializable {
 
     private String name;
     private String conference;
@@ -184,6 +187,7 @@ public class Team {
     public void setUserControl(boolean control){
 
         userControl = control;
+        league.setUserTeam(this);
     }
 
     public boolean checkUserControl(){

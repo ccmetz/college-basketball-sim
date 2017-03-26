@@ -1,5 +1,6 @@
 package ccmetz.basketballsim.Models;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  *
  * Generic Player class that will contain a player's name, position, attributes, stats, etc
  */
-public class Player {
+public class Player implements Serializable {
 
     // Defined in the constructor
     private String name;

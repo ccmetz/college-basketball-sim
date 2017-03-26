@@ -1,19 +1,22 @@
 package ccmetz.basketballsim.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import ccmetz.basketballsim.Helpers.Sorter;
 
 /**
  * Created by ccmetz on 4/4/16.
  *
  * Conference class that will contain Teams and conference stats
  */
-public class Conference {
+public class Conference implements Serializable {
 
     private String name; //name of the conference
     private League league; //League that the conference belongs to
-    private List<Team> teamList; //List of the teams that belong to this conference
+    private ArrayList<Team> teamList; //List of the teams that belong to this conference
 
 
     public Conference(String nm, League lg){

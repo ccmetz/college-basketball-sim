@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,18 +29,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import ccmetz.basketballsim.Models.Game;
-import ccmetz.basketballsim.Models.League;
-import ccmetz.basketballsim.Models.Player;
-import ccmetz.basketballsim.Models.Team;
 import ccmetz.basketballsim.Adapters.BoxScoreAdapter;
 import ccmetz.basketballsim.Adapters.ExpandableListAdapterRoster;
 import ccmetz.basketballsim.Adapters.LineupListArrayAdapter;
 import ccmetz.basketballsim.Adapters.PlayerStatsAdapter;
-import ccmetz.basketballsim.R;
 import ccmetz.basketballsim.Adapters.ScheduleListArrayAdapter;
+import ccmetz.basketballsim.Models.Game;
+import ccmetz.basketballsim.Models.League;
+import ccmetz.basketballsim.Models.Player;
+import ccmetz.basketballsim.Models.Team;
+import ccmetz.basketballsim.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,17 +94,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /* This will probably need to be encased in an if statement that checks for NEW GAME or LOAD GAME */
-        league = new League();
-        Intent intent = getIntent();
-        confCounter = intent.getIntExtra("chosenConf", 0);
-        teamCounter = intent.getIntExtra("chosenTeam", 0);
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // NEW GAME or LOAD GAME?
+        Bundle bundle = getIntent().getExtras();
+        if (bundle.getBoolean("LOAD"))
+        {
+            loadLeague("leaguefile.ser");
+        }
+        else
+        {
+            league = new League();
+            Intent intent = getIntent();
+            confCounter = intent.getIntExtra("chosenConf", 0);
+            teamCounter = intent.getIntExtra("chosenTeam", 0);
+            /* Assign the correct Team to the user */
+            userTeam = league.getConferences().get(confCounter).getTeams().get(teamCounter);
+            userTeam.setUserControl(true);
+        }
 
-        /* Assign the correct Team to the user */
-        userTeam = league.getConferences().get(confCounter).getTeams().get(teamCounter);
-        userTeam.setUserControl(true);
         onATLTab = false; //Default to appropriate box score for schedule tab (user's team)
         boxScoreTracker = userTeam.getGameArrayList(); //Set to user's team by default
 
@@ -592,13 +605,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-
-        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-        startActivity(intent);
-    }
-
     // Method for resetting the rosterView and scheduleView when a new team is selected
     public void updateLists() {
 
@@ -617,6 +623,66 @@ public class MainActivity extends AppCompatActivity {
                 .getGameArrayList();
     }
 
+    // Load a league file
+    public void loadLeague (String fileName)
+    {
+        try
+        {
+            FileInputStream fis = getApplicationContext().openFileInput(fileName);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            League loadedLeague = (League) is.readObject();
+            is.close();
+            fis.close();
+
+            if (loadedLeague != null)
+            {
+                Log.d("League", Integer.toString(loadedLeague.getCurrentWeek()));
+                for (Team team : loadedLeague.getConferences().get(0).getTeams())
+                {
+                    Log.d("Team", team.getTeamName() + ": " + team.getRecord());
+                }
+                league = loadedLeague;
+                userTeam = league.getUserTeam();
+            }
+        }
+        catch (IOException | ClassNotFoundException e)
+        {
+            Log.e("Load", e.getMessage());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_save) {
+
+            // Save the serializable League object
+            new saveLeague("leaguefile.ser").execute();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     // Inner AsyncTask for simming the current week's games
     private class SimWeekTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -624,7 +690,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            this.dialog.setMessage("Simming week...");
+            this.dialog.setMessage("Simming Next Game...");
             this.dialog.show();
         }
 
@@ -651,5 +717,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Inner AsyncTask for saving the current League
+    private class saveLeague extends AsyncTask<Void, Void, Boolean> {
+        private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+        private String fileName;
+
+        public saveLeague(String fileName)
+        {
+            this.fileName = fileName;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setMessage("Saving...");
+            this.dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void ...params) {
+
+            // Save the serializable League object
+            try {
+                FileOutputStream fos = MainActivity.this.getApplicationContext()
+                        .openFileOutput(fileName, Context.MODE_PRIVATE);
+                ObjectOutputStream os = new ObjectOutputStream(fos);
+                os.writeObject(league);
+                os.close();
+                fos.close();
+            }
+            catch (IOException e)
+            {
+                Log.e("Save", e.getMessage(), e);
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+    }
 }
 

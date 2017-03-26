@@ -1,5 +1,6 @@
 package ccmetz.basketballsim.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,7 +11,7 @@ import java.util.Random;
  * League class that will contain the conferences, teams, and players for the league
  * that the user will be playing in.
  */
-public class League {
+public class League implements Serializable {
 
     // String arrays that contain the first and last names that will be used for players throughout the league
     final private String[] firstNames = {"Daniel", "Isaiah", "Devyn", "Roy", "Aaron", "Bryan", "Demarcus", "Stephen", "Lebron",
@@ -24,11 +25,12 @@ public class League {
                                         "Young", "Carter", "Manning", "Jok", "Valentine", "Baldwin", "Simmons", "Durant", "King",
                                         "Allen", "Parsons", "Forbes", "Taylor", "Harden", "Nowitzki"};
 
-    private List<String> posList; //List of basketball positions
-    private List<Conference> confList; //List that contains the conferences that belong to this league
-    private List<Team> leagueTeamList; //List that contains all of the teams in league
+    private ArrayList<String> posList; //List of basketball positions
+    private ArrayList<Conference> confList; //List that contains the conferences that belong to this league
+    private ArrayList<Team> leagueTeamList; //List that contains all of the teams in league
     private int currentWeek; //Starts at 0
     private int currentSeason; //Starts at 2016
+    private Team userTeam;
 
 
     public League(){
@@ -141,7 +143,7 @@ public class League {
 
         return confList;
     }
-
+/*
     public Team getUserTeam(){
 
         //Will be used when looping through all of the league teams
@@ -165,7 +167,7 @@ public class League {
 
         return currentTeam;
     }
-
+*/
     // Method for setting the schedules up for the teams each season
     public void setTeamSchedules(){
 
@@ -195,6 +197,15 @@ public class League {
         return posList;
     }
 
+    public void setUserTeam(Team userTeam)
+    {
+        this.userTeam = userTeam;
+    }
+
+    public Team getUserTeam()
+    {
+        return userTeam;
+    }
 
     public void calcPreseasonTeamRankings(){
 

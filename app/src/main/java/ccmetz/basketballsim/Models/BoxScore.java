@@ -1,9 +1,11 @@
 package ccmetz.basketballsim.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by ccmetz on 7/25/16.
  */
-public class BoxScore {
+public class BoxScore implements Serializable {
 
     private String homePlayers;
     private String awayPlayers;

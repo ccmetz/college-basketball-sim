@@ -1,11 +1,14 @@
 package ccmetz.basketballsim.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import ccmetz.basketballsim.Helpers.Sorter;
 
 /**
  * Created by ccmetz on 5/1/16.
  */
-public class Game {
+public class Game implements Serializable {
 
     public boolean hasBeenPlayed;
 
