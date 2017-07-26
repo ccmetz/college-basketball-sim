@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#006BB6</color>
-    <color name="colorPrimaryDark">#005689</color>
-    <color name="colorButton">#F58426</color>
-    <color name="colorButtonDark">#F4760E</color>
-    <color name="colorAccent">#F5262F</color>
-</resources>
-<!-- Saved colors:
+  <color name="colorPrimary">#006BB6</color>
+  <color name="colorPrimaryDark">#005689</color>
+  <color name="colorButton">#F58426</color>
+  <color name="colorButtonDark">#F4760E</color>
+  <color name="colorAccent">#F5262F</color>
+</resources><!-- Saved colors:
     colorbutton1: #29A19C
     colorbutton2: #29668B
     colorPrimDark: #005689

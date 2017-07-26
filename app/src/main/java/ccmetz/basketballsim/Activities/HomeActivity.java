@@ -9,41 +9,47 @@ import android.widget.Button;
 
 import ccmetz.basketballsim.R;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity
+{
 
-    private Button newGameButton; //New game starts when clicking this button
-    private Button loadGameButton; //User can load an existing game
+  private Button newGameButton; //New game starts when clicking this button
+  private Button loadGameButton; //User can load an existing game
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_home);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
-        newGameButton = (Button) findViewById(R.id.new_game_button);
+    newGameButton = (Button) findViewById(R.id.new_game_button);
 
-        newGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, TeamActivity.class);
-                intent.putExtra("LOAD", false);
-                startActivity(intent);
-            }
-        });
+    newGameButton.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        Intent intent = new Intent(HomeActivity.this, TeamActivity.class);
+        intent.putExtra("LOAD", false);
+        startActivity(intent);
+      }
+    });
 
-        loadGameButton = (Button) findViewById(R.id.load_game_button);
+    loadGameButton = (Button) findViewById(R.id.load_game_button);
 
-        loadGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                intent.putExtra("LOAD", true);
-                startActivity(intent);
-            }
-        });
+    loadGameButton.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        intent.putExtra("LOAD", true);
+        startActivity(intent);
+      }
+    });
 
-    }
+  }
 
     /*
     @Override

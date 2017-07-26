@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <Spinner
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="20dp"
+    android:id="@+id/player_spinner" />
+
+  <GridView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="20dp"
-        android:id="@+id/player_spinner"/>
-
-    <GridView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/player_stats_grid"
-        android:paddingLeft="10dp"
-        android:horizontalSpacing="5dp"
-        android:verticalSpacing="20dp"
-        android:numColumns="4"
-        android:gravity="center"/>
+    android:id="@+id/player_stats_grid"
+    android:paddingLeft="10dp"
+    android:horizontalSpacing="5dp"
+    android:verticalSpacing="20dp"
+    android:numColumns="4"
+    android:gravity="center" />
 
 </LinearLayout>
