@@ -1,7 +1,5 @@
 package ccmetz.basketballsim.Models;
 
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -585,9 +583,7 @@ public class Team implements Serializable
     }
     else
     {
-      int SOR = calcStrengthOfRecordBonus();
-      pollScore = (100 * wins) + preseasonScore + SOR;
-      Log.d("Team Ranking", "SOR score for " + name + " => " + SOR);
+      pollScore = (100 * wins) + preseasonScore + calcStrengthOfRecordBonus();
     }
   }
 
