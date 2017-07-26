@@ -30,9 +30,9 @@ public class HomeActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        Intent intent = new Intent(HomeActivity.this, TeamActivity.class);
-        intent.putExtra("LOAD", false);
-        startActivity(intent);
+      Intent intent = new Intent(HomeActivity.this, TeamActivity.class);
+      intent.putExtra("LOAD", false);
+      startActivity(intent);
       }
     });
 
@@ -43,12 +43,11 @@ public class HomeActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-        intent.putExtra("LOAD", true);
-        startActivity(intent);
+      Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+      intent.putExtra("LOAD", true);
+      startActivity(intent);
       }
     });
-
   }
 
     /*

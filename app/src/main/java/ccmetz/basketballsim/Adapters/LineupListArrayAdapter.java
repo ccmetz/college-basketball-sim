@@ -24,27 +24,23 @@ import ccmetz.basketballsim.R;
  */
 public class LineupListArrayAdapter extends ArrayAdapter<Player>
 {
-
   private Context context;
   private ArrayList<Player> rosterList;
   private int[] roleTracker;
 
   public LineupListArrayAdapter(Context context, ArrayList<Player> rosterList)
   {
-
     super(context, R.layout.adjust_lineup_list_item, rosterList);
 
     this.context = context;
     this.rosterList = rosterList;
 
     roleTracker = new int[3]; //Max # of players per position is 3 right now
-
   }
 
   @Override
   public View getView(final int position, View convertView, ViewGroup parent)
   {
-
     LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     if (convertView == null)
     {
@@ -64,21 +60,18 @@ public class LineupListArrayAdapter extends ArrayAdapter<Player>
 
     if (playerRole == Player.Role.STARTER)
     {
-      //Log.i("Role", "STARTER");
       detailText.setTextColor(Color.parseColor("#84c103"));
       firstString.setChecked(true);
       roleTracker[position] = 1;
     }
     else if (playerRole == Player.Role.ROLEPLAYER)
     {
-      //  Log.i("Role", "ROLE");
       detailText.setTextColor(Color.parseColor("#d4444a"));
       secondString.setChecked(true);
       roleTracker[position] = 2;
     }
     else if (playerRole == Player.Role.BENCH)
     {
-      // Log.i("Role", "BENCH");
       detailText.setTextColor(Color.GRAY);
       thirdString.setChecked(true);
       roleTracker[position] = 3;
@@ -89,12 +82,10 @@ public class LineupListArrayAdapter extends ArrayAdapter<Player>
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
       {
-
-        if (firstString.isChecked())
-        {
-
-          roleTracker[position] = 1; // Set to starter
-        }
+      if (firstString.isChecked())
+      {
+        roleTracker[position] = 1; // Set to starter
+      }
       }
     });
 
@@ -103,12 +94,10 @@ public class LineupListArrayAdapter extends ArrayAdapter<Player>
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
       {
-
-        if (secondString.isChecked())
-        {
-
-          roleTracker[position] = 2; // Set to Role player
-        }
+      if (secondString.isChecked())
+      {
+        roleTracker[position] = 2; // Set to Role player
+      }
       }
     });
 
@@ -117,38 +106,28 @@ public class LineupListArrayAdapter extends ArrayAdapter<Player>
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
       {
-
-        if (thirdString.isChecked())
-        {
-
-          roleTracker[position] = 3; // Set to bench
-        }
+      if (thirdString.isChecked())
+      {
+        roleTracker[position] = 3; // Set to bench
+      }
       }
     });
 
     return convertView;
-
   }
 
   public void updateLineupAdapter()
   {
-
     //Clear the roleTracker
     for (int i = 0; i < roleTracker.length; i++)
     {
-
       roleTracker[i] = 0;
     }
-
     this.notifyDataSetChanged();
-
   }
 
   public int[] getRoleChanges()
   {
-
     return roleTracker;
   }
-
-
 }

@@ -12,7 +12,6 @@ import ccmetz.basketballsim.Helpers.Sorter;
  */
 public class Team implements Serializable
 {
-
   private String name;
   private String conference;
   private String abbreviation;
@@ -44,7 +43,6 @@ public class Team implements Serializable
   //Creates new Team and assigns it to a conference
   public Team(String nm, String conf, String abbr, int progLvl, League l)
   {
-
     name = nm;
     conference = conf;
     abbreviation = abbr;
@@ -75,16 +73,14 @@ public class Team implements Serializable
 
     calcTeamOverall();
 
-    schedule = new ArrayList<Game>();
-    scheduleList = new ArrayList<String>();
-    homeGames = new ArrayList<String>();
-    awayGames = new ArrayList<String>();
-
+    schedule = new ArrayList<>();
+    scheduleList = new ArrayList<>();
+    homeGames = new ArrayList<>();
+    awayGames = new ArrayList<>();
   }
 
   public String getTeamName()
   {
-
     return name;
   }
 
@@ -95,14 +91,12 @@ public class Team implements Serializable
 
   public ArrayList<Player> getRoster()
   {
-
     return rosterList;
   }
 
   // Will randomly determine what level of recruit will be added to the team
   public int determineRecruitStars()
   {
-
     double random = Math.random();
     double baseRating = (double) programLevel / 20; // Most likely recruit will be stars = (int) baseRating
     double comparison = baseRating - (programLevel / 20);
@@ -111,18 +105,15 @@ public class Team implements Serializable
     // Check for One and Done chance
     if (programLevel >= 90)
     {
-
       double oneAndDoneChance = 0.10;
 
       if (programLevel >= 95)
       {
-
         oneAndDoneChance = 0.20;
       }
 
       if (Math.random() < oneAndDoneChance)
       {
-
         return 6;
       }
     }
@@ -130,78 +121,58 @@ public class Team implements Serializable
     // If not recruit != one and done, determine stars rating for normal recruit
     if (comparison >= 0.75)
     {
-
       if (random > 0.75) stars = (int) baseRating + 1;
       else if (random < 0.05) stars = (int) baseRating - 1;
     }
     else if (comparison >= 0.5)
     {
-
       if (random > 0.85) stars = (int) baseRating + 1;
       else if (random < 0.10) stars = (int) baseRating - 1;
     }
     else
     {
-
       if (random > 0.90) stars = (int) baseRating + 1;
       else if (random < 0.15) stars = (int) baseRating - 1;
     }
 
     return stars;
-
   }
 
   public void generateRoster(int numPGs, int numSGs, int numSFs, int numPFs, int numCs)
   {
-
     for (int i = 0; i < numPGs; i++)
     {
-
       pgList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 1, (int) (4 * Math.random()),
           determineRecruitStars(), (int) (4 * Math.random()), this));
-
     }
-
     Sorter.sortPlayersByOverall(pgList);
 
     for (int i = 0; i < numSGs; i++)
     {
-
       sgList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 2, (int) (4 * Math.random()),
           determineRecruitStars(), (int) (4 * Math.random()), this));
-
     }
-
     Sorter.sortPlayersByOverall(sgList);
 
     for (int i = 0; i < numSFs; i++)
     {
-
       sfList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 3, (int) (4 * Math.random()),
           determineRecruitStars(), (int) (4 * Math.random()), this));
-
     }
-
     Sorter.sortPlayersByOverall(sfList);
 
     for (int i = 0; i < numPFs; i++)
     {
-
       pfList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 4, (int) (4 * Math.random()),
           determineRecruitStars(), (int) (4 * Math.random()), this));
-
     }
-
     Sorter.sortPlayersByOverall(pfList);
 
     for (int i = 0; i < numCs; i++)
     {
-
       cList.add(i, new Player(league.getRandomFirstName(), league.getRandomLastName(), 5, (int) (4 * Math.random()),
           determineRecruitStars(), (int) (4 * Math.random()), this));
-
     }
-
     Sorter.sortPlayersByOverall(cList);
 
     // Create the rosterList that will be displayed on the Lineup tab in MainActivity
@@ -210,33 +181,28 @@ public class Team implements Serializable
 
   public void setUserControl(boolean control)
   {
-
     userControl = control;
     league.setUserTeam(this);
   }
 
   public boolean checkUserControl()
   {
-
     return userControl;
   }
 
   public String getAbbr()
   {
-
     return abbreviation;
   }
 
 
   public String displayFullTeamString()
   {
-
     return name + " - Prestige: " + programLevel;
   }
 
   public ArrayList<Game> getSchedule()
   {
-
     return schedule;
   }
 
@@ -244,7 +210,6 @@ public class Team implements Serializable
   // This method will create and sort the rosterList by starters and bench players
   public void createRosterList()
   {
-
     ArrayList<Player> roleList = new ArrayList<Player>();
     ArrayList<Player> benchList = new ArrayList<Player>();
 
@@ -293,76 +258,63 @@ public class Team implements Serializable
     rosterList.addAll(roleList);
     rosterList.addAll(benchList);
 
-
     // Set best players at their positions as STARTER
     for (int i = 0; i < 5; i++)
     {
-
       rosterList.get(i).setPlayerRole(Player.Role.STARTER);
     }
 
     // Set the 5 backup players to ROLEPLAYER
     for (int i = 5; i < 10; i++)
     {
-
       rosterList.get(i).setPlayerRole(Player.Role.ROLEPLAYER);
     }
   }
 
   public String getRecord()
   {
-
     return wins + " - " + losses;
   }
 
   // Calculates the teams overall based on the starters and first 5 bench players
   public void calcTeamOverall()
   {
-
     int starterScore = 0;
     int benchScore = 0;
 
     // Give a score for the top 5 position players
     for (int i = 0; i < 5; i++)
     {
-
       starterScore = rosterList.get(i).getOverall() + starterScore;
     }
     // Give a score for the next 5 best bench players
     for (int i = 5; i < 10; i++)
     {
-
       benchScore = rosterList.get(i).getOverall() + benchScore;
     }
 
     starterScore = starterScore * 3; //starters will be 3 times as important than the bench
-
     teamOverall = (starterScore + benchScore) / 20;
   }
 
   public int getTeamOverall()
   {
-
     return teamOverall;
   }
 
   //Updates a string ArrayList of the team's schedule
   public void updateScheduleList()
   {
-
     scheduleList.clear();
 
     for (int i = 0; i < schedule.size(); i++)
     {
-
       if (abbreviation.equals(schedule.get(i).getHomeTeam().getAbbr()))
       {
-
         scheduleList.add(schedule.get(i).getAwayTeam().getTeamName() + "/" + schedule.get(i).getGameResult(true));
       }
       else if (abbreviation.equals(schedule.get(i).getAwayTeam().getAbbr()))
       {
-
         scheduleList.add("@" + schedule.get(i).getHomeTeam().getTeamName() + "/" + schedule.get(i).getGameResult(false));
       }
     }
@@ -371,14 +323,12 @@ public class Team implements Serializable
   // Returns the ArrayList of Strings that fills the items on the team's schedule listview
   public ArrayList<String> getScheduleList()
   {
-
     return scheduleList;
   }
 
   // Returns the ArrayList of Game objects that are on this team's schedule
   public ArrayList<Game> getGameArrayList()
   {
-
     return schedule;
   }
 
@@ -395,10 +345,8 @@ public class Team implements Serializable
   // Returns an ArrayList of the players that play a specific position on the team
   public ArrayList<Player> getPositionList(int pos)
   {
-
     switch (pos)
     {
-
       case 0:
         return pgList;
 
@@ -417,14 +365,12 @@ public class Team implements Serializable
 
     //return playerList;
     return pgList;
-
   }
 
   // This method is called when the user makes changes to their team's lineup
   // The rosterList is re-sorted according to any new starters or role players
   public void updateTeamLineup()
   {
-
     ArrayList<Player> roleList = new ArrayList<Player>();
     ArrayList<Player> benchList = new ArrayList<Player>();
 
@@ -446,7 +392,6 @@ public class Team implements Serializable
     // Populate the role player and bench lists
     for (int i = 1; i < pgList.size(); i++)
     {
-
       if (pgList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER)
       {
         roleList.add(pgList.get(i));
@@ -459,7 +404,6 @@ public class Team implements Serializable
 
     for (int i = 1; i < sgList.size(); i++)
     {
-
       if (sgList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER)
       {
         roleList.add(sgList.get(i));
@@ -472,7 +416,6 @@ public class Team implements Serializable
 
     for (int i = 1; i < sfList.size(); i++)
     {
-
       if (sfList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER)
       {
         roleList.add(sfList.get(i));
@@ -485,7 +428,6 @@ public class Team implements Serializable
 
     for (int i = 1; i < pfList.size(); i++)
     {
-
       if (pfList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER)
       {
         roleList.add(pfList.get(i));
@@ -498,7 +440,6 @@ public class Team implements Serializable
 
     for (int i = 1; i < cList.size(); i++)
     {
-
       if (cList.get(i).getPlayerRole() == Player.Role.ROLEPLAYER)
       {
         roleList.add(cList.get(i));
@@ -514,16 +455,13 @@ public class Team implements Serializable
 
     for (int i = 0; i < roleList.size(); i++)
     {
-
       rosterList.add(roleList.get(i));
     }
 
     for (int i = 0; i < benchList.size(); i++)
     {
-
       rosterList.add(benchList.get(i));
     }
-
   }
 
   // This method is called inside of updateTeamLineup
@@ -531,51 +469,40 @@ public class Team implements Serializable
   // of their respective ArrayLists
   public void updateStarters(ArrayList<Player> list)
   {
-
-
     for (int i = 0; i < list.size(); i++)
     {
-
       if (list.get(i).getPlayerRole() == Player.Role.STARTER && i != 0)
       {
-
         //Swap the new starter with the old starter
         Player temp = list.get(0);
         list.set(0, list.get(i));
         list.set(i, temp);
       }
-
     }
 
     //Resort the list with role players ahead of bench players
     for (int i = 1; i < list.size() - 1; i++)
     {
-
       if (list.get(i).getPlayerRole() == Player.Role.BENCH)
       {
-
         //Check for any role players below it in the list
         for (int j = i + 1; j < list.size(); j++)
         {
-
           if (list.get(j).getPlayerRole() == Player.Role.ROLEPLAYER)
           {
             //Swap
             Player temp = list.get(i);
             list.set(i, list.get(j));
             list.set(j, temp);
-
           }
         }
       }
     }
-
   }
 
   // Calculate the poll score for this team (used to determine top 25 rankings)
   public void calcPollScore()
   {
-
     if (wins + losses == 0)
     {
       preseasonScore = (3 * teamOverall) + programLevel;
@@ -591,7 +518,6 @@ public class Team implements Serializable
   // and losses
   private int calcStrengthOfRecordBonus()
   {
-
     // Maximum bonus scores
     int totalWinBonus = 2000;
     int totalLossBonus = -1000;
@@ -632,7 +558,6 @@ public class Team implements Serializable
           lOppWins += game.getHomeTeam().getWins();
           lOppLosses += game.getHomeTeam().getLosses();
         }
-
       }
     }
 

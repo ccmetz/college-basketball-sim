@@ -9,7 +9,6 @@ package ccmetz.basketballsim.Models;
  */
 public class Shot
 {
-
   // Constants used for steal, block, and shot probabilities
   private final int shotMod;
   private final double stealOpp;
@@ -22,7 +21,6 @@ public class Shot
 
   public Shot(int pBonus, Player s, Player d, int shotType)
   {
-
     passerBonus = pBonus;
     shooter = s;
     defender = d;
@@ -65,7 +63,6 @@ public class Shot
 
   public Game.Result shoot()
   {
-
     double shotChance = shotMod + (shooter.getPostRating() / 2) - (defender.getDefenseRating() / 5);
     double stealChance = (defender.getStealRating() / 2) - (shooter.getHandleRating() / 3);
     double blockChance = (defender.getBlockRating() / 2) - (shooter.getPostRating() / 3);
@@ -116,6 +113,4 @@ public class Shot
       return Game.Result.MISS;
     }
   }
-
-
 }

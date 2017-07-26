@@ -85,9 +85,6 @@ public class MainActivity extends AppCompatActivity
   private int season; //Current season
   private ArrayList<String> posList;
 
-  int teamSpinnerCounter;
-
-
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
@@ -108,7 +105,7 @@ public class MainActivity extends AppCompatActivity
       Intent intent = getIntent();
       confCounter = intent.getIntExtra("chosenConf", 0);
       teamCounter = intent.getIntExtra("chosenTeam", 0);
-            /* Assign the correct Team to the user */
+      /* Assign the correct Team to the user */
       userTeam = league.getConferences().get(confCounter).getTeams().get(teamCounter);
       userTeam.setUserControl(true);
     }
@@ -138,13 +135,12 @@ public class MainActivity extends AppCompatActivity
     confSpinnerText = (TextView) findViewById(R.id.conf_spinner_text);
     teamSpinnerText = (TextView) findViewById(R.id.team_spinner_text);
 
-        /* Define the functionality of the lineupButton */
+    /* Define the functionality of the lineupButton */
     lineupButton.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-
         LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rootView = inflater.inflate(R.layout.lineup_dialog, null);
 
@@ -165,34 +161,26 @@ public class MainActivity extends AppCompatActivity
         lineupView.setAdapter(lineupAdapter);
 
         // Handle ListView changes when the spinner position is changed
-        posSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        posSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
           @Override
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
           {
-
             playerList.clear();
             playerList.addAll(userTeam.getPositionList(position));
 
             lineupAdapter.updateLineupAdapter();
-
           }
 
           @Override
-          public void onNothingSelected(AdapterView<?> parent)
-          {
-
-          }
+          public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         //Initialize the Save Lineup button
         Button saveLineupButton = (Button) rootView.findViewById(R.id.save_lineup_button);
-        saveLineupButton.setOnClickListener(new View.OnClickListener()
-        {
+        saveLineupButton.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v)
           {
-
             // Check for valid # of Starters, Role Players, etc
             int[] roleTracker = lineupAdapter.getRoleChanges();
             int starterCount = 0;
@@ -200,7 +188,6 @@ public class MainActivity extends AppCompatActivity
 
             for (int i = 0; i < roleTracker.length; i++)
             {
-
               if (roleTracker[i] == 1) starterCount++;
               else if (roleTracker[i] == 2) roleCount++;
             }
@@ -208,13 +195,10 @@ public class MainActivity extends AppCompatActivity
             // Reorganize the userTeam roster and update the rosterView on the Manage Roster tab
             if (starterCount == 1 && roleCount == 1)
             {
-
               for (int i = 0; i < playerList.size(); i++)
               {
-
                 switch (roleTracker[i])
                 {
-
                   case 1:
                     playerList.get(i).setPlayerRole(Player.Role.STARTER);
                     break;
@@ -225,7 +209,6 @@ public class MainActivity extends AppCompatActivity
                     playerList.get(i).setPlayerRole(Player.Role.BENCH);
                     break;
                 }
-
               }
 
               userTeam.updateTeamLineup(); //Reorganize the team roster
@@ -250,9 +233,7 @@ public class MainActivity extends AppCompatActivity
               }
               toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
               toast.show();
-
             }
-
           }
         });
 
@@ -277,7 +258,7 @@ public class MainActivity extends AppCompatActivity
       }
     });
 
-        /* Define the functionality of the Player Stats button */
+    /* Define the functionality of the Player Stats button */
     statsButton.setOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -310,15 +291,11 @@ public class MainActivity extends AppCompatActivity
           @Override
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
           {
-
             playerStatsAdapter.updatePlayerStats(position);
           }
 
           @Override
-          public void onNothingSelected(AdapterView<?> parent)
-          {
-
-          }
+          public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         // Show the Player Stats Dialog
@@ -344,81 +321,75 @@ public class MainActivity extends AppCompatActivity
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
 
-        if (userTeam.getGameArrayList().get(position).hasBeenPlayed)
+      if (userTeam.getGameArrayList().get(position).hasBeenPlayed)
+      {
+        /** FOR DEBUGGING PURPOSES **/
+       /* //Display a dialog that shows the log of the game
+        String log = userTeam.getGameArrayList().get(position).getGameLog();
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(log)
+                .show(); */
+
+        //Get the gameBoxScore array and team names from the specific game
+        ArrayList<String[]> gameBoxScore = new ArrayList<String[]>();
+        ArrayList<String> boxScoreTeams = new ArrayList<String>();
+
+        if (onATLTab)
         {
-          /** FOR DEBUGGING PURPOSES **/
-         /* //Display a dialog that shows the log of the game
-          String log = userTeam.getGameArrayList().get(position).getGameLog();
-          new AlertDialog.Builder(MainActivity.this)
-                  .setMessage(log)
-                  .show(); */
+          gameBoxScore.clear();
+          gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getHomeBoxScore());
+          gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getAwayBoxScore());
 
-          //Get the gameBoxScore array and team names from the specific game
-          ArrayList<String[]> gameBoxScore = new ArrayList<String[]>();
-          ArrayList<String> boxScoreTeams = new ArrayList<String>();
-
-
-          if (onATLTab)
-          {
-            gameBoxScore.clear();
-            gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getHomeBoxScore());
-            gameBoxScore.add(boxScoreTracker.get(position).getBoxScore().getAwayBoxScore());
-
-            boxScoreTeams.clear();
-            boxScoreTeams.add(boxScoreTracker.get(position).getHomeTeam().getAbbr());
-            boxScoreTeams.add(boxScoreTracker.get(position).getAwayTeam().getAbbr());
-          }
-          else
-          {
-            gameBoxScore.clear();
-            gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getHomeBoxScore());
-            gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getAwayBoxScore());
-
-            boxScoreTeams.clear();
-            boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
-            boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
-          }
-
-          LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-          View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
-
-          //Initialize the boxScoreSpinner with the relevant team names
-          Spinner boxScoreSpinner = (Spinner) rootView.findViewById(R.id.team_spinner);
-          ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(MainActivity.this,
-              android.R.layout.simple_spinner_item, boxScoreTeams);
-          spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-          boxScoreSpinner.setAdapter(spinnerAdapter);
-
-          //Initialize the GridView and set the custom BoxScoreAdapter
-          GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
-          final BoxScoreAdapter boxScoreAdapter = new BoxScoreAdapter(gameBoxScore, MainActivity.this);
-          boxScoreGrid.setAdapter(boxScoreAdapter);
-
-          // Notify the boxScoreAdapter when the spinner selection changes
-          boxScoreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-          {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-
-              boxScoreAdapter.updateBoxScore(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
-            }
-          });
-
-          //Show the box score dialog
-          AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-          builder.setView(rootView);
-          builder.show();
+          boxScoreTeams.clear();
+          boxScoreTeams.add(boxScoreTracker.get(position).getHomeTeam().getAbbr());
+          boxScoreTeams.add(boxScoreTracker.get(position).getAwayTeam().getAbbr());
         }
+        else
+        {
+          gameBoxScore.clear();
+          gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getHomeBoxScore());
+          gameBoxScore.add(userTeam.getGameArrayList().get(position).getBoxScore().getAwayBoxScore());
+
+          boxScoreTeams.clear();
+          boxScoreTeams.add(userTeam.getGameArrayList().get(position).getHomeTeam().getAbbr());
+          boxScoreTeams.add(userTeam.getGameArrayList().get(position).getAwayTeam().getAbbr());
+        }
+
+        LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rootView = inflater.inflate(R.layout.boxscore_dialog, null);
+
+        //Initialize the boxScoreSpinner with the relevant team names
+        Spinner boxScoreSpinner = (Spinner) rootView.findViewById(R.id.team_spinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(MainActivity.this,
+            android.R.layout.simple_spinner_item, boxScoreTeams);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        boxScoreSpinner.setAdapter(spinnerAdapter);
+
+        //Initialize the GridView and set the custom BoxScoreAdapter
+        GridView boxScoreGrid = (GridView) rootView.findViewById(R.id.box_score_grid);
+        final BoxScoreAdapter boxScoreAdapter = new BoxScoreAdapter(gameBoxScore, MainActivity.this);
+        boxScoreGrid.setAdapter(boxScoreAdapter);
+
+        // Notify the boxScoreAdapter when the spinner selection changes
+        boxScoreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+          @Override
+          public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+          {
+            boxScoreAdapter.updateBoxScore(position);
+          }
+
+          @Override
+          public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        //Show the box score dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setView(rootView);
+        builder.show();
+      }
       }
     });
-
 
     /* Sim Button functionality */
     simButton.setOnClickListener(new View.OnClickListener()
@@ -437,7 +408,6 @@ public class MainActivity extends AppCompatActivity
 
     for (int i = 0; i < league.getConferences().size(); i++)
     {
-
       confList.add(i, league.getConferences().get(i).getConfName());
     }
 
@@ -450,7 +420,6 @@ public class MainActivity extends AppCompatActivity
 
     for (int i = 0; i < league.getConferences().get(0).getTeams().size(); i++)
     {
-
       // Defaults to teams belonging to the first conference initialized in the league
       Team currentTeam = league.getConferences().get(0).getTeams().get(i);
       teamList.add(i, "#" + currentTeam.getRanking() + " " + currentTeam.getTeamName());
@@ -460,40 +429,28 @@ public class MainActivity extends AppCompatActivity
     teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     teamSpinner.setAdapter(teamAdapter);
 
-    confSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-    {
-
+    confSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
       {
-
         refreshTeamList(position);
         updateLists(); // Reset the team rosters and schedules
       }
 
       @Override
-      public void onNothingSelected(AdapterView<?> parent)
-      {
-
-      }
+      public void onNothingSelected(AdapterView<?> parent) {}
     });
 
-    teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-    {
+    teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
       {
-
         teamCounter = position; // Update the position of the teamSpinner
-
         updateLists(); // Reset the team rosters and schedules
       }
 
       @Override
-      public void onNothingSelected(AdapterView<?> parent)
-      {
-
-      }
+      public void onNothingSelected(AdapterView<?> parent) {}
     });
 
     /* Set up the RadioGroup and RadioButton listeners */
@@ -507,12 +464,11 @@ public class MainActivity extends AppCompatActivity
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
       {
-
-        if (rosterButton.isChecked())
-        {
-          scheduleView.setVisibility(View.GONE);
-          rosterView.setVisibility(View.VISIBLE);
-        }
+      if (rosterButton.isChecked())
+      {
+        scheduleView.setVisibility(View.GONE);
+        rosterView.setVisibility(View.VISIBLE);
+      }
       }
     });
 
@@ -521,18 +477,17 @@ public class MainActivity extends AppCompatActivity
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
       {
-
-        if (scheduleButton.isChecked())
-        {
-          rosterView.setVisibility(View.GONE);
-          scheduleView.setVisibility(View.VISIBLE);
-        }
+      if (scheduleButton.isChecked())
+      {
+        rosterView.setVisibility(View.GONE);
+        scheduleView.setVisibility(View.VISIBLE);
+      }
       }
     });
 
 
-        /* The following views will default as not visible because the Manage Roster tab is selected by default
-         * Set visibility of views that are not on the Manage Roster tab to View.GONE */
+    /* The following views will default as not visible because the Manage Roster tab is selected by default
+     * Set visibility of views that are not on the Manage Roster tab to View.GONE */
     if (scheduleText != null)
     {
       scheduleText.setVisibility(View.GONE);
@@ -553,7 +508,6 @@ public class MainActivity extends AppCompatActivity
       teamSpinnerText.setVisibility(View.GONE);
     }
     teamSpinner.setVisibility(View.GONE);
-
     radioGroup.setVisibility(View.GONE);
 
 
@@ -565,7 +519,6 @@ public class MainActivity extends AppCompatActivity
 
         if (pos == 0)
         {
-
           buttonPanel.setVisibility(View.VISIBLE);
           lineupButton.setVisibility(View.VISIBLE);
           statsButton.setVisibility(View.VISIBLE);
@@ -577,7 +530,6 @@ public class MainActivity extends AppCompatActivity
         }
         else if (pos == 1)
         {
-
           onATLTab = false;
 
           scheduleText.setVisibility(View.VISIBLE);
@@ -586,11 +538,9 @@ public class MainActivity extends AppCompatActivity
 
           //Set the schedule to the user's team and update the adapter
           scheduleAdapter.updateScheduleList(userTeam.getScheduleList());
-
         }
         else if (pos == 2)
         {
-
           onATLTab = true;
 
           confSpinnerText.setVisibility(View.VISIBLE);
@@ -601,15 +551,12 @@ public class MainActivity extends AppCompatActivity
 
           if (rosterButton.isChecked())
           {
-
             rosterView.setVisibility(View.VISIBLE);
           }
           else if (scheduleButton.isChecked())
           {
-
             scheduleView.setVisibility(View.VISIBLE);
           }
-
           updateLists(); // Reset the team rosters and schedules
         }
       }
@@ -621,24 +568,19 @@ public class MainActivity extends AppCompatActivity
 
         if (pos == 0)
         {
-
           buttonPanel.setVisibility(View.GONE);
           lineupButton.setVisibility(View.GONE);
           statsButton.setVisibility(View.GONE);
           rosterView.setVisibility(View.GONE);
-
         }
         else if (pos == 1)
         {
-
           scheduleText.setVisibility(View.GONE);
           scheduleView.setVisibility(View.GONE);
           simButton.setVisibility(View.GONE);
-
         }
         else if (pos == 2)
         {
-
           confSpinnerText.setVisibility(View.GONE);
           confSpinner.setVisibility(View.GONE);
           teamSpinnerText.setVisibility(View.GONE);
@@ -650,10 +592,7 @@ public class MainActivity extends AppCompatActivity
       }
 
       @Override
-      public void onTabReselected(TabLayout.Tab tab)
-      {
-
-      }
+      public void onTabReselected(TabLayout.Tab tab) {}
     });
   }
 
@@ -741,12 +680,10 @@ public class MainActivity extends AppCompatActivity
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_save)
     {
-
       // Save the serializable League object
       new saveLeague("leaguefile.ser").execute();
       return true;
     }
-
     return super.onOptionsItemSelected(item);
   }
 

@@ -10,7 +10,6 @@ import ccmetz.basketballsim.Helpers.Sorter;
  */
 public class Game implements Serializable
 {
-
   public boolean hasBeenPlayed;
 
   private Team homeTeam;
@@ -41,7 +40,6 @@ public class Game implements Serializable
 
   Game(Team hTeam, Team aTeam)
   {
-
     homeTeam = hTeam;
     awayTeam = aTeam;
     hasBeenPlayed = false;
@@ -78,7 +76,6 @@ public class Game implements Serializable
   // Initialize the BoxScore object with the names of the players in the starting lineup
   public void initializeBoxScore()
   {
-
     String homeNames = "";
     String awayNames = "";
 
@@ -105,13 +102,11 @@ public class Game implements Serializable
     }
 
     awayNames = awayNames + "\n";
-
     boxScore = new BoxScore(homeNames, awayNames);
   }
 
   public String getGameResult(boolean home)
   {
-
     String r = " ----";
 
     if (home)
@@ -143,36 +138,30 @@ public class Game implements Serializable
     }
 
     return "Result: " + r;
-
   }
 
   public Team getHomeTeam()
   {
-
     return homeTeam;
   }
 
   public Team getAwayTeam()
   {
-
     return awayTeam;
   }
 
   public Team getWinningTeam()
   {
-
     return winningTeam;
   }
 
   public Team getLosingTeam()
   {
-
     return losingTeam;
   }
 
   public String getGameLog()
   {
-
     return gameLog;
   }
 
@@ -180,19 +169,15 @@ public class Game implements Serializable
   // ONLY OPTIMIZED FOR GAMES PLAYED WITHOUT SUBS - WILL NEED TO MODIFY WHEN SUB FUNCTIONALITY ADDED
   public BoxScore getBoxScore()
   {
-
     boxScore.createBoxScore();
     return boxScore;
-
   }
 
   // Sets the current starters and available bench players for each team
   public void setTeamStartersAndBench()
   {
-
     for (int i = 0; i < homeLineup.size(); i++)
     {
-
       if (homeLineup.get(i).getPlayerRole() == Player.Role.STARTER)
       {
         homeStarters.add(homeLineup.get(i));
@@ -203,14 +188,12 @@ public class Game implements Serializable
         homeBench.add(homeLineup.get(i));
         homeLineup.get(i).addGame();
       }
-
     }
 
     Sorter.sortByPosition(homeBench);
 
     for (int i = 0; i < awayLineup.size(); i++)
     {
-
       if (awayLineup.get(i).getPlayerRole() == Player.Role.STARTER)
       {
         awayStarters.add(awayLineup.get(i));
@@ -221,7 +204,6 @@ public class Game implements Serializable
         awayBench.add(awayLineup.get(i));
         awayLineup.get(i).addGame();
       }
-
     }
 
     Sorter.sortByPosition(awayBench);
@@ -233,7 +215,6 @@ public class Game implements Serializable
 
   private void makeSubstitutions()
   {
-
     homeOnFloor.clear();
     awayOnFloor.clear();
 
@@ -255,10 +236,8 @@ public class Game implements Serializable
   // This method will be used to simulate the Game!
   public void simGame()
   {
-
     if (!hasBeenPlayed)
     {
-
       setTeamStartersAndBench();
       initializeBoxScore();
 
@@ -269,7 +248,6 @@ public class Game implements Serializable
 
       while (clock > 0)
       {
-
         //Check clock to decide if subs should come in
         //The role players will play from 1800 - 1500 secs and 600 - 300 secs left in the game
         if (clock <= 1800 && clock >= 1500 && !isBenchIn) makeSubstitutions();
@@ -277,30 +255,25 @@ public class Game implements Serializable
         else if (clock <= 600 && clock >= 300 && !isBenchIn) makeSubstitutions();
         else if (clock <= 300 && isBenchIn) makeSubstitutions();
 
-
         // Home team is on offense
         if (possession == 0)
         {
-
           runPlay(homeOnFloor, awayOnFloor);
           possession = 1; //change possession after the home team finishes their play
         }
         // Away team is on offense
         else if (possession == 1)
         {
-
           runPlay(awayOnFloor, homeOnFloor);
           possession = 0; //change possession after the away team finishes their play
         }
 
         if (clock <= 0 && homeScore == awayScore)
         {
-
           //Overtime!
           clock = 300; // Add 5 min to clock
           numOvertimes++;
         }
-
       }
 
       if (homeScore > awayScore)
@@ -319,9 +292,7 @@ public class Game implements Serializable
       }
 
       hasBeenPlayed = true; //Once the game is finished, set to true
-
     }
-
   }
 
   /* Method for a single play
@@ -334,7 +305,6 @@ public class Game implements Serializable
   *             respective subs! */
   public void runPlay(ArrayList<Player> offense, ArrayList<Player> defense)
   {
-
     final int bringUpBallTime = 5; //5 seconds to bring the ball up the court on each possession
     boolean curPossession = true; //Keeps track of offensive possession
     double passChance = 0.90; // 90% chance the first ball handler will make a pass
@@ -346,13 +316,10 @@ public class Game implements Serializable
     int posOfBall = 0; //Keeps track of the position of the player within the offense ArrayList (Different from player pos)
     int posOfPasser = 0; //Keeps track of the position of the passer within the offense ArrayList (Different from player pos)
 
-
     while (curPossession)
     {
-
       if (Math.random() < passChance)
       {
-
         //Decide who to pass to
         passer = hasBall;
         posOfPasser = posOfBall;
@@ -360,17 +327,14 @@ public class Game implements Serializable
         hasBall = offense.get(posOfBall);
         passCounter++;
         passChance = passChance * 0.7;
-
       }
       else
       {
-
         //Player with the ball shoots
         result = attemptShot(passer, hasBall, defense, posOfBall, posOfPasser);
 
         if (result == Result.MISS || result == Result.BLOCK)
         {
-
           //rebound the ball
           posOfBall = rebound(offense, defense);
 
@@ -401,44 +365,32 @@ public class Game implements Serializable
         {
           clock = clock - (passCounter * 5) - bringUpBallTime;
         }
-
-
       }
     }
-
-
   }
 
   /* Method for determining where the next pass should go
   *  Currently based off of chance and each player's offensive overall */
   public int determineNextPass(Player p, ArrayList<Player> offense)
   {
-
     int posToPass = 0; //defaults to PG
     double passProb = 0; //Stores a score that will be used to decide who will be passed to
     double largestPassProb = 0; //Stores the largest passProb score
 
-
     for (int i = 0; i < offense.size(); i++)
     {
-
       if (!(offense.get(i).equals(p)))
-      { //If current ball handler does not equal this player, calc passProb
-
+      {
+        //If current ball handler does not equal this player, calc passProb
         passProb = (offense.get(i).getOffOvr() * 2 * Math.random());
-
         if (passProb > largestPassProb)
         {
           largestPassProb = passProb;
           posToPass = i;
         }
       }
-
     }
-
     return posToPass;
-
-
   }
 
   /* Method for determining who rebounds a missed shot
@@ -446,7 +398,6 @@ public class Game implements Serializable
   *  or it will return a '-1' if the defensive rebound was made */
   public int rebound(ArrayList<Player> offense, ArrayList<Player> defense)
   {
-
     final double offRebPercent = 0.15; //Offensive rebounds occur 15% of the time
 
     int posOfDefReb = 4; //Keeps track of the position of the rebounder
@@ -459,7 +410,6 @@ public class Game implements Serializable
 
     for (int i = 0; i < defense.size(); i++)
     {
-
       defRebChance = (defense.get(i).getReboundRating() * Math.random()) +
           (defense.get(i).getHeightRating() * Math.random());
 
@@ -472,7 +422,6 @@ public class Game implements Serializable
 
     for (int i = 0; i < offense.size(); i++)
     {
-
       offRebChance = (offense.get(i).getReboundRating() * Math.random()) +
           (offense.get(i).getHeightRating() * Math.random());
 
@@ -485,7 +434,6 @@ public class Game implements Serializable
 
     if (Math.random() > offRebPercent)
     {
-
       //defensive rebound
       gameLog = gameLog + defense.get(posOfDefReb).getTeamAbbr() + " " + defense.get(posOfDefReb).getName() +
           " grabbed the defensive rebound " + clock + "\n";
@@ -504,7 +452,6 @@ public class Game implements Serializable
       offense.get(posOfOffReb).addOffRebound();
       return posOfOffReb;
     }
-
   }
 
   /* Method for determining if the player makes or misses his shot
@@ -515,7 +462,6 @@ public class Game implements Serializable
   *  Returns the result of the shot attempt (Steal, Block, Make, Miss) from the Shot object */
   public Result attemptShot(Player passer, Player shooter, ArrayList<Player> defense, int posBall, int posPass)
   {
-
     Result shotResult; // records the result of the shot attempt
     int shotType; // 0 = post, 1 = layup, 2 = midrange, 3 = three
     double assistChance = (double) passer.getPassRating() / 150;
@@ -527,16 +473,13 @@ public class Game implements Serializable
     // A passer with a Pass Rating of 75 will have a 50% chance of assisting on the shot
     if (!passer.equals(shooter) && (Math.random() < assistChance))
     {
-
       isAssisted = true;
       //No passer bonus for passers with rating under 70
       if (passer.getPassRating() >= 70)
       {
-
         passerBonus = (4 + ((passer.getPassRating() - 70) / 2));
       }
     }
-
 
     // Determine what kind of shot the player will attempt based on tendencies
     if (100 * Math.random() < shooter.getJumperOrDrive())
@@ -546,7 +489,6 @@ public class Game implements Serializable
       {
         //Player will Post up
         shotType = 0;
-
       }
       else
       {
@@ -579,7 +521,6 @@ public class Game implements Serializable
     // Check for assist
     if (shotResult == Result.MAKE && isAssisted)
     {
-
       boxScore.addAst(possession, posPass, isBenchIn);
       passer.addAssist();
 
@@ -592,7 +533,6 @@ public class Game implements Serializable
   // Helper method to handle different shot results and write to the box score, game log, and update the score
   private void recordResult(Result shotResult, int shotType, Player shooter, Player defender, int posBall)
   {
-
     String shotStr = "";
     // If not a three, save the type of 2 pt shot attempt
     switch (shotType)
@@ -610,7 +550,6 @@ public class Game implements Serializable
 
     if (shotResult == Result.STEAL)
     {
-
       gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " stole the ball from " +
           shooter.getName() + " " + clock + "\n";
 
@@ -620,7 +559,6 @@ public class Game implements Serializable
     }
     else if (shotResult == Result.BLOCK)
     {
-
       gameLog = gameLog + defender.getTeamAbbr() + " " + defender.getName() + " blocked " + shooter.getName() +
           " " + clock + "\n";
 

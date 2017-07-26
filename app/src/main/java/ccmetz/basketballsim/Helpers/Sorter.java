@@ -14,33 +14,27 @@ import ccmetz.basketballsim.Models.Team;
  */
 public class Sorter
 {
-
-
   // Sorts a List<Player> by position (From Point Guard to Center)
   public static void sortByPosition(List<Player> list)
   {
-
     Collections.sort(list, new PositionComp());
   }
 
   // Sorts a List<Team> by Prestige (Highest to Lowest)
   public static void sortByPrestige(List<Team> list)
   {
-
     Collections.sort(list, new PrestigeComp());
   }
 
   // Sorts a List<Player> by Overall (Highest to Lowest)
   public static void sortPlayersByOverall(List<Player> list)
   {
-
     Collections.sort(list, new PlayerOvrComp());
   }
 
   // Sorts a List<Team> by Poll Score
   public static void sortByPollScore(List<Team> list)
   {
-
     Collections.sort(list, new TeamPollComp());
   }
 
@@ -48,7 +42,6 @@ public class Sorter
   // Inner Comparator class for sorting Players by position
   static class PositionComp implements Comparator<Player>
   {
-
     @Override
     public int compare(Player a, Player b)
     {
@@ -62,7 +55,6 @@ public class Sorter
   // Inner Comparator class for sorting Teams by prestige and name
   static class PrestigeComp implements Comparator<Team>
   {
-
     @Override
     public int compare(Team a, Team b)
     {
@@ -76,7 +68,6 @@ public class Sorter
   // Inner Comparator class for sorting Players by overall and name
   static class PlayerOvrComp implements Comparator<Player>
   {
-
     @Override
     public int compare(Player a, Player b)
     {
@@ -89,7 +80,6 @@ public class Sorter
   // Inner Comparator class for sorting Teams by their polling score
   static class TeamPollComp implements Comparator<Team>
   {
-
     @Override
     public int compare(Team a, Team b)
     {

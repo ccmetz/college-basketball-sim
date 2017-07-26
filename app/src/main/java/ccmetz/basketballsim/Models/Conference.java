@@ -14,7 +14,6 @@ import ccmetz.basketballsim.Helpers.Sorter;
  */
 public class Conference implements Serializable
 {
-
   private String name; //name of the conference
   private League league; //League that the conference belongs to
   private ArrayList<Team> teamList; //List of the teams that belong to this conference
@@ -22,22 +21,18 @@ public class Conference implements Serializable
 
   public Conference(String nm, League lg)
   {
-
     name = nm;
     league = lg;
     teamList = new ArrayList<Team>();
-
   }
 
   public String getConfName()
   {
-
     return name;
   }
 
   public List<Team> getTeams()
   {
-
     return teamList;
   }
 
@@ -45,16 +40,12 @@ public class Conference implements Serializable
   // setting up each team's individual schedule string list
   public void setConfSchedule()
   {
-
     Collections.shuffle(teamList); //Shuffle teams
-
 
     for (int week = 0; week < 2 * teamList.size() - 2; week++)
     {
-
       for (int gameNum = 0; gameNum < teamList.size() / 2; gameNum++)
       {
-
         Team a = teamList.get((week + gameNum) % 9);
         Team b;
 
@@ -71,7 +62,6 @@ public class Conference implements Serializable
 
         if (!a.homeGames.contains(b.getAbbr()))
         {
-
           game = new Game(a, b);
           a.homeGames.add(b.getAbbr());
           b.awayGames.add(a.getAbbr());
@@ -81,7 +71,6 @@ public class Conference implements Serializable
         }
         else if (!a.awayGames.contains(b.getAbbr()))
         {
-
           game = new Game(b, a);
           a.awayGames.add(b.getAbbr());
           b.homeGames.add(a.getAbbr());
@@ -89,8 +78,6 @@ public class Conference implements Serializable
           a.getSchedule().add(game);
           b.getSchedule().add(game);
         }
-
-
       }
     }
 
@@ -99,9 +86,7 @@ public class Conference implements Serializable
     //Call each team's setScheduleStringList method now that their schedules have been created
     for (int i = 0; i < teamList.size(); i++)
     {
-
       teamList.get(i).updateScheduleList();
     }
-
   }
 }

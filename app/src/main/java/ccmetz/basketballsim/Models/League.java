@@ -17,7 +17,6 @@ import ccmetz.basketballsim.Helpers.Sorter;
  */
 public class League implements Serializable
 {
-
   // String arrays that contain the first and last names that will be used for players throughout the league
   final private String[] firstNames = {"Daniel", "Isaiah", "Devyn", "Roy", "Aaron", "Bryan", "Demarcus", "Stephen", "Lebron",
       "Michael", "Eric", "Andrew", "Anthony", "Jared", "Eli", "John", "Ahmad", "Christian",
@@ -40,7 +39,6 @@ public class League implements Serializable
 
   public League()
   {
-
     currentSeason = 2016;
     currentWeek = 0;
 
@@ -128,13 +126,10 @@ public class League implements Serializable
   // This method will be responsible for calling all of the simGame methods for every game during the currentWeek
   public void simCurrentWeek()
   {
-
     if (currentWeek < leagueTeamList.get(0).getSchedule().size())
     {
-
       for (int i = 0; i < leagueTeamList.size(); i++)
       {
-
         leagueTeamList.get(i).getSchedule().get(currentWeek).simGame();
         leagueTeamList.get(i).updateScheduleList(); //Recreate the schedule list with updated results
       }
@@ -154,19 +149,16 @@ public class League implements Serializable
 
   public int getCurrentSeason()
   {
-
     return currentSeason;
   }
 
   public int getCurrentWeek()
   {
-
     return currentWeek;
   }
 
   public List<Conference> getConferences()
   {
-
     return confList;
   }
 
@@ -198,10 +190,8 @@ public class League implements Serializable
   // Method for setting the schedules up for the teams each season
   public void setTeamSchedules()
   {
-
     for (int i = 0; i < confList.size(); i++)
     {
-
       confList.get(i).setConfSchedule();
     }
   }
@@ -209,23 +199,18 @@ public class League implements Serializable
   // Methods for generating a first and last name
   public String getRandomFirstName()
   {
-
     Random r = new Random();
-
     return firstNames[r.nextInt(firstNames.length)];
   }
 
   public String getRandomLastName()
   {
-
     Random r = new Random();
-
     return lastNames[r.nextInt(lastNames.length)];
   }
 
   public List<String> getPosList()
   {
-
     return posList;
   }
 
@@ -242,7 +227,6 @@ public class League implements Serializable
   //Calculate preseason rankings based on team overalls and prestige
   public void calcTeamRankings()
   {
-
     for (Team team : leagueTeamList)
     {
       team.calcPollScore();

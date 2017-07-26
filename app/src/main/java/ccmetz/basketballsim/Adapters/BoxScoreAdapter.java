@@ -13,7 +13,6 @@ import java.util.ArrayList;
  */
 public class BoxScoreAdapter extends BaseAdapter
 {
-
   private String[] homeBoxScore;
   private String[] awayBoxScore;
   private Context context;
@@ -29,35 +28,29 @@ public class BoxScoreAdapter extends BaseAdapter
 
   public int getCount()
   {
-
     return homeBoxScore.length;
   }
 
   public Object getItem(int position)
   {
-
     return null;
   }
 
   public long getItemId(int position)
   {
-
     return 0;
   }
 
   public View getView(int position, View convertView, ViewGroup parent)
   {
-
     TextView textView;
 
     if (convertView == null)
     {
-
       textView = new TextView(context);
     }
     else
     {
-
       textView = (TextView) convertView;
     }
 
@@ -70,7 +63,6 @@ public class BoxScoreAdapter extends BaseAdapter
   // Method used to update the box score when a new team is selected in the box score dialog
   public void updateBoxScore(int position)
   {
-
     counter = position;
     this.notifyDataSetChanged();
   }

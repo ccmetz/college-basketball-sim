@@ -15,14 +15,12 @@ import ccmetz.basketballsim.Models.Player;
  */
 public class PlayerStatsAdapter extends BaseAdapter
 {
-
   private ArrayList<Player> roster;
   private Context context;
   private int counter = 0;
 
   public PlayerStatsAdapter(ArrayList<Player> roster, Context c)
   {
-
     this.roster = roster;
     context = c;
   }
@@ -48,7 +46,6 @@ public class PlayerStatsAdapter extends BaseAdapter
   @Override
   public View getView(int position, View convertView, ViewGroup parent)
   {
-
     TextView textView;
 
     if (convertView == null)
@@ -60,14 +57,12 @@ public class PlayerStatsAdapter extends BaseAdapter
       textView = (TextView) convertView;
     }
 
-
     textView.setText(roster.get(counter).getPlayerStats()[position]);
     return textView;
   }
 
   public void updatePlayerStats(int position)
   {
-
     counter = position;
     this.notifyDataSetChanged();
   }

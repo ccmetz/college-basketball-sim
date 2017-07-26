@@ -23,16 +23,13 @@ import ccmetz.basketballsim.R;
  */
 public class ExpandableListAdapterRoster extends BaseExpandableListAdapter
 {
-
   private Activity context;
   private ArrayList<Player> rosterList = new ArrayList<Player>();
 
   public ExpandableListAdapterRoster(Activity context, ArrayList<Player> rosterList)
   {
-
     this.context = context;
     this.rosterList.addAll(rosterList);
-
   }
 
   @Override
@@ -80,7 +77,6 @@ public class ExpandableListAdapterRoster extends BaseExpandableListAdapter
   @Override
   public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
   {
-
     LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     convertView = layoutInflater.inflate(R.layout.group_player_details, null);
     TextView detailText = (TextView) convertView.findViewById(R.id.group_player_text);
@@ -96,9 +92,7 @@ public class ExpandableListAdapterRoster extends BaseExpandableListAdapter
     else if (playerRole == Role.ROLEPLAYER)
     {
       detailText.setTextColor(Color.parseColor("#d4444a"));
-
     }
-
 
     return convertView;
   }
@@ -106,7 +100,6 @@ public class ExpandableListAdapterRoster extends BaseExpandableListAdapter
   @Override
   public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
   {
-
     LayoutInflater inflater = context.getLayoutInflater();
 
     if (convertView == null)
@@ -132,7 +125,6 @@ public class ExpandableListAdapterRoster extends BaseExpandableListAdapter
 
   public void updateRosterList(ArrayList<Player> newRoster)
   {
-
     rosterList.clear();
     rosterList.addAll(newRoster);
     this.notifyDataSetChanged();

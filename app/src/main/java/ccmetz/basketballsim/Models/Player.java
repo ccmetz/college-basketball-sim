@@ -11,7 +11,6 @@ import java.util.ArrayList;
  */
 public class Player implements Serializable
 {
-
   // Defined in the constructor
   private String name;
   private String fName;
@@ -81,7 +80,6 @@ public class Player implements Serializable
   //STARS will influence the player's attributes
   public Player(String first, String last, int pos, int yr, int stars, int t, Team tm)
   {
-
     fName = first;
     lName = last;
     name = first + " " + last;
@@ -109,36 +107,29 @@ public class Player implements Serializable
     // Set Position String
     if (position == 1)
     {
-
       posString = "PG";
     }
     else if (position == 2)
     {
-
       posString = "SG";
 
     }
     else if (position == 3)
     {
-
       posString = "SF";
     }
     else if (position == 4)
     {
-
       posString = "PF";
     }
     else if (position == 5)
     {
-
       posString = "C";
     }
 
     // Generate Player Ratings and Tendencies
     generatePlayerRatings();
     generatePlayerTendencies();
-
-
   }
 
   // Player roles will be designated as either STARTER, ROLEPLAYER, BENCHRIDER
@@ -153,7 +144,6 @@ public class Player implements Serializable
   // Sets the Player's playerRole to either STARTER, ROLEPLAYER, or BENCHRIDER
   public void setPlayerRole(Role r)
   {
-
     playerRole = r;
   }
 
@@ -161,14 +151,12 @@ public class Player implements Serializable
   /* Used for displaying player ratings in string form */
   public String displayPlayerInfo()
   {
-
     return "[" + getYearString() + "] " + posString + " " + name + " " + playerHt + " - Ovr: " + overall;
   }
 
   /* Returns ArrayList of Players stats and ratings */
   public ArrayList<String> displayStatsAndRatings()
   {
-
     ArrayList<String> list = new ArrayList<String>();
     list.add("Lay: " + layupRating + "/Def: " + defenseRating);
     list.add("Post: " + postRating + "/Reb: " + reboundRating);
@@ -184,7 +172,6 @@ public class Player implements Serializable
   /* Returns a shorter String to be used for the Adjust Lineup dialog */
   public String displayShortPlayerInfo()
   {
-
     return "[" + getYearString() + "] " + posString + " " + fName.substring(0, 1) + "." + lName +
         " " + playerHt + "\nOvr: " + overall;
   }
@@ -192,7 +179,6 @@ public class Player implements Serializable
 
   public String getYearString()
   {
-
     if (year == 3 || year == 4)
     {
       return "Sr";
@@ -216,7 +202,6 @@ public class Player implements Serializable
   /* Method that calculates the Player's height in ft and inches based on their heightRating integer value */
   private void calcPlayerHt(int htRating)
   {
-
     float measurement = (float) ((71 + (14 * htRating / 100)) / 12.0);
     int feet = (int) measurement;
     float fraction = measurement - feet;
@@ -229,15 +214,12 @@ public class Player implements Serializable
   /* Method to set the height rating of the player based on position */
   public void setHeightRating(int pos)
   {
-
     if (pos == 1)
     {
-
       heightRating = (int) (100 * Math.random() / 2); //Rating will range from 0 - 50 for point guards
     }
     else if (pos == 2)
     {
-
       heightRating = (int) ((100 * Math.random() / 2) + 20); //Rating will range from 20-60 for shooting guards
       // Limit heightRating to 60
       if (heightRating > 60)
@@ -247,7 +229,6 @@ public class Player implements Serializable
     }
     else if (pos == 3)
     {
-
       heightRating = (int) ((100 * Math.random() / 2) + 40); //Rating will range from 40-80 for SFs
       // Limit heightRating to 80
       if (heightRating > 80)
@@ -257,7 +238,6 @@ public class Player implements Serializable
     }
     else if (pos == 4)
     {
-
       heightRating = (int) ((100 * Math.random() / 2) + 60); //Rating will range from 60-90 for PFs
       // Limit heightRating to 90
       if (heightRating > 90)
@@ -267,7 +247,6 @@ public class Player implements Serializable
     }
     else if (pos == 5)
     {
-
       heightRating = (int) ((100 * Math.random() / 2) + 70); //Rating will range from 70-100 for Cs
       // Limit heightRating to 100
       if (heightRating > 100)
@@ -275,14 +254,12 @@ public class Player implements Serializable
         heightRating = 100;
       }
     }
-
     calcPlayerHt(heightRating);
   }
 
   /* Method to set the default base ratings for each position */
   public int[] setModifiers(int pos)
   {
-
     int[] base = new int[10];
 
     if (pos == 1)
@@ -362,49 +339,40 @@ public class Player implements Serializable
   *  3 - Defender */
   public void addTypeBonus(int[] b, int pos, int type)
   {
-
-
     if (type == 0 && (pos == 4 || pos == 5))
     {
-
       typeString = "Rebounder";
       b[5] += 10;
     }
     else if (type == 0 && (pos == 1 || pos == 2 || pos == 3))
     {
-
       typeString = "Passer";
       b[8] += 10;
     }
     else if (type == 1)
     {
-
       typeString = "Shooter";
       b[2] += 5;
       b[3] += 5;
     }
     else if (type == 2 && (pos == 4 || pos == 5))
     {
-
       typeString = "Post Up";
       b[1] += 10;
     }
     else if (type == 2 && (pos == 1 || pos == 2 || pos == 3))
     {
-
       typeString = "Driver";
       b[0] += 10;
     }
     else if (type == 3 && (pos == 4 || pos == 5))
     {
-
       typeString = "Defender";
       b[4] += 10;
       b[7] += 5; //Bonus to Blocks
     }
     else if (type == 3 && (pos == 1 || pos == 2 || pos == 3))
     {
-
       typeString = "Defender";
       b[4] += 10;
       b[6] += 5; //Bonus to Steals
@@ -416,7 +384,6 @@ public class Player implements Serializable
    * Note: Still need to decide what to do with player specialties? Keep them or get rid of them? */
   public void generatePlayerRatings()
   {
-
     int[] base = setModifiers(position);
 
     addTypeBonus(base, position, type);
@@ -437,7 +404,6 @@ public class Player implements Serializable
     setHeightRating(position);
 
     calcOverall();
-
   }
 
   /* Method that will generate player tendencies based upon their position, ratings, and player type
@@ -449,7 +415,6 @@ public class Player implements Serializable
   * tryForBlock is affected by position and player ratings */
   public void generatePlayerTendencies()
   {
-
     // Default Tendencies
     shootOrPass = 60;
     jumperOrDrive = 50;
@@ -461,58 +426,48 @@ public class Player implements Serializable
     // Tendency adjustments based on position played
     if (position == 1)
     {
-
       layupOrPost -= 40;
       tryForSteal += 5;
     }
     else if (position == 2 || position == 3)
     {
-
       layupOrPost -= 35;
       tryForSteal += 5;
     }
     else if (position == 4 || position == 5)
     {
-
       tryForBlock += 5;
     }
 
     // Tendency adjustments based on attributes
     if (threeRating >= midRating + 10)
     {
-
       midOrThree += 10;
     }
     else if (midRating >= threeRating + 10)
     {
-
       midOrThree -= 10;
     }
 
     if (stealRating >= 75)
     {
-
       tryForSteal += 10;
     }
 
     if (blockRating >= 75)
     {
-
       tryForBlock += 10;
     }
-
 
     // Tendency adjustments based on Player Type (Rebounder and Defender doesn't affect tendencies)
     // Passer
     if (type == 0 && position == 1)
     {
-
       shootOrPass += 15;
     }
     // Shooter
     else if (type == 1)
     {
-
       shootOrPass -= 10;
       jumperOrDrive -= 10;
 
@@ -520,7 +475,6 @@ public class Player implements Serializable
     // Driver/Post Up
     else if (type == 2)
     {
-
       jumperOrDrive += 10;
 
       if (position == 1 || position == 2 || position == 3)
@@ -532,16 +486,13 @@ public class Player implements Serializable
         layupOrPost += 10;
       }
     }
-
   }
 
   public void calcOverall()
   {
-
     // Backcourt overall
     if (position == 1 || position == 2 || position == 3)
     {
-
       offOvr = (int) ((layupRating + postRating * 0.15 + midRating + threeRating
           + passRating * 0.75 + handleRating * 0.75) / 4.65);
       defOvr = (int) ((defenseRating + reboundRating * 0.75 + stealRating + blockRating * 0.75) / 3.5);
@@ -549,19 +500,16 @@ public class Player implements Serializable
     // Frontcourt overall
     else if (position == 4 || position == 5)
     {
-
       offOvr = (int) ((layupRating + postRating + midRating + threeRating * 0.75
           + passRating * 0.25 + handleRating * 0.25) / 4.25);
       defOvr = (int) ((defenseRating + reboundRating + stealRating * 0.75 + blockRating) / 3.75);
     }
-
     overall = (offOvr + defOvr) / 2;
   }
 
   // Method for creating the player stats grid
   public String[] getPlayerStats()
   {
-
     String[] stats = new String[12];
 
     DecimalFormat df = new DecimalFormat("#.#");
@@ -773,6 +721,4 @@ public class Player implements Serializable
   {
     return tryForBlock;
   }
-
-
 }

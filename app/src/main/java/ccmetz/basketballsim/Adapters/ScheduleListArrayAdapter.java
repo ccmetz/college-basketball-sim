@@ -16,7 +16,6 @@ import ccmetz.basketballsim.R;
  */
 public class ScheduleListArrayAdapter extends ArrayAdapter<String>
 {
-
   private Context context;
   private ArrayList<String> scheduleList = new ArrayList<String>();
 
@@ -27,13 +26,11 @@ public class ScheduleListArrayAdapter extends ArrayAdapter<String>
 
     this.context = context;
     this.scheduleList.addAll(scheduleList);
-
   }
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent)
   {
-
     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     if (convertView == null)
     {
@@ -48,15 +45,12 @@ public class ScheduleListArrayAdapter extends ArrayAdapter<String>
     rightText.setText(splitArray[1]);
 
     return convertView;
-
   }
 
   public void updateScheduleList(ArrayList<String> newSchedule)
   {
-
     scheduleList.clear();
     scheduleList.addAll(newSchedule);
     this.notifyDataSetChanged();
   }
-
 }

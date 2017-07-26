@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 public class BoxScore implements Serializable
 {
-
   private String homePlayers;
   private String awayPlayers;
   private String[] homeBoxScore; //String array to hold a the home team's completed box score
@@ -32,7 +31,6 @@ public class BoxScore implements Serializable
 
   public BoxScore(String homeNames, String awayNames)
   {
-
     homePlayers = homeNames;
     awayPlayers = awayNames;
 
@@ -54,7 +52,6 @@ public class BoxScore implements Serializable
     awayAst = new int[10];
 
     posMod = 0;
-
   }
 
   public String[] getHomeBoxScore()
@@ -69,14 +66,12 @@ public class BoxScore implements Serializable
 
   public void createBoxScore()
   {
-
     createHomeBoxScore();
     createAwayBoxScore();
   }
 
   private void createHomeBoxScore()
   {
-
     homeBoxScore[0] = "\n" + homePlayers;
 
     homeBoxScore[1] = "2FGM/A" + "\n" + home2pt[0][0] + "  " + home2pt[0][1] + "\n" +
@@ -143,7 +138,6 @@ public class BoxScore implements Serializable
 
   private void createAwayBoxScore()
   {
-
     awayBoxScore[0] = "\n" + awayPlayers;
 
     awayBoxScore[1] = "2FGM/A" + "\n" + away2pt[0][0] + "  " + away2pt[0][1] + "\n" +
@@ -217,7 +211,6 @@ public class BoxScore implements Serializable
 
   public void add2ptMake(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0)
@@ -236,17 +229,14 @@ public class BoxScore implements Serializable
 
   public void add2ptMiss(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0) home2pt[player + posMod][1]++;
     else if (possession == 1) away2pt[player + posMod][1]++;
-
   }
 
   public void add3ptMake(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0)
@@ -265,7 +255,6 @@ public class BoxScore implements Serializable
 
   public void add3ptMiss(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0) home3pt[player + posMod][1]++;
@@ -274,7 +263,6 @@ public class BoxScore implements Serializable
 
   public void addOReb(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0)
@@ -291,7 +279,6 @@ public class BoxScore implements Serializable
 
   public void addDReb(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     // The defensive rebound goes to the team that did not currently have possession
@@ -309,7 +296,6 @@ public class BoxScore implements Serializable
 
   public void addSteal(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0)
@@ -326,7 +312,6 @@ public class BoxScore implements Serializable
 
   public void addBlock(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0) awaySBT[player + posMod][1]++;
@@ -335,18 +320,14 @@ public class BoxScore implements Serializable
 
   public void addUnforcedTO()
   {
-
     // Will add unforced Turnovers once those are added to the game sim logic
   }
 
   public void addAst(int possession, int player, boolean isBenchIn)
   {
-
     modifyPosMod(isBenchIn);
 
     if (possession == 0) homeAst[player + posMod]++;
     else if (possession == 1) awayAst[player + posMod]++;
   }
-
-
 }

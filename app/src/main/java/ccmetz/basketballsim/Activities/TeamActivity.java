@@ -20,7 +20,6 @@ import ccmetz.basketballsim.R;
 
 public class TeamActivity extends AppCompatActivity
 {
-
   private Spinner confSpinner; //Spinner that the user can use to select conferences
   private List<String> confNames; //ArrayList that holds all of the conference names
   private ArrayAdapter<String> confAdapter; //Adapter that attaches conference names to the confSpinner
@@ -43,14 +42,14 @@ public class TeamActivity extends AppCompatActivity
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    teamNames = new ArrayList<String>();
+    teamNames = new ArrayList<>();
     // Defaults to BIG 10 team names
     teamNames.addAll(Arrays.asList(getResources().getStringArray(R.array.big10_array)));
 
     currentConf = 0; //First conference is selected by default
     currentTeam = 0; //First team is selected by default
 
-        /* Spinner for Conferences */
+    /* Spinner for Conferences */
     confSpinner = (Spinner) findViewById(R.id.conf_spinner);
 
     // Create the confNames ArrayList to be used in the confAdapter
@@ -61,12 +60,10 @@ public class TeamActivity extends AppCompatActivity
     confAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     confSpinner.setAdapter(confAdapter);
 
-    confSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-    {
+    confSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
       {
-
         currentConf = position;
         //Change the teamNames ArrayList to include only teams from the selected conference
         teamNames.clear();
@@ -87,30 +84,24 @@ public class TeamActivity extends AppCompatActivity
         {
           teamNames.addAll(Arrays.asList(getResources().getStringArray(R.array.acc_array)));
         }
-
         teamAdapter.notifyDataSetChanged(); //updates the listview with new teams
       }
 
       @Override
-      public void onNothingSelected(AdapterView<?> parent)
-      {
-
-      }
+      public void onNothingSelected(AdapterView<?> parent) {}
     });
 
-        /* ListView for Teams that belong to conference picked in the Spinner */
+    /* ListView for Teams that belong to conference picked in the Spinner */
     teamView = (ListView) findViewById(R.id.team_list);
 
-    teamAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, teamNames);
+    teamAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teamNames);
     teamView.setAdapter(teamAdapter);
 
-        /* The team roster will display when clicked on */
-    teamView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-    {
+    /* The team roster will display when clicked on */
+    teamView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
-
         currentTeam = position;
         // Get just the team name for the confirmation dialog (Need to subtract " - Prestige: ##")
         String confirmName = null;
@@ -119,41 +110,31 @@ public class TeamActivity extends AppCompatActivity
           confirmName = teamNames.get(currentTeam).substring(0, teamNames.get(currentTeam).indexOf(" -"));
         }
 
-                /* Create and show the dialog for the team selected */
+        /* Create and show the dialog for the team selected */
         AlertDialog.Builder dialog = new AlertDialog.Builder(TeamActivity.this);
         dialog.setMessage("Are you sure you want to be the coach of " + confirmName + "?");
 
-
-        dialog.setPositiveButton("Accept the job!", new DialogInterface.OnClickListener()
-        {
+        dialog.setPositiveButton("Accept the job!", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which)
           {
-
             Intent intent = new Intent(TeamActivity.this, MainActivity.class);
-                        /* Push info for the team that the user picked to the main activity */
+            /* Push info for the team that the user picked to the main activity */
             intent.putExtra("chosenConf", currentConf);
             intent.putExtra("chosenTeam", currentTeam);
             startActivity(intent);
-
           }
         });
 
-        dialog.setNegativeButton("Consider other offers", new DialogInterface.OnClickListener()
-        {
+        dialog.setNegativeButton("Consider other offers", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which)
           {
             //Exit dialog
           }
         });
-
         dialog.show();
       }
     });
-
-
   }
-
-
 }
