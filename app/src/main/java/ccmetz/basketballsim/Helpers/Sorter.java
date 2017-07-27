@@ -38,6 +38,12 @@ public class Sorter
     Collections.sort(list, new TeamPollComp());
   }
 
+  // Sorts a List<Player> by their POY score
+  public static void sortByPlayerOfTheYearScore(List<Player> list)
+  {
+    Collections.sort(list, new POYScoreComp());
+  }
+
 
   // Inner Comparator class for sorting Players by position
   static class PositionComp implements Comparator<Player>
@@ -85,6 +91,18 @@ public class Sorter
     {
       if (a.getPollScore() < b.getPollScore()) return 1;
       else if (a.getPollScore() == b.getPollScore()) return 0;
+      else return -1;
+    }
+  }
+
+  // Inner Comparator class for sorting Players by their Player of the Year score
+  static class POYScoreComp implements Comparator<Player>
+  {
+    @Override
+    public int compare(Player a, Player b)
+    {
+      if (a.getPOYScore() < b.getPOYScore()) return 1;
+      else if (a.getPOYScore() == b.getPOYScore()) return 0;
       else return -1;
     }
   }

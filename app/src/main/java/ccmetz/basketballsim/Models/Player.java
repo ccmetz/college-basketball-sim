@@ -24,7 +24,7 @@ public class Player implements Serializable
   private Team team;
 
   // Player Skill Ratings
-    /* Shooting */
+  /* Shooting */
   private int layupRating;
   private int postRating;
   private int midRating;
@@ -40,7 +40,7 @@ public class Player implements Serializable
   private int handleRating;
 
   // Player Tendencies
-    /* Offensive */
+  /* Offensive */
   private int shootOrPass; // Scale 0 - 100 where 0 is shoot and 100 is pass
   private int jumperOrDrive;
   private int layupOrPost;
@@ -50,7 +50,7 @@ public class Player implements Serializable
   private int tryForBlock;
 
   // Miscellaneous Player variables
-    /* String representation of the height rating */
+  /* String representation of the height rating */
   private String playerHt;
   /* Overall rating */
   private int overall;
@@ -74,6 +74,9 @@ public class Player implements Serializable
   private int fgm3 = 0;
   private int fga3 = 0;
   private int turnovers = 0;
+
+  // Player award scores
+  private double POYScore = 0;
 
 
   //Constructor for randomly generated Player Name and attributes
@@ -721,4 +724,69 @@ public class Player implements Serializable
   {
     return tryForBlock;
   }
+
+  // Get Methods for player stats
+  public double getPPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) points / games;
+  }
+
+  public double getRPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) rebounds / games;
+  }
+
+  public double getORPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) offRebounds / games;
+  }
+
+  public double getDRPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) defRebounds / games;
+  }
+
+  public double getAPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) assists / games;
+  }
+
+  public double getSPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) steals / games;
+  }
+
+  public double getBPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) blocks / games;
+  }
+
+  public double getTOPG()
+  {
+    if (games == 0) return 0.0;
+    return (double) turnovers / games;
+  }
+
+  public double getFgPercent()
+  {
+    if (fga2 + fga3 == 0) return 0.0;
+    return (double) (fgm2 + fgm3) / (fga2 + fga3) * 100;
+  }
+
+  public double get3FgPercent()
+  {
+    if (fga3 == 0) return 0.0;
+    return (double) fgm3 / fga3 * 100;
+  }
+
+  // Player award getters/setters
+  public void setPOYScore(double score) { POYScore = score; }
+  public double getPOYScore() { return POYScore; }
 }

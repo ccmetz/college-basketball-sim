@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity
   private League league; //This will be the league that the user will officially play in
   private Team userTeam; //The team that the user will be controlling
   private int season; //Current season
+  private int numGamesPlayed; // Number of games that have been played so far this season
   private ArrayList<String> posList;
 
   @Override
@@ -705,6 +706,7 @@ public class MainActivity extends AppCompatActivity
       try
       {
         league.simCurrentWeek();
+        numGamesPlayed++;
         return true;
       }
       catch (Exception e)
@@ -727,6 +729,13 @@ public class MainActivity extends AppCompatActivity
       // Refresh team rankings
       scheduleText.setText("#" + userTeam.getRanking() + " " + userTeam.getTeamName() + " (" + userTeam.getRecord() + ")");
       refreshTeamList(confCounter);
+
+      // Check if season is over
+      if (numGamesPlayed == league.getRegularSeasonGames())
+      {
+        // Regular season is over - calculate awards
+        league.determinePlayerOfTheYear();
+      }
     }
   }
 

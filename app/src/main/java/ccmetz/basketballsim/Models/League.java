@@ -29,6 +29,8 @@ public class League implements Serializable
       "Young", "Carter", "Manning", "Jok", "Valentine", "Baldwin", "Simmons", "Durant", "King",
       "Allen", "Parsons", "Forbes", "Taylor", "Harden", "Nowitzki"};
 
+  final private int REGULAR_SEASON_GAMES = 18;
+
   private ArrayList<String> posList; //List of basketball positions
   private ArrayList<Conference> confList; //List that contains the conferences that belong to this league
   private ArrayList<Team> leagueTeamList; //List that contains all of the teams in league
@@ -239,4 +241,38 @@ public class League implements Serializable
       ranking++;
     }
   }
+
+  private List<Player> getLeaguePlayers()
+  {
+    List<Player> allPlayers = new ArrayList<>();
+    for (Team team : leagueTeamList)
+    {
+      allPlayers.addAll(team.getRoster());
+    }
+    return allPlayers;
+  }
+
+  // Determine the National Player of the Year
+  public Player determinePlayerOfTheYear()
+  {
+    List<Player> players = getLeaguePlayers();
+    for (Player player : players)
+    {
+      double score = (3 * player.getPPG())
+          + (2 * player.getRPG())
+          + (2 * player.getAPG())
+          + (1.5 * player.getSPG())
+          + (1.5 * player.getBPG())
+          - (1.5 * player.getTOPG());
+      player.setPOYScore(score);
+    }
+    Sorter.sortByPlayerOfTheYearScore(players);
+    Player winner = players.get(0);
+    Log.d("POY", "National Player of the Year is: " + winner.getPosition() + " " + winner.getName() + " from " + winner.getTeamAbbr());
+    Log.d("POY", "Stats - PPG: " + winner.getPPG() + " RPG: " + winner.getRPG() + " APG: " + winner.getAPG()
+      + " SPG: " + winner.getSPG() + " BPG: " + winner.getBPG() + " TOPG: " + winner.getTOPG());
+    return winner;
+  }
+
+  public int getRegularSeasonGames() { return REGULAR_SEASON_GAMES; }
 }
